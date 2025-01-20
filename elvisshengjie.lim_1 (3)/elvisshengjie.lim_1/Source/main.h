@@ -1,44 +1,63 @@
-#ifndef MAIN_H
-#define MAIN_H
+// ---------------------------------------------------------------------------
+// includes
 
-// Rect class definition
-class Rect {
-public:
-    float x{};
-    float y{};
-    float width{};
-    float height{};
-
-};
+#include <crtdbg.h> // To check for memory leaks
+#include "AEEngine.h"
 
 
 
-Rect rectleft;
-Rect rectright;
-Rect rectplayer;
-Rect recthealth;
-Rect recthealth2;
+// ---------------------------------------------------------------------------
+// main
 
-Rect recthealth3;
-Rect recthealth4;
-Rect recthealth5;
-Rect recthealth6;
-Rect recthealth7;
-Rect recthealth8;
-Rect recthealth9;
-Rect recthealth10;
-Rect recthealth11;
-Rect recthealth12;
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPWSTR    lpCmdLine,
+	_In_ int       nCmdShow)
+{
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
 
 
-float screenHeight{ 900 };
-float screenWidth{ 1600 };
-static bool ishealth = true;
+	int gGameRunning = 1;
 
-void playermovement(float& x, float& y);
-void clampScreen(float& x, float& y, float& width, float& height, float screenWidth, float screenHeight);
-bool collisionCircle(float x0, float y0, float width0, float height0, float x1, float y1, float width1, float height1);
-bool healhbarexist(float healthwidth, float x, float healthwidth2);
+	// Initialization of your own variables go here
+
+	// Using custom window procedure
+	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
+
+	// Changing the window title
+	AESysSetWindowTitle("My New Demo!");
+
+	// reset the system modules
+	AESysReset();
+
+	printf("Hello World\n");
+
+	// Game Loop
+	while (gGameRunning)
+	{
+		// Informing the system about the loop's start
+		AESysFrameStart();
+
+		// Basic way to trigger exiting the application
+		// when ESCAPE is hit or when the window is closed
+		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
+			gGameRunning = 0;
+
+		// Your own update logic goes here
 
 
-#endif // MAIN_H
+		// Your own rendering logic goes here
+
+
+		// Informing the system about the loop's end
+		AESysFrameEnd();
+
+	}
+
+
+	// free the system
+	AESysExit();
+}
