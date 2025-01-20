@@ -3,6 +3,7 @@
 #include <crtdbg.h> // To check for memory leaks
 #include "AEEngine.h"
 #include <math.h> 
+#include "render.hpp"
 
 // ---------------------------------------------------------------------------
 // main
@@ -49,6 +50,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     
     AEGfxVertexList* pMesh = AEGfxMeshEnd();
+    AEGfxTexture* bTex = AEGfxTextureLoad("Assets/floor.png");
+    AEGfxTexture* dTex = AEGfxTextureLoad("Assets/dustbin.png");
+    
+    
 
     // Game Loop
     while (gGameRunning) {
@@ -57,25 +62,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
         if (AEInputCheckTriggered(AEVK_ESCAPE) || !AESysDoesWindowExist())
             gGameRunning = false;
-        AEGfxSetBackgroundColor(0.4f, 0.26f, 0.13f); // Dark brown color
 
-
-        // Draw circles
-        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		
-			
-	        AEMtx33 ingredientboxTransform;
-			AEMtx33Scale(&ingredientboxTransform, 200.0f, 200.0f);
-			AEMtx33TransApply(&ingredientboxTransform, &ingredientboxTransform, 200.0f, 200.0f);
-			AEGfxSetTransform(ingredientboxTransform.m);
-            AEGfxSetColorToMultiply(1.0f, 0.0f, 0.0f, 1.0f);
-            AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-            AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-            AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
-            AEGfxSetTransparency(1.0f);
-			AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
-		
+       
+        /*AEGfxSetBackgroundColor(0.35f, 0.2f, 0.1f);*/ 
+        Renderbackground(pMesh, bTex);
         
+        RenderDustbin(pMesh, dTex);
+
+        RenderIngredientbox(pMesh);
+
+        RenderStove(pMesh);
+
+        AESysFrameEnd();
     }
 
     // Cleanup
