@@ -105,6 +105,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\render.cpp" />
+    <ClCompile Include="collison.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\Desktop\floor.png" />
@@ -115,6 +116,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\render.hpp" />
+    <ClInclude Include="collison.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

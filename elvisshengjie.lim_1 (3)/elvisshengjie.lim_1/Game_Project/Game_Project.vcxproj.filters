@@ -21,6 +21,9 @@
     <ClCompile Include="..\Source\render.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="collison.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Assets\Assets\PlanetTexture.png">
@@ -41,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\render.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="collison.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
