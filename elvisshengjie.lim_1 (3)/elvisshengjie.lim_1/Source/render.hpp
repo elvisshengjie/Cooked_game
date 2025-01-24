@@ -15,13 +15,14 @@ void RenderIngredientbox(AEGfxVertexList* mesh);
 
 // Renders the stove with a red color
 void RenderStove(AEGfxVertexList* mesh);
-
+void RendercollisonIngredientBox(AEGfxVertexList* mesh);
+void RenderhighlightIngredientBox(AEGfxVertexList* mesh);
 class Rect {
 	public:
+	float width{};
+	float height{};
 	float x{};
 	float y{};
-	float width{};
-	float height;
 
 
 };
@@ -29,6 +30,7 @@ extern Rect background1;
 extern Rect dusbin1;
 extern Rect ingredient1_box;
 extern Rect stove1;
+extern Rect collison_ingredient_box1;
 //variable
 
 

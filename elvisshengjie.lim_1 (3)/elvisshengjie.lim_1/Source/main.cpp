@@ -1,9 +1,11 @@
-
+#include <iostream>
 // includes
 #include <crtdbg.h> // To check for memory leaks
 #include "AEEngine.h"
 #include <math.h> 
 #include "render.hpp"
+#include "player.hpp"
+#include "collison.hpp"
 
 // ---------------------------------------------------------------------------
 // main
@@ -62,16 +64,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
         if (AEInputCheckTriggered(AEVK_ESCAPE) || !AESysDoesWindowExist())
             gGameRunning = false;
-
        
+       
+        players1.playerMove(6.0);
         /*AEGfxSetBackgroundColor(0.35f, 0.2f, 0.1f);*/ 
+        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
         Renderbackground(pMesh, bTex);
-        
+        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
         RenderDustbin(pMesh, dTex);
-
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         RenderIngredientbox(pMesh);
-
+        RendercollisonIngredientBox(pMesh);
         RenderStove(pMesh);
+        players1.playerdraw(pMesh);
+        if (players1.playerCheckCollison(collison_ingredient_box1.x, collison_ingredient_box1.y, collison_ingredient_box1.width, collison_ingredient_box1.height)) {
+            AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+            RenderhighlightIngredientBox(pMesh);
+        }
 
         AESysFrameEnd();
     }
