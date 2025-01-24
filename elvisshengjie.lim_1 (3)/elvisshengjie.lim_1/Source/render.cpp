@@ -45,9 +45,9 @@ void RenderIngredientbox(AEGfxVertexList* mesh) {
         AEMtx33TransApply(&ingredientboxTransform, &ingredientboxTransform, -200.0f + 151.0f * i, 175.0f);
         AEGfxSetTransform(ingredientboxTransform.m);
         AEGfxSetColorToMultiply(1.0f, 0.0f, 0.0f, 1.0f);
-        AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+        AEGfxSetColorToAdd(1.0f, 0.0f + 1.0f * i,0.0f + 1.0f * (i-1), 1.0f);
         AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-        AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxSetBlendColor(1.0f, 0.0f + 1.0f * i ,0.0f + 1.0f * (i-1), 1.0f);
         AEGfxSetTransparency(1.0f);
         AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
     }
