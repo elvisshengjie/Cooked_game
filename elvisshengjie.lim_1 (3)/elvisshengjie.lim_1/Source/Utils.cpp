@@ -20,5 +20,5 @@ f64 Timer::getRemainingTime() const {
 }
 
 bool Timer::completed() const {
-	return AEIsF64NearZero(getRemainingTime());
+	return getRemainingTime() <=0;
 }
