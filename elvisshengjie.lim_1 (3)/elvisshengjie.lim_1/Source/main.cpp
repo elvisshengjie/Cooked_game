@@ -55,8 +55,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     AEGfxTexture* bTex = AEGfxTextureLoad("Assets/floor.png");
     AEGfxTexture* dTex = AEGfxTextureLoad("Assets/dustbin.png");
     
-    
-
     // Game Loop
     while (gGameRunning) {
       

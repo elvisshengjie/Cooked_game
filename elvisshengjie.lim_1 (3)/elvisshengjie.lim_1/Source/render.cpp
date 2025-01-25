@@ -7,7 +7,7 @@
 // Function to Render Dustbin with Texture
 
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
-Rect dustbin1{ 250.0f, 300.0f,-700.0 , -300.0f };
+Rect dustbin1{ 250.0f, 300.0f,-700.0f , -300.0f };
 Rect ingredient1_box{ 150.0f, 150.0f,-200.0f ,175.0f };
 Rect stove1{ 300.0f, 200.0f,-50.0f, -200.0f };
 

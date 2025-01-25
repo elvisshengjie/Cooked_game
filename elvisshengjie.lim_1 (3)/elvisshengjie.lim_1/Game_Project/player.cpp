@@ -44,5 +44,3 @@ bool player::playerCheckCollison(float x1, float y1, float width1, float height1
 {
 	return Colingredientbox1.collisonRect(x, y, width, height, x1, y1, width1, height1);
 }
-
-
