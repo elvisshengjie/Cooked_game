@@ -107,6 +107,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\render.cpp" />
+    <ClCompile Include="..\Source\Utils.cpp" />
     <ClCompile Include="collison.cpp" />
     <ClCompile Include="player.cpp" />
   </ItemGroup>
@@ -119,6 +120,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\render.hpp" />
+    <ClInclude Include="..\Source\utils.hpp" />
     <ClInclude Include="collison.hpp" />
     <ClInclude Include="player.hpp" />
   </ItemGroup>
