@@ -44,27 +44,6 @@ bool player::playerCheckCollison(float x1, float y1, float width1, float height1
 {
 	return Colingredientbox1.collisonRect(x, y, width, height, x1, y1, width1, height1);
 }
-
-void player::playerPickUp(bool &isHolding, Ingredient &heldItem, const Ingredient &nearbyItem)
-{
-	// Check if the 'E' key is pressed (once)
-	if (AEInputCheckTriggered(AEVK_E))
-	{
-		// If the player is not holding an item
-		if (!isHolding)
-		{
-			// Pick up the nearby item
-			isHolding = true;
-			heldItem = nearbyItem;
-			std::cout << "Picked up item: " << heldItem.name << std::endl;
-		}
-		else // If the player is already holding an item
-		{
-			// Drop the item
-			isHolding = false;
-			std::cout << "Dropped item: " << heldItem.name << std::endl;
-			// Clear the held item (optional, for clarity)
-			heldItem = {};
-		}
-	}
+void player::playerThrow(){
+	this->Hand = EMPTY;
 }
