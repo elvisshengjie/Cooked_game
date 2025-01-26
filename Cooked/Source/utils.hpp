@@ -1,6 +1,8 @@
 #pragma once
 
 #include "AEEngine.h"
+#include <vector>
+#include "player.hpp"
 
 class Timer {
 private:
@@ -16,3 +18,23 @@ public:
 
 	bool completed() const;
 };
+
+class Stove
+{
+	private:
+		std::vector<int> stoveItems;
+		Timer cookingTimer;
+
+	public:
+		Stove(f64 duration);
+
+		bool canCook() const;
+		
+		void putIngredients(Ingredients &ingredient);
+
+		f64 cookIngredients();
+
+		f64 remainingCookingTime()const;
+};
+
+extern Stove Wok;

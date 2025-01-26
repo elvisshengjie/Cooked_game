@@ -6,6 +6,7 @@
 #include "render.hpp"
 #include "player.hpp"
 #include "collison.hpp"
+#include "utils.hpp"
 
 // ---------------------------------------------------------------------------
 // main
@@ -31,7 +32,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
 
     // Changing the window title
-    AESysSetWindowTitle("Health Bar Demo");
+    AESysSetWindowTitle("Cooked!");
 
     
     AESysReset();
