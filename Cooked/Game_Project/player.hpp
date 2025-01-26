@@ -4,15 +4,6 @@
 #include <AEEngine.h> // Replace with the actual header for your graphics framework
 #include "Ingredients.hpp"
 
-enum Ingredients {
-	EMPTY = 0,
-	CHICKEN,
-	RICE,
-	EGG,
-	CHEESE,
-	POTATO,
-	BEEF
-};
 class player
 {
 	private:
