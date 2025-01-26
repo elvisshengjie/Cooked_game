@@ -47,3 +47,18 @@ bool player::playerCheckCollison(float x1, float y1, float width1, float height1
 void player::playerThrow(){
 	this->Hand = EMPTY;
 }
+
+void player::playerPickUp(bool& isHolding, Ingredients& heldItem, const Ingredients& nearbyItem) {
+	if (AEInputCheckTriggered(AEVK_E)) {
+		if (!isHolding && nearbyItem != EMPTY) {
+			isHolding = true;
+			heldItem = nearbyItem;
+			std::cout << "Picked up item: " << heldItem << std::endl;
+		}
+		else if (isHolding) {
+			isHolding = false;
+			std::cout << "Dropped item: " << heldItem << std::endl;
+			heldItem = EMPTY;
+		}
+	}
+}
