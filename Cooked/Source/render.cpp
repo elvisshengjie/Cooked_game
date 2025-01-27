@@ -7,12 +7,12 @@
 // Function to Render Dustbin with Texture
 
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
-Rect dustbin1{ 250.0f, 300.0f,-700.0f , -300.0f };
-Rect ingredient1_box{ 150.0f, 150.0f,-200.0f ,175.0f };
-Rect stove1{ 300.0f, 200.0f,-50.0f, -200.0f };
+Rect dustbin1{ 150.0f, 200.0f,-700.0f , -300.0f };
+Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
+Rect stove1{ 200.0f, 100.0f,-50.0f, -200.0f };
 
-Rect collison_ingredient_box1{ 230.0f,310.0f, -240.0f, 175.0f };
-Rect highlight_ingredient_box1{ 150.0f, 150.0f,-200.0f ,175.0f };
+Rect collison_ingredient_box1{ 150.0f,210.0f, -235.0f, 175.0f };
+Rect highlight_ingredient_box1{ 80.0f, 80.0f,-200.0f ,175.0f };
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     AEMtx33 background;
