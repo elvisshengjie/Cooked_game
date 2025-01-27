@@ -8,12 +8,15 @@
 // Function to Render Dustbin with Texture
 
 std::vector<Rect> highingredientBoxes = {
-    {150.0f, 150.0f,-200.0f ,175.0f},
-    {150.0f,150.0f, -49.0f, 175.0f}
+    {90.0f, 90.0f,-200.0f ,175.0f},
+    {90.0f,90.0f, -49.0f, 175.0f},
+    {90.0f, 90.0f, 102.0f, 175.0f }
+    
 };
 std::vector<Rect> collisionBoxes = {
-    {250.0f, 330.0f, -240.0f, 175.0f},
-    {250.0f,330.0f, -90.0f, 175.0f}
+    {100.0f, 100.0f, -200.0f, 175.0f},
+    {100.0f,100.0f, -49.0f, 175.0f},
+    { 100.0f, 100.0f, 102.0f, 175.0f }
 };
 
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
@@ -21,8 +24,7 @@ Rect dustbin1{ 150.0f, 200.0f,-700.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
 Rect stove1{ 200.0f, 100.0f,-50.0f, -200.0f };
 
-Rect collison_ingredient_box1{ 150.0f,210.0f, -235.0f, 175.0f };
-Rect highlight_ingredient_box1{ 80.0f, 80.0f,-200.0f ,175.0f };
+
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     AEMtx33 background;
@@ -56,24 +58,14 @@ void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture * tex) {
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box)
 {
     AEMtx33 collisionTransform;
-
-    // Scale transform using the box's width and height
     AEMtx33Scale(&collisionTransform, box.width, box.height);
-
-    // Translate transform using the box's x and y
     AEMtx33TransApply(&collisionTransform, &collisionTransform, box.x, box.y);
-
-    // Set the transform for rendering
     AEGfxSetTransform(collisionTransform.m);
-
-    // Set color, blend, etc. as you were doing
     AEGfxSetColorToMultiply(1.0f, 0.0f, 0.0f, 1.0f);
     AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
     AEGfxSetTransparency(0.5f);
-
-    // Finally, draw the mesh
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox)
