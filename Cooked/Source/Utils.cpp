@@ -4,9 +4,10 @@
 #include "utils.hpp"
 
 
-Timer::Timer(f64 duration) : countdownDuration(duration), startTime(0.0) {}
+//Timer::Timer(f64 duration) : countdownDuration(duration), startTime(0.0) {}
 
-void Timer::start() {
+void Timer::start(f64 duration) {
+	this->countdownDuration = duration;
 	startTime = AEGetTime(nullptr);
 }
 
