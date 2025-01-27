@@ -72,13 +72,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         RenderDustbin(pMesh, dTex);
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         RenderIngredientbox(pMesh);
-        RendercollisonIngredientBox(pMesh);
+        
+        
         RenderStove(pMesh);
         players1.playerdraw(pMesh);
-        if (players1.playerCheckCollison(collison_ingredient_box1.x, collison_ingredient_box1.y, collison_ingredient_box1.width, collison_ingredient_box1.height)) {
-            AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-            RenderhighlightIngredientBox(pMesh);
+
+        for (size_t i = 0;i < collisionBoxes.size(); i++) {
+            const Rect& collBox = collisionBoxes[i];
+            const Rect& visualBox = highingredientBoxes[i];
+
+            if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)) {
+                // Highlight the linked visual box
+                RenderhighlightIngredientBox(pMesh, visualBox);
+            }
         }
+
+
 
         AESysFrameEnd();
     }

@@ -1,36 +1,35 @@
-#pragma once
 // render.hpp
+#pragma once
 
+#include <AEEngine.h> // Include necessary headers first
+#include <vector>
 
-#include <crtdbg.h> // To check for memory leaks
-#include <math.h> 
-#include <AEEngine.h> // Replace with the actual header for your graphics framework
-
-void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex);
-// Renders the dustbin with texture
-void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture* tex);
-
-// Renders three circles with white boundaries
-void RenderIngredientbox(AEGfxVertexList* mesh);
-
-// Renders the stove with a red color
-void RenderStove(AEGfxVertexList* mesh);
-void RendercollisonIngredientBox(AEGfxVertexList* mesh);
-void RenderhighlightIngredientBox(AEGfxVertexList* mesh);
+// Define Rect class before any function declarations
 class Rect {
-	public:
-	float width{};
-	float height{};
-	float x{};
-	float y{};
+public:
+    float width{};
+    float height{};
+    float x{};
+    float y{};
 
+    
 
 };
+
+// Function declarations using Rect
+void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex);
+void RenderDustbin(AEGfxVertexList* mesh, AEGfxTexture* tex);
+void RenderIngredientbox(AEGfxVertexList* mesh);
+void RenderStove(AEGfxVertexList* mesh);
+void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box);
+void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox);
+
+// Extern declarations for global variables
 extern Rect background1;
-extern Rect dusbin1;
+extern Rect dustbin1;
 extern Rect ingredient1_box;
 extern Rect stove1;
-extern Rect collison_ingredient_box1;
-//variable
+extern std::vector<Rect> highingredientBoxes;
+extern std::vector<Rect> collisionBoxes;
 
 
