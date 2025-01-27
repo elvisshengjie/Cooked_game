@@ -1,3 +1,4 @@
+#include <string>
 
 /*
 	Ingredients :
@@ -27,7 +28,6 @@ enum Ingredients {
 	BEEF
 };
 
-// List of valid ingredients
 const std::string validIngredients[] = { "chicken", "rice", "egg", 
 										"cheese", "potato", "beef" };
 
