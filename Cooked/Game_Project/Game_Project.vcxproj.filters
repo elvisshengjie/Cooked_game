@@ -30,6 +30,9 @@
     <ClCompile Include="..\Source\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ingredients.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Assets\Assets\PlanetTexture.png">
@@ -55,13 +58,13 @@
     <ClInclude Include="collison.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="player.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ingredients.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\player.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

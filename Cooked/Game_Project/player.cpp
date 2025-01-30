@@ -48,6 +48,40 @@ void player::playerThrow(){
 	this->Hand = EMPTY;
 }
 
+void player::ClampToScreen() {
+	// Player's half dimensions (since x/y are at the center)
+	const float halfWidth = width / 2.0f;
+	const float halfHeight = height / 2.0f;
+
+	// Screen boundaries 
+	const float screenLeft = -800.0f;   
+	const float screenRight = 800.0f;   
+	const float screenBottom = -450.0f;   
+	const float screenTop = 450.0f;   
+
+	// Clamp x-axis (left/right edges)
+	const float playerLeft = x - halfWidth;  
+	const float playerRight = x + halfWidth;  
+
+	if (playerLeft < screenLeft) {
+		x = screenLeft + halfWidth;  
+	}
+	else if (playerRight >= screenRight) {
+		x = screenRight - halfWidth -1 ; 
+	}
+
+	// Clamp y-axis (top/bottom edges)
+	const float playerBottom = y - halfHeight; 
+	const float playerTop = y + halfHeight; 
+
+	if (playerBottom < screenBottom) {
+		y = screenBottom + halfHeight; 
+	}
+	else if (playerTop >= screenTop) {
+		y = screenTop - halfHeight -1;   
+	}
+}
+
 void player::playerPickUp(bool& isHolding, Ingredients& heldItem, const Ingredients& nearbyItem) {
 	if (AEInputCheckTriggered(AEVK_E)) {
 		if (!isHolding && nearbyItem != EMPTY) {
@@ -62,3 +96,4 @@ void player::playerPickUp(bool& isHolding, Ingredients& heldItem, const Ingredie
 		}
 	}
 }
+

@@ -27,6 +27,8 @@ public:
 	void playerMove(float speed);
 	bool playerCheckCollison(float x1, float y1, float width1, float height1);
 	void playerThrow();
+	void ClampToScreen();
+	void playerPickUp(bool& isHolding, Ingredients& heldItem, const Ingredients& nearbyItem);
 };
 
 extern player players1;
