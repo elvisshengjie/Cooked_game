@@ -6,15 +6,13 @@
 
 class Timer {
 private:
-	f64 countdownDuration; //countdown in s
-	f64 startTime; //start time in s
+	double countdownDuration; //countdown in s
+	double startTime; //start time in s
 
 public:
-	Timer(f64 duration);
+	void start(double duration);
 
-	void start();
-
-	f64 getRemainingTime() const;
+	double getRemainingTime() const;
 
 	bool completed() const;
 };
@@ -24,17 +22,18 @@ class Stove
 	private:
 		std::vector<int> stoveItems;
 		Timer cookingTimer;
+		int numIngredients;
+		
 
 	public:
-		Stove(f64 duration);
 
 		bool canCook() const;
 		
 		void putIngredients(Ingredients &ingredient);
 
-		f64 cookIngredients();
+		double cookIngredients();
 
-		f64 remainingCookingTime()const;
+		double remainingCookingTime()const;
 };
 
 extern Stove Wok;

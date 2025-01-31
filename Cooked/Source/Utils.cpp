@@ -4,16 +4,16 @@
 #include "utils.hpp"
 
 
-//Timer::Timer(f64 duration) : countdownDuration(duration), startTime(0.0) {}
+//Timer::Timer(double duration) : countdownDuration(duration), startTime(0.0) {}
 
-void Timer::start(f64 duration) {
+void Timer::start(double duration) {
 	this->countdownDuration = duration;
 	startTime = AEGetTime(nullptr);
 }
 
-f64 Timer::getRemainingTime() const {
-	f64 currTime = AEGetTime(nullptr);
-	f64 elapsedTime = currTime - startTime;
+double Timer::getRemainingTime() const {
+	double currTime = AEGetTime(nullptr);
+	double elapsedTime = currTime - startTime;
 	return (countdownDuration - elapsedTime) > 0.0 ? (countdownDuration - elapsedTime) : 0.0;
 }
 
@@ -29,9 +29,9 @@ bool Timer::completed() const {
 
 
 
-Stove::Stove(f64 duration) : cookingTimer(duration) {}
+//Stove::Stove(double duration) : cookingTimer(duration) {}
 
-f64 Stove::remainingCookingTime() const 
+double Stove::remainingCookingTime() const 
 {
 	return this->cookingTimer.getRemainingTime();
 }
@@ -46,12 +46,33 @@ void Stove::putIngredients(Ingredients &ingredient)
 	this->stoveItems.push_back(ingredient);
 }
 
-f64 Stove::cookIngredients()  
+double Stove::cookIngredients()  
 {
 	if(AEInputCheckTriggered(AEVK_E) && this->canCook() )
 	{
+		
+		if(this->stoveItems.size() == 2)
+		{
+			this->cookingTimer.start(3.0);
+		}
+		else if (this->stoveItems.size() == 3)
+		{
+			this->cookingTimer.start(4.0);
+		}
+		else if (this->stoveItems.size() == 4)
+		{
+			this->cookingTimer.start(5.0);
+		}
+		else if (this->stoveItems.size() == 5)
+		{
+			this->cookingTimer.start(6.0);
+		}
+		else if (this->stoveItems.size() == 6)
+		{
+			this->cookingTimer.start(7.0);
+		}
+
 		this->stoveItems.clear();
-		this->cookingTimer.start();
 		return this->cookingTimer.getRemainingTime();
 	}
 	else return 0.0;
