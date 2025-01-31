@@ -3,16 +3,28 @@
 #include <assert.h>
 #include <crtdbg.h> // To check for memory leaks
 #include <math.h> 
+#include <vector>
 #include <AEEngine.h> // Replace with the actual header for your graphics framework
 // Function to Render Dustbin with Texture
 
-Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
-Rect dustbin1{ 250.0f, 300.0f,-700.0f , -300.0f };
-Rect ingredient1_box{ 150.0f, 150.0f,-200.0f ,175.0f };
-Rect stove1{ 300.0f, 200.0f,-50.0f, -200.0f };
+std::vector<Rect> highingredientBoxes = {
+    {90.0f, 90.0f,-200.0f ,175.0f},
+    {90.0f,90.0f, -49.0f, 175.0f},
+    {90.0f, 90.0f, 102.0f, 175.0f }
+    
+};
+std::vector<Rect> collisionBoxes = {
+    {100.0f, 100.0f, -200.0f, 175.0f},
+    {100.0f,100.0f, -49.0f, 175.0f},
+    { 100.0f, 100.0f, 102.0f, 175.0f }
+};
 
-Rect collison_ingredient_box1{ 230.0f,310.0f, -240.0f, 175.0f };
-Rect highlight_ingredient_box1{ 150.0f, 150.0f,-200.0f ,175.0f };
+Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
+Rect dustbin1{ 150.0f, 200.0f,-700.0f , -300.0f };
+Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
+Rect stove1{ 200.0f, 100.0f,-50.0f, -200.0f };
+
+
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     AEMtx33 background;
@@ -43,25 +55,24 @@ void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture * tex) {
     
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
-void RendercollisonIngredientBox(AEGfxVertexList * mesh){
-
-    AEMtx33 collisonIngBox;
-    AEMtx33Scale(&collisonIngBox, collison_ingredient_box1.width, collison_ingredient_box1.height);
-    AEMtx33TransApply(&collisonIngBox, &collisonIngBox, collison_ingredient_box1.x, collison_ingredient_box1.y);
-    AEGfxSetTransform(collisonIngBox.m);
+void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box)
+{
+    AEMtx33 collisionTransform;
+    AEMtx33Scale(&collisionTransform, box.width, box.height);
+    AEMtx33TransApply(&collisionTransform, &collisionTransform, box.x, box.y);
+    AEGfxSetTransform(collisionTransform.m);
     AEGfxSetColorToMultiply(1.0f, 0.0f, 0.0f, 1.0f);
     AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
     AEGfxSetTransparency(0.5f);
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
-
 }
-void RenderhighlightIngredientBox(AEGfxVertexList* mesh)
+void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox)
 {
     AEMtx33 highingredientboxTransform;
-    AEMtx33Scale(&highingredientboxTransform, highlight_ingredient_box1.width, highlight_ingredient_box1.height);
-    AEMtx33TransApply(&highingredientboxTransform, &highingredientboxTransform, highlight_ingredient_box1.x, highlight_ingredient_box1.y);
+    AEMtx33Scale(&highingredientboxTransform, highlightBox.width, highlightBox.height);
+    AEMtx33TransApply(&highingredientboxTransform, &highingredientboxTransform, highlightBox.x, highlightBox.y);
     AEGfxSetTransform(highingredientboxTransform.m);
     AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
     AEGfxSetColorToAdd(0.2f, 0.2f, 0.2f, 0.2f);
