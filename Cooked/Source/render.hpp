@@ -31,5 +31,5 @@ extern Rect ingredient1_box;
 extern Rect stove1;
 extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
-
+extern std::vector<Rect> objectcollision;
 

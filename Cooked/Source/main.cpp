@@ -73,6 +73,15 @@ void CoreEngine::Update()
 
         players1.playerMove(6.0);
         players1.ClampToScreen();
+        for (size_t i = 0; i < objectcollision.size(); i++) {
+            const Rect& object = objectcollision[i];
+
+
+            players1.playerCheckCollisonobject(object.x, object.y, object.width, object.height);
+
+
+        }
+
         //AEGfxSetBackgroundColor(0.35f, 0.2f, 0.1f);
         AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
         Renderbackground(pMesh, bTex);
@@ -94,6 +103,8 @@ void CoreEngine::Update()
                 RenderhighlightIngredientBox(pMesh, visualBox);
             }
         }
+
+        
 
 
 
