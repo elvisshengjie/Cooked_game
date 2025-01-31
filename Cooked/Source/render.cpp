@@ -18,9 +18,15 @@ std::vector<Rect> collisionBoxes = {
     {100.0f,100.0f, -49.0f, 175.0f},
     { 100.0f, 100.0f, 102.0f, 175.0f }
 };
-
+std::vector<Rect> objectcollision = {
+    { 150.0f, 200.0f,-750.0f , -300.0f },
+    { 200.0f, 100.0f,-50.0f, -200.0f },
+    { 80.0f, 80.0f,-200.0f ,175.0f },
+    { 80.0f, 80.0f,-49.0f ,175.0f },
+    { 80.0f, 80.0f,102.0f ,175.0f }
+};
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
-Rect dustbin1{ 150.0f, 200.0f,-700.0f , -300.0f };
+Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
 Rect stove1{ 200.0f, 100.0f,-50.0f, -200.0f };
 

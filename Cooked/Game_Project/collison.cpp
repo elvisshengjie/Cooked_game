@@ -1,4 +1,5 @@
 #include "collison.hpp"
+#include <iostream>
 
 
 Collison Colingredientbox1;
@@ -23,3 +24,45 @@ bool Collison::collisonRect(float x0, float y0, float width0, float height0, flo
 		playerTop >= objectBottom &&
 		playerBottom <= objectTop);
 }
+
+void Collison::collisonobjectRect(
+    float& px, float& py, float pw, float ph,
+    float ox, float oy, float ow, float oh)
+{
+    // Half-widths, half-heights
+    float halfPW = pw * 0.5f;
+    float halfPH = ph * 0.5f;
+    float halfOW = ow * 0.5f;
+    float halfOH = oh * 0.5f;
+
+    bool overlapX = (px + halfPW >= ox - halfOW) && (px - halfPW <= ox + halfOW);
+    bool overlapY = (py + halfPH >= oy - halfOH) && (py - halfPH <= oy + halfOH);
+
+    if (overlapX && overlapY) {
+        // They overlap; figure out how far to push the player out.
+
+        // Overlap amounts:
+        float overlapLeft = (px + halfPW) - (ox - halfOW);
+        float overlapRight = (ox + halfOW) - (px - halfPW);
+        float overlapTop = (py + halfPH) - (oy - halfOH);
+        float overlapBottom = (oy + halfOH) - (py - halfPH);
+
+        // Find the smallest overlap
+        float minOverlap = std::min({ overlapLeft, overlapRight, overlapTop, overlapBottom });
+
+        // Adjust position based on which side is smallest
+        if (minOverlap == overlapLeft) {
+            px -= overlapLeft;    // Move player left
+        }
+        else if (minOverlap == overlapRight) {
+            px += overlapRight;   // Move player right
+        }
+        else if (minOverlap == overlapTop) {
+            py -= overlapTop;     // Move player up
+        }
+        else {
+            py += overlapBottom;  // Move player down
+        }
+    }
+}
+
