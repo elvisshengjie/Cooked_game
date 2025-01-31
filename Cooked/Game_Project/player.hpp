@@ -14,9 +14,9 @@ class player
 		int Hand = EMPTY;
 
 	public:
-		void playerdraw(AEGfxVertexList* mesh);
+		void playerdraw(AEGfxVertexList* mesh)const;
 		void playerMove(float speed);
-		bool playerCheckCollison(float x1, float y1, float width1, float height1);
+		bool playerCheckCollison(float x1, float y1, float width1, float height1)const;
 		void playerThrow();
 		void playerPickUp(bool& isHolding, Ingredients& heldItem, const Ingredients& nearbyItem);
 };

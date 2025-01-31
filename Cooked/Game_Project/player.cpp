@@ -6,7 +6,7 @@
 
 
 player players1;
-void player::playerdraw(AEGfxVertexList* mesh)
+void player::playerdraw(AEGfxVertexList* mesh) const
 {
     AEMtx33 rectplayer;
 	AEMtx33Scale(&rectplayer, width, height);
@@ -40,7 +40,7 @@ void player::playerMove(float speed)
 	}
 }
 
-bool player::playerCheckCollison(float x1, float y1, float width1, float height1)
+bool player::playerCheckCollison(float x1, float y1, float width1, float height1)const
 {
 	return Colingredientbox1.collisonRect(x, y, width, height, x1, y1, width1, height1);
 }
@@ -62,3 +62,13 @@ void player::playerPickUp(bool& isHolding, Ingredients& heldItem, const Ingredie
 		}
 	}
 }
+
+//float player::getX() const 
+//{
+//	return x;
+//}
+//
+//float player::getY() const
+//{
+//	return y;
+//}

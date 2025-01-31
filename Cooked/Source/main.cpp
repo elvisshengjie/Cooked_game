@@ -2,11 +2,12 @@
 // includes
 #include <crtdbg.h> // To check for memory leaks
 #include "AEEngine.h"
-#include <math.h> 
-#include "render.hpp"
+#include <math.h>
 #include "player.hpp"
-#include "collison.hpp"
+#include "render.hpp"
 #include "utils.hpp"
+#include "collison.hpp"
+
 
 // ---------------------------------------------------------------------------
 // main
