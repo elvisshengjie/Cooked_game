@@ -120,7 +120,7 @@ void RenderIngredientsOnBoxes(AEGfxVertexList* mesh)
 
         // 2) Compute position and size for the ingredient shape
         float posX = ingredient1_box.x + 151.0f * i;
-        float posY = ingredient1_box.y + 10.0f; // shift slightly above
+        float posY = ingredient1_box.y; // shift slightly above
         float ingW = ingredient1_box.width - 20.0f;  // smaller than the box
         float ingH = ingredient1_box.height - 20.0f; // smaller than the box
 
