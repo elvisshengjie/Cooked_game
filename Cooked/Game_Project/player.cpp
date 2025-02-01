@@ -153,14 +153,14 @@ void player::playerPickUp(Ingredients& boxIngredient)
 {
 	if (AEInputCheckTriggered(AEVK_E))
 	{
-		// If the player is not already holding something
+		// If the player is not already holding something, pick up the box ingredient.
 		if (Hand == EMPTY)
 		{
-			Hand = boxIngredient;                // Pick up the current ingredient from the box.
-			boxIngredient = GetRandomIngredient(); // Immediately randomize the box's ingredient.
+			Hand = boxIngredient;                // Player picks up the current ingredient.
+			boxIngredient = GetRandomIngredient(); // Randomize the box immediately.
 			std::cout << "Picked up: " << IngredientToString(Hand) << std::endl;
 		}
-		// If already holding an ingredient, drop it (clear the hand)
+		// If already holding an ingredient, drop it (clear the held ingredient).
 		else
 		{
 			std::cout << "Dropped: " << IngredientToString(Hand) << std::endl;
@@ -168,7 +168,6 @@ void player::playerPickUp(Ingredients& boxIngredient)
 		}
 	}
 }
-
 //float player::getX() const 
 //{
 //	return x;
