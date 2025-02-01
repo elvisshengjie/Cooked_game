@@ -20,7 +20,6 @@ class CoreEngine
 {
     bool gGameRunning = true;
     AEGfxVertexList* pMesh = nullptr;
-    AEGfxVertexList* IngredientMesh = nullptr;
     AEGfxTexture* bTex = nullptr;
     AEGfxTexture* dTex = nullptr;
 	AEGfxTexture* chickenTex = nullptr;
@@ -83,19 +82,6 @@ void CoreEngine::Init()
 	
 
 
-    AEGfxMeshStart();
-    AEGfxTriAdd(
-        -0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,  // Bottom-left
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,  // Bottom-right
-        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f   // Top-left
-    );
-    AEGfxTriAdd(
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,  // Bottom-right
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,  // Top-right
-        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f   // Top-left
-    );
-    IngredientMesh = AEGfxMeshEnd();
-
 }
 
 void CoreEngine::Update()
@@ -139,17 +125,15 @@ void CoreEngine::Update()
         
 		
         RenderStove(pMesh);
-        players1.playerdraw(pMesh, IngredientMesh);
+        players1.playerdraw(pMesh);
 
         for (size_t i = 0; i < collisionBoxes.size(); i++) {
             const Rect& collBox = collisionBoxes[i];
             const Rect& visualBox = highingredientBoxes[i];
 
             if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)) {
-                // Optionally, render a highlight for the box.
+                // Highlight the linked visual box
                 RenderhighlightIngredientBox(pMesh, visualBox);
-                // Handle pickup/drop for the current box.
-                players1.playerPickUp(g_currentBoxIngredients[i]);
             }
         }
 
@@ -174,7 +158,6 @@ void CoreEngine::Update()
 
 void CoreEngine::Exit(){
     if (pMesh) AEGfxMeshFree(pMesh);
-    if (IngredientMesh)AEGfxMeshFree(IngredientMesh);
     if (bTex) AEGfxTextureUnload(bTex);
     if (dTex) AEGfxTextureUnload(dTex);
         AESysExit();
