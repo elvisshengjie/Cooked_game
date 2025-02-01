@@ -75,3 +75,4 @@ public:
 	void update();
 	const std::vector<Recipe>& getActiveRecipes() const;
 };
+

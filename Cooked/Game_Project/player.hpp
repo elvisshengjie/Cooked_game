@@ -5,6 +5,7 @@
 #include "Ingredients.hpp"
 
 
+
 class player
 {
 	private:
@@ -23,6 +24,7 @@ class player
 		void ClampToScreen();
 		void playerThrow();
 		void playerPickUp(Ingredients& boxIngredient);
+		void playerDrop(Stove& stove);
 		
 
 };

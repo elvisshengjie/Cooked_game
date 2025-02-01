@@ -3,6 +3,7 @@
 
 #include <AEEngine.h> // Include necessary headers first
 #include <vector>
+#include "Ingredients.hpp"
 
 // Define Rect class before any function declarations
 class Rect {
@@ -34,6 +35,13 @@ void RenderIngredientbox(AEGfxVertexList* mesh);
 void RenderStove(AEGfxVertexList* mesh);
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box);
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox);
+
+void RenderRecipeBox(AEGfxVertexList* mesh , const Recipe& recipe, float x, float y);
+
+void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem);
+
+void InitFont();
+
 //void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
 void RenderIngredientsOnBoxes(
     AEGfxVertexList* mesh,
@@ -52,4 +60,4 @@ extern Rect stove1;
 extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;
-
+extern s8 FontID;

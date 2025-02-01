@@ -26,7 +26,7 @@ class Stove
 {
 private:
 	std::vector<std::string> stoveItems;
-	Timer cookingTimer;
+	Timer cookingTimer{};
 	bool isCooking;
 	float x, y, width, height;
 
@@ -52,6 +52,10 @@ public:
 	float getX() const;
 
 	float getY() const;
+
+	float getW() const;
+
+	float getH() const;
 
 };
 extern Stove Wok;

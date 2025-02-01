@@ -9,6 +9,14 @@
 #include <AEEngine.h> // Replace with the actual header for your graphics framework
 // Function to Render Dustbin with Texture
 
+s8 FontID = -1;
+
+void InitFont()
+{
+    FontID = AEGfxCreateFont("./Assets/buggy-font.ttf", 24);  // Ensure valid .ttf file
+    assert(FontID >= 0 && "Failed to load font!");
+}
+
 std::vector<Rect> highingredientBoxes = {
     {90.0f, 90.0f,-200.0f ,175.0f},
     {90.0f,90.0f, -49.0f, 175.0f},
@@ -25,8 +33,19 @@ std::vector<Rect> objectcollision = {
     { 200.0f, 100.0f,-50.0f, -200.0f },
     { 80.0f, 80.0f,-200.0f ,175.0f },
     { 80.0f, 80.0f,-49.0f ,175.0f },
-    { 80.0f, 80.0f,102.0f ,175.0f }
+    { 80.0f, 80.0f,102.0f ,175.0f },
+    { 330.0f, 200.0f, -350.0f, 340.0f },  // Recipe 1 Collision
+    { 330.0f, 200.0f,   -0.0f, 340.0f },  // Recipe 2 Collision
+    { 330.0f, 200.0f,  350.0f, 340.0f }   // Recipe 3 Collision
 };
+
+std::vector<Rect> recipeBoxes = {
+    { 350.0f, 120.0f, -350.0f, 340.0f },  // Recipe 1 (Wider & Higher)
+    { 350.0f, 120.0f,   -0.0f, 340.0f },  // Recipe 2 (Centered)
+    { 350.0f, 120.0f,  350.0f, 340.0f }   // Recipe 3 (Right)
+};
+
+
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
 Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
@@ -209,4 +228,74 @@ void RenderStove(AEGfxVertexList* mesh) {
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 
+void RenderRecipeBox(AEGfxVertexList* mesh, const Recipe& recipe, float x, float y)
+{
 
+    // Move Boxes Higher
+    //y += 50.0f;
+    // Render recipe box background
+    AEMtx33 recipeTransform;
+    AEMtx33Scale(&recipeTransform, 330.0f, 200.0f);
+    AEMtx33TransApply(&recipeTransform, &recipeTransform, x, y);
+    AEGfxSetTransform(recipeTransform.m);
+
+    AEGfxSetColorToMultiply(0.9f, 0.9f, 0.9f, 1.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+
+    // Print Recipe Name
+    if (FontID < 0) return;
+
+    // Adjust text alignment for wider box
+    float textX = (x - 160.0f) / 800.0f;  // Left-align for wider box
+    float nameY = (y + 50.0f) / 450.0f;   // Position recipe name higher
+    float ingYStart = y / 450.0f; // Ingredients start slightly lower
+
+    float nameScale = 0.85f;  // Slightly larger for better readability
+    float ingScale = 0.75f;   // Maintain clarity for ingredients
+
+    // Split long recipe names over two lines
+    std::string nameLine1 = recipe.Name;
+    std::string nameLine2 = "";
+
+    if (recipe.Name.length() > 16) { // If too long, break into two lines
+        size_t spacePos = recipe.Name.find(' ', 12);
+        if (spacePos != std::string::npos) {
+            nameLine1 = recipe.Name.substr(0, spacePos);
+            nameLine2 = recipe.Name.substr(spacePos + 1);
+        }
+    }
+
+    // Print Name (Left-aligned)
+    AEGfxPrint(FontID, nameLine1.c_str(), textX, nameY, nameScale, 0.0f, 0.0f, 0.0f, 1.0f);
+    if (!nameLine2.empty()) {
+        AEGfxPrint(FontID, nameLine2.c_str(), textX, nameY - 0.05f, nameScale, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    // Handle Ingredients Overflow (Split into two columns, flowing into right half)
+    float ingTextY = ingYStart;
+    float ingColumnX = textX;  // Start in left half
+    size_t midPoint = (recipe.Ingredients.size() + 1) / 2;  // Halfway point for two columns
+
+    for (size_t i = 0; i < recipe.Ingredients.size(); ++i) {
+        AEGfxPrint(FontID, recipe.Ingredients[i].c_str(), ingColumnX, ingTextY, ingScale, 0.0f, 0.0f, 1.0f, 1.0f); // Blue text
+        ingTextY -= 0.05f;  // **Reduced spacing between ingredients (was 0.07f)**
+
+        // Move to second column if halfway through the ingredient list
+        if (i + 1 == midPoint) {
+            ingTextY = ingYStart;  // Reset Y for second column
+            ingColumnX += 0.20f;  // **Added extra space for clearer separation**
+        }
+    }
+}
+
+void RenderActiveRecipes(AEGfxVertexList* mesh,const RecipeSystem& recipeSystem)
+{
+    const std::vector<Recipe>& activeRecipes = recipeSystem.getActiveRecipes();
+
+    for (size_t i = 0; i < activeRecipes.size(); i++)
+    {
+        if (i >= recipeBoxes.size()) break; // Prevent overflow
+        RenderRecipeBox(mesh, activeRecipes[i], recipeBoxes[i].x, recipeBoxes[i].y);
+    }
+}

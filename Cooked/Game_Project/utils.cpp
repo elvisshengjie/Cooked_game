@@ -27,8 +27,7 @@ bool Timer::completed() const {
 Stove::Stove(float posX, float posY, float w, float h)
 	: x(posX), y(posY), width(w), height(h), isCooking(false) {}
 
-Stove Wok(300.0f, 200.0f, 50.0f, 50.0f);
-
+Stove Wok(-50.0f, -200.0f, 200.0f, 100.0f);
 
 void Stove::putIngredient(const std::string& ingredient)
 {
@@ -91,4 +90,12 @@ float Stove::getX() const
 float Stove::getY() const
 {
 	return y;
+}
+
+float Stove::getW() const {
+	return width;
+}
+
+float Stove::getH() const {
+	return height;
 }

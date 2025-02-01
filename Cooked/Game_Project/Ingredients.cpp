@@ -64,7 +64,7 @@ RecipeSystem::RecipeSystem() {
 	allRecipes.push_back(Recipe("Loaded Protein Bowl", { "Chicken", "Rice", "Egg", "Cheese", "Potato", "Beef" }));
 
 	// Start with 3 random recipes
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 3; i++) {
 		activeRecipes.push_back(allRecipes[std::rand() % allRecipes.size()]);
 	}
 

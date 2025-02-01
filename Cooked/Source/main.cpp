@@ -15,6 +15,7 @@
 // main
                    // Increases health
 
+
 // Function to check if player is within a circle
 class CoreEngine
 {
@@ -29,6 +30,7 @@ class CoreEngine
     AEGfxTexture* eggTex = nullptr;
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
+    RecipeSystem recipeSystem;
 public:
     void Init();
     void Update();
@@ -54,6 +56,8 @@ void CoreEngine::Init()
 
     AEGfxMeshStart();
     srand(static_cast<unsigned>(time(nullptr)));  // Seed the random generator once
+
+    InitFont();
    
     // Initialize our 3 current box ingredients
     for (int i = 0; i < 3; ++i)
@@ -128,7 +132,7 @@ void CoreEngine::Update()
         
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         RenderIngredientbox(pMesh);
-
+        RenderActiveRecipes(pMesh, recipeSystem);
         
         
         
@@ -150,6 +154,12 @@ void CoreEngine::Update()
                 RenderhighlightIngredientBox(pMesh, visualBox);
                 // Handle pickup/drop for the current box.
                 players1.playerPickUp(g_currentBoxIngredients[i]);
+            }
+            if (players1.playerCheckCollison(Wok.getX(), Wok.getY(), Wok.getW(), Wok.getH()) ||
+                players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y, objectcollision[0].width, objectcollision[0].height))
+            {
+
+                players1.playerDrop(Wok);
             }
         }
 

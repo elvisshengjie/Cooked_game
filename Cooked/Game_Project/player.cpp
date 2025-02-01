@@ -4,7 +4,6 @@
 #include <iostream>
 
 
-
 player players1;
 void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 	// Draw the player (blue rectangle)
@@ -149,17 +148,37 @@ void player::playerPickUp(Ingredients& boxIngredient)
 	if (AEInputCheckTriggered(AEVK_E))
 	{
 		// If the player is not already holding something, pick up the box ingredient.
-		if (Hand == EMPTY)
+		if (Hand != EMPTY)
 		{
+			std::cout << "You are already holding, drop into Dustbin / Stove";
+			return;
+		}
 			Hand = boxIngredient;                // Player picks up the current ingredient.
 			boxIngredient = GetRandomIngredient(); // Randomize the box immediately.
 			std::cout << "Picked up: " << IngredientToString(Hand) << std::endl;
-		}
 		// If already holding an ingredient, drop it (clear the held ingredient).
-		else
-		{
-			std::cout << "Dropped: " << IngredientToString(Hand) << std::endl;
-			Hand = EMPTY;
+	}
+}
+
+void player::playerDrop(Stove& stove) {
+	//std::cout << "Attempted";
+	if (AEInputCheckTriggered(AEVK_E)) {
+		std::cout << "Attempted";
+		if (Hand != EMPTY) {
+			if (playerCheckCollison(stove.getX(), stove.getY(), stove.getW(), stove.getH()))
+			{
+				stove.putIngredient(IngredientToString(Hand));  // Convert enum to string
+				std::cout << "Dropped ingredient: " << IngredientToString(Hand) << " into the stove!" << std::endl;
+				Hand = EMPTY;  // Player no longer holds the ingredient
+			}
+			else if (playerCheckCollison(-750.0f, -300.0f,150.0f, 200.0f))
+			{
+				std::cout << "Threw away ingredient: " << IngredientToString(Hand) << std::endl;
+				Hand = EMPTY;  // Ingredient is removed
+			}
+			else {
+				return;
+			}
 		}
 	}
 }
