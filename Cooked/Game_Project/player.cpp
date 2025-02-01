@@ -19,16 +19,12 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 	AEGfxSetTransparency(1.0f);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
-	// If holding an ingredient, draw it near the player.
 	if (Hand != EMPTY) {
-		// Offset for drawing the held ingredient (e.g., to the right).
 		float offsetX = width + 2.0f;
 		float offsetY = 0.0f;
 
 		AEMtx33 ingredientTransform;
-		// Scale the held ingredient rectangle (here, half the player's size)
 		AEMtx33Scale(&ingredientTransform, width * 0.5f, height * 0.5f);
-		// Position it relative to the player's position.
 		AEMtx33TransApply(&ingredientTransform, &ingredientTransform, x + offsetX, y + offsetY);
 		AEGfxSetTransform(ingredientTransform.m);
 
@@ -77,11 +73,10 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 		}
 
 		// Draw the held ingredient rectangle.
-		// IMPORTANT: Use a dedicated mesh that has white (neutral) vertex colors so that the multiplier tint is clearly visible.
+		// IMPORTANT: Use a dedicated mesh (mesh2) that is created with white (neutral) vertex colors.
 		AEGfxMeshDraw(mesh2, AE_GFX_MDM_TRIANGLES);
 	}
 }
-
 
 void player::playerMove(float speed)
 {
@@ -153,14 +148,14 @@ void player::playerPickUp(Ingredients& boxIngredient)
 {
 	if (AEInputCheckTriggered(AEVK_E))
 	{
-		// If the player is not already holding something
+		// If the player is not already holding something, pick up the box ingredient.
 		if (Hand == EMPTY)
 		{
-			Hand = boxIngredient;                // Pick up the current ingredient from the box.
-			boxIngredient = GetRandomIngredient(); // Immediately randomize the box's ingredient.
+			Hand = boxIngredient;                // Player picks up the current ingredient.
+			boxIngredient = GetRandomIngredient(); // Randomize the box immediately.
 			std::cout << "Picked up: " << IngredientToString(Hand) << std::endl;
 		}
-		// If already holding an ingredient, drop it (clear the hand)
+		// If already holding an ingredient, drop it (clear the held ingredient).
 		else
 		{
 			std::cout << "Dropped: " << IngredientToString(Hand) << std::endl;
