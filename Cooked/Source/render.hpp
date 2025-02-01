@@ -22,13 +22,27 @@ public:
 // Forward declare your rendering functions
 
 // Function declarations using Rect
+void Renderchicken(AEGfxVertexList* mesh, AEGfxTexture* tex);
+void Renderbeef(AEGfxVertexList* mesh, AEGfxTexture* tex);
+void Rendercheese(AEGfxVertexList* mesh, AEGfxTexture* tex);
+void Renderrice(AEGfxVertexList* mesh, AEGfxTexture* tex);
+void Renderpotato(AEGfxVertexList* mesh, AEGfxTexture* tex);
+void Renderegg(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void RenderDustbin(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void RenderIngredientbox(AEGfxVertexList* mesh);
 void RenderStove(AEGfxVertexList* mesh);
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box);
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox);
-void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
+//void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
+void RenderIngredientsOnBoxes(
+    AEGfxVertexList* mesh,
+    AEGfxTexture* chickenTex,
+    AEGfxTexture* beefTex,
+    AEGfxTexture* cheeseTex,
+    AEGfxTexture* eggTex,
+    AEGfxTexture* riceTex,
+    AEGfxTexture* potatoTex);
 
 // Extern declarations for global variables
 extern Rect background1;

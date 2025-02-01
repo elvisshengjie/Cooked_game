@@ -107,70 +107,229 @@ void RenderIngredientbox(AEGfxVertexList* mesh) {
     }
 }
 
-void RenderIngredientsOnBoxes(AEGfxVertexList* mesh)
-{
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+void Renderchicken(AEGfxVertexList* mesh, AEGfxTexture* tex) {
+    AEMtx33 dustbin;
+    AEMtx33Scale(&dustbin, dustbin1.width, dustbin1.height);
+    AEMtx33TransApply(&dustbin, &dustbin, dustbin1.x, dustbin1.y);
+    AEGfxSetTransform(dustbin.m);
 
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+void Renderrice(AEGfxVertexList* mesh, AEGfxTexture* tex) {
+    AEMtx33 dustbin;
+    AEMtx33Scale(&dustbin, dustbin1.width, dustbin1.height);
+    AEMtx33TransApply(&dustbin, &dustbin, dustbin1.x, dustbin1.y);
+    AEGfxSetTransform(dustbin.m);
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+void Rendercheese(AEGfxVertexList* mesh, AEGfxTexture* tex) {
+    AEMtx33 dustbin;
+    AEMtx33Scale(&dustbin, dustbin1.width, dustbin1.height);
+    AEMtx33TransApply(&dustbin, &dustbin, dustbin1.x, dustbin1.y);
+    AEGfxSetTransform(dustbin.m);
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+void Renderbeef(AEGfxVertexList* mesh, AEGfxTexture* tex) {
+    AEMtx33 dustbin;
+    AEMtx33Scale(&dustbin, dustbin1.width, dustbin1.height);
+    AEMtx33TransApply(&dustbin, &dustbin, dustbin1.x, dustbin1.y);
+    AEGfxSetTransform(dustbin.m);
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+void Renderpotato(AEGfxVertexList* mesh, AEGfxTexture* tex) {
+    AEMtx33 dustbin;
+    AEMtx33Scale(&dustbin, dustbin1.width, dustbin1.height);
+    AEMtx33TransApply(&dustbin, &dustbin, dustbin1.x, dustbin1.y);
+    AEGfxSetTransform(dustbin.m);
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+void Renderegg(AEGfxVertexList* mesh, AEGfxTexture* tex) {
+            float posX = ingredient1_box.x +151.0f;
+            float posY = ingredient1_box.y; // shift slightly above
+            float ingW = ingredient1_box.width -20.0f;  // smaller than the box
+            float ingH = ingredient1_box.height -20.0f; // smaller than the box
+    
+            // 3) Setup the transformation for the shape
+            AEMtx33 ingredientTransform;
+            AEMtx33Scale(&ingredientTransform, ingW, ingH);
+            AEMtx33TransApply(&ingredientTransform, &ingredientTransform, posX, posY);
+            AEGfxSetTransform(ingredientTransform.m);
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+
+//void RenderIngredientsOnBoxes(AEGfxVertexList* mesh)
+//{
+//    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+//
+//    for (int i = 0; i < 3; i++)
+//    {
+//        // 1) Retrieve which ingredient is in this box
+//        Ingredients ing = g_currentBoxIngredients[i];
+//        if (ing == EMPTY)
+//            continue; // skip rendering if empty
+//
+//        // 2) Compute position and size for the ingredient shape
+//        float posX = ingredient1_box.x + 151.0f * i;
+//        float posY = ingredient1_box.y; // shift slightly above
+//        float ingW = ingredient1_box.width - 20.0f;  // smaller than the box
+//        float ingH = ingredient1_box.height - 20.0f; // smaller than the box
+//
+//        // 3) Setup the transformation for the shape
+//        AEMtx33 ingredientTransform;
+//        AEMtx33Scale(&ingredientTransform, ingW, ingH);
+//        AEMtx33TransApply(&ingredientTransform, &ingredientTransform, posX, posY);
+//        AEGfxSetTransform(ingredientTransform.m);
+//
+//        // 4) Vary color (or shape) based on the ingredient
+//        switch (ing)
+//        {
+//        case CHICKEN:
+//            // Pale-ish color
+//            AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
+//            break;
+//        case RICE:
+//            // White-ish
+//            AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+//            break;
+//        case EGG:
+//            // Light yellow
+//            AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
+//            break;
+//        case CHEESE:
+//            // Yellow-ish
+//            AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
+//            break;
+//        case POTATO:
+//            // Brown-ish
+//            AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
+//            break;
+//        case BEEF:
+//            // Reddish
+//            AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
+//            break;
+//        default:
+//            AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+//            break;
+//        }
+//
+//        
+//
+//        
+//        AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+//        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+//        AEGfxSetBlendColor(1.0f, 1.0f, 1.0f, 1.0f);
+//        AEGfxSetTransparency(1.0f);
+//
+//        
+//        AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+//    }
+//}
+void RenderIngredientsOnBoxes(
+    AEGfxVertexList* mesh,
+    AEGfxTexture* chickenTex,
+    AEGfxTexture* beefTex,
+    AEGfxTexture* cheeseTex,
+    AEGfxTexture* eggTex,
+    AEGfxTexture* riceTex,
+    AEGfxTexture* potatoTex)
+{
+    // Use texture rendering mode
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+    // Loop over the 3 boxes
     for (int i = 0; i < 3; i++)
     {
-        // 1) Retrieve which ingredient is in this box
+        // Which ingredient is in this slot?
         Ingredients ing = g_currentBoxIngredients[i];
         if (ing == EMPTY)
-            continue; // skip rendering if empty
+            continue; // Skip if no ingredient
 
-        // 2) Compute position and size for the ingredient shape
-        float posX = ingredient1_box.x + 151.0f * i;
-        float posY = ingredient1_box.y; // shift slightly above
-        float ingW = ingredient1_box.width - 20.0f;  // smaller than the box
-        float ingH = ingredient1_box.height - 20.0f; // smaller than the box
+        // Compute position & size for the ingredient texture
+        float posX = ingredient1_box.x + (151.0f * i);
+        float posY = ingredient1_box.y;
+        float ingW = ingredient1_box.width - 20.0f;
+        float ingH = ingredient1_box.height - 20.0f;
 
-        // 3) Setup the transformation for the shape
+        // Transform so the texture is drawn smaller than the box
         AEMtx33 ingredientTransform;
         AEMtx33Scale(&ingredientTransform, ingW, ingH);
         AEMtx33TransApply(&ingredientTransform, &ingredientTransform, posX, posY);
         AEGfxSetTransform(ingredientTransform.m);
 
-        // 4) Vary color (or shape) based on the ingredient
+        // Set blend & color to white so the texture appears "as is"
+        AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+        AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+        AEGfxSetTransparency(1.0f);
+
+        // Pick the correct texture for each ingredient
         switch (ing)
         {
         case CHICKEN:
-            // Pale-ish color
-            AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
-            break;
-        case RICE:
-            // White-ish
-            AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-            break;
-        case EGG:
-            // Light yellow
-            AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
-            break;
-        case CHEESE:
-            // Yellow-ish
-            AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
-            break;
-        case POTATO:
-            // Brown-ish
-            AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
+            AEGfxTextureSet(chickenTex, 0, 0);
             break;
         case BEEF:
-            // Reddish
-            AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
+            AEGfxTextureSet(beefTex, 0, 0);
+            break;
+        case CHEESE:
+            AEGfxTextureSet(cheeseTex, 0, 0);
+            break;
+        case EGG:
+            AEGfxTextureSet(eggTex, 0, 0);
+            break;
+        case RICE:
+            AEGfxTextureSet(riceTex, 0, 0);
+            break;
+        case POTATO:
+            AEGfxTextureSet(potatoTex, 0, 0);
             break;
         default:
-            AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-            break;
+            // If an unrecognized ingredient was placed here, skip
+            continue;
         }
 
-        
-
-        
-        AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-        AEGfxSetBlendColor(1.0f, 1.0f, 1.0f, 1.0f);
-        AEGfxSetTransparency(1.0f);
-
-        
+        // Now draw the mesh with that texture
         AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
     }
 }
