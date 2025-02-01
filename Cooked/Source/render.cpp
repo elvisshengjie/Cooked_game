@@ -113,48 +113,42 @@ void RenderIngredientsOnBoxes(AEGfxVertexList* mesh)
 
     for (int i = 0; i < 3; i++)
     {
-        // 1) Retrieve which ingredient is in this box
+        // Retrieve the ingredient for the box.
         Ingredients ing = g_currentBoxIngredients[i];
         if (ing == EMPTY)
-            continue; // skip rendering if empty
+            continue; // Skip rendering if empty (if desired).
 
-        // 2) Compute position and size for the ingredient shape
+        // Compute the position and size for the ingredient shape.
         float posX = ingredient1_box.x + 151.0f * i;
-        float posY = ingredient1_box.y + 10.0f; // shift slightly above
-        float ingW = ingredient1_box.width - 20.0f;  // smaller than the box
-        float ingH = ingredient1_box.height - 20.0f; // smaller than the box
+        float posY = ingredient1_box.y + 10.0f; // slight vertical offset.
+        float ingW = ingredient1_box.width - 20.0f;  // slightly smaller than the box.
+        float ingH = ingredient1_box.height - 20.0f; // slightly smaller than the box.
 
-        // 3) Setup the transformation for the shape
+        // Set up the transformation matrix.
         AEMtx33 ingredientTransform;
         AEMtx33Scale(&ingredientTransform, ingW, ingH);
         AEMtx33TransApply(&ingredientTransform, &ingredientTransform, posX, posY);
         AEGfxSetTransform(ingredientTransform.m);
 
-        // 4) Vary color (or shape) based on the ingredient
+        // Set the color based on the ingredient type.
         switch (ing)
         {
         case CHICKEN:
-            // Pale-ish color
             AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
             break;
         case RICE:
-            // White-ish
             AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
             break;
         case EGG:
-            // Light yellow
             AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
             break;
         case CHEESE:
-            // Yellow-ish
             AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
             break;
         case POTATO:
-            // Brown-ish
             AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
             break;
         case BEEF:
-            // Reddish
             AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
             break;
         default:
@@ -162,18 +156,16 @@ void RenderIngredientsOnBoxes(AEGfxVertexList* mesh)
             break;
         }
 
-        
-
-        
         AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
         AEGfxSetBlendMode(AE_GFX_BM_BLEND);
         AEGfxSetBlendColor(1.0f, 1.0f, 1.0f, 1.0f);
         AEGfxSetTransparency(1.0f);
 
-        
+        // Draw the mesh (which should be a neutral shape, typically a rectangle).
         AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
     }
 }
+
 
 
 
