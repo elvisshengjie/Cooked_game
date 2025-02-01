@@ -16,6 +16,11 @@ public:
 
 };
 
+
+// ... Other boxes ...
+
+// Forward declare your rendering functions
+
 // Function declarations using Rect
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void RenderDustbin(AEGfxVertexList* mesh, AEGfxTexture* tex);
@@ -23,6 +28,7 @@ void RenderIngredientbox(AEGfxVertexList* mesh);
 void RenderStove(AEGfxVertexList* mesh);
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box);
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox);
+void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
 
 // Extern declarations for global variables
 extern Rect background1;

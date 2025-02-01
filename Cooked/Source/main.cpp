@@ -2,6 +2,8 @@
 // includes
 #include <crtdbg.h> // To check for memory leaks
 #include "AEEngine.h"
+#include <AEGraphics.h>
+
 #include <math.h>
 #include "player.hpp"
 #include "render.hpp"
@@ -44,7 +46,13 @@ void CoreEngine::Init()
 
 
     AEGfxMeshStart();
-
+    srand(static_cast<unsigned>(time(nullptr)));  // Seed the random generator once
+   
+    // Initialize our 3 current box ingredients
+    for (int i = 0; i < 3; ++i)
+    {
+        g_currentBoxIngredients[i] = GetRandomIngredient();
+    }
 
     AEGfxTriAdd(
         -0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,  // bottom-left: red
@@ -91,7 +99,9 @@ void CoreEngine::Update()
         RenderDustbin(pMesh, dTex);
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         RenderIngredientbox(pMesh);
-
+        
+        /*AEGfxSetRenderMode(AE_GFX_RM_COLOR);*/
+        RenderIngredientsOnBoxes(pMesh);
 
         RenderStove(pMesh);
         players1.playerdraw(pMesh);

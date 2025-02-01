@@ -6,6 +6,33 @@
 #include "Ingredients.hpp"
 #include "utils.hpp"
 
+
+Ingredients GetRandomIngredient()
+{
+	static bool seeded = false;
+	if (!seeded)
+	{
+		srand(static_cast<unsigned>(time(nullptr)));
+		seeded = true;
+	}
+	int randIndex = rand() % 6 + 1; // e.g., if you have 6 valid ingredients
+	return static_cast<Ingredients>(randIndex);
+}
+std::vector<Ingredients> g_currentBoxIngredients(3);
+
+//std::string IngredientToString(Ingredients ing)
+//{
+//	switch (ing)
+//	{
+//	case CHICKEN: return "CHICKEN";
+//	case RICE:    return "RICE";
+//	case EGG:     return "EGG";
+//	case CHEESE:  return "CHEESE";
+//	case POTATO:  return "POTATO";
+//	case BEEF:    return "BEEF";
+//	default:      return "???";
+//	}
+//}
 //Constructor
 Recipe::Recipe(std::string recipeName, std::vector<std::string> ingredientList)
 	: Name(recipeName), Ingredients(ingredientList) {}

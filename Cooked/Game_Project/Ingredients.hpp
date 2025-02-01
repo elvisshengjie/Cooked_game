@@ -25,15 +25,29 @@
 
 	Loaded Protein Bowl (Chicken, Rice, Egg, Cheese, Potato, Beef)-6
 */
-enum Ingredients {
-	EMPTY = 0,
-	CHICKEN,
-	RICE,
-	EGG,
-	CHEESE,
-	POTATO,
-	BEEF
-};
+
+enum Ingredients { EMPTY = 0, CHICKEN, RICE, EGG, CHEESE, POTATO, BEEF };
+inline std::string IngredientToString(Ingredients ing)
+{
+	switch (ing)
+	{
+	case CHICKEN: return "CHICKEN";
+	case RICE:    return "RICE";
+	case EGG:     return "EGG";
+	case CHEESE:  return "CHEESE";
+	case POTATO:  return "POTATO";
+	case BEEF:    return "BEEF";
+	default:      return "???";
+	}
+}
+
+// Forward declare (prototype) only, no function body
+Ingredients GetRandomIngredient();
+std::string IngredientToString(Ingredients ing);
+extern std::vector<Ingredients> g_currentBoxIngredients;
+
+
+
 
 
 const std::string validIngredients[] = { "chicken", "rice", "egg", 
