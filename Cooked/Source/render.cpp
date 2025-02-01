@@ -136,6 +136,18 @@ void RenderIngredientsOnBoxes(
         float ingH = ingredient1_box.height - 20.0f;
 
         // Transform so the texture is drawn smaller than the box
+        // Retrieve the ingredient for the box.
+        Ingredients ing = g_currentBoxIngredients[i];
+        if (ing == EMPTY)
+            continue; // Skip rendering if empty (if desired).
+
+        // Compute the position and size for the ingredient shape.
+        float posX = ingredient1_box.x + 151.0f * i;
+        float posY = ingredient1_box.y + 10.0f; // slight vertical offset.
+        float ingW = ingredient1_box.width - 20.0f;  // slightly smaller than the box.
+        float ingH = ingredient1_box.height - 20.0f; // slightly smaller than the box.
+
+        // Set up the transformation matrix.
         AEMtx33 ingredientTransform;
         AEMtx33Scale(&ingredientTransform, ingW, ingH);
         AEMtx33TransApply(&ingredientTransform, &ingredientTransform, posX, posY);
@@ -167,6 +179,26 @@ void RenderIngredientsOnBoxes(
             break;
         case POTATO:
             AEGfxTextureSet(potatoTex, 0, 0);
+        // Set the color based on the ingredient type.
+        switch (ing)
+        {
+        case CHICKEN:
+            AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
+            break;
+        case RICE:
+            AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+            break;
+        case EGG:
+            AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
+            break;
+        case CHEESE:
+            AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
+            break;
+        case POTATO:
+            AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
+            break;
+        case BEEF:
+            AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
             break;
         default:
             // If an unrecognized ingredient was placed here, skip
@@ -174,9 +206,16 @@ void RenderIngredientsOnBoxes(
         }
 
         // Now draw the mesh with that texture
+        AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+        AEGfxSetBlendColor(1.0f, 1.0f, 1.0f, 1.0f);
+        AEGfxSetTransparency(1.0f);
+
+        // Draw the mesh (which should be a neutral shape, typically a rectangle).
         AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
     }
 }
+
 
 
 
