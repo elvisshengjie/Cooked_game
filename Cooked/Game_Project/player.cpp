@@ -154,7 +154,7 @@ void player::playerPickUp(Ingredients& boxIngredient)
 			return;
 		}
 			Hand = boxIngredient;                // Player picks up the current ingredient.
-			boxIngredient = GetRandomIngredient(); // Randomize the box immediately.
+			boxIngredient = GetRandomIngredient(boxIngredient); // Randomize the box immediately.
 			std::cout << "Picked up: " << IngredientToString(Hand) << std::endl;
 		// If already holding an ingredient, drop it (clear the held ingredient).
 	}

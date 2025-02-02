@@ -42,7 +42,7 @@ inline std::string IngredientToString(Ingredients ing)
 }
 
 // Forward declare (prototype) only, no function body
-Ingredients GetRandomIngredient();
+Ingredients GetRandomIngredient(Ingredients previousIngredient = EMPTY);
 std::string IngredientToString(Ingredients ing);
 extern std::vector<Ingredients> g_currentBoxIngredients;
 

@@ -7,16 +7,19 @@
 #include "utils.hpp"
 
 
-Ingredients GetRandomIngredient()
+Ingredients GetRandomIngredient(Ingredients previousIngredient)
 {
-	static bool seeded = false;
-	if (!seeded)
-	{
-		srand(static_cast<unsigned>(time(nullptr)));
-		seeded = true;
-	}
-	int randIndex = rand() % 6 + 1; // e.g., if you have 6 valid ingredients
-	return static_cast<Ingredients>(randIndex);
+	// Use a static random engine so that it isn't re-seeded on every call.
+	static std::random_device rd;
+	static std::mt19937 engine(rd());
+	std::uniform_int_distribution<int> distribution(1, 6); // valid indices: 1 to 6
+
+	Ingredients newIngredient;
+	do {
+		newIngredient = static_cast<Ingredients>(distribution(engine));
+	} while (previousIngredient != EMPTY && newIngredient == previousIngredient);
+
+	return newIngredient;
 }
 std::vector<Ingredients> g_currentBoxIngredients(3);
 
@@ -54,7 +57,7 @@ bool Recipe::matchesWok(const std::vector<std::string> &wokIngredients)const
 }
 
 RecipeSystem::RecipeSystem() {
-	std::srand(std::time(0)); // Srand Seed with time
+	std::srand(static_cast<unsigned int>(std::time(0)));; // Srand Seed with time
 
 	allRecipes.push_back(Recipe("Cheesy Potato Mash", { "Potato", "Cheese" }));
 	allRecipes.push_back(Recipe("Cheese Omelette", { "Cheese", "Egg" }));
@@ -81,35 +84,3 @@ void RecipeSystem::update() {
 const std::vector<Recipe>& RecipeSystem::getActiveRecipes() const {
 	return activeRecipes;
 }
-//void randomizenIngredient()
-//
-//
-//void print_c(const std::vector < std::string > & x) {
-//	for (std::string element : x) {
-//>>>>>>> main
-//
-//		std::cout << element << " ";
-//	}
-//	std::cout << '\n';
-//}
-//
-//int main()
-//{
-//	std::random_device rd;
-//	std::mt19937 g(rd());
-//	std::vector<std::string> v{ "apple","cake","egg","juice"};
-//	std::vector < std::string > original_v;
-//	
-//	std::copy(v.begin(), v.end(), std::back_inserter(original_v));
-//	print_c(original_v);
-//	
-//print_c(v);
-//
-//std::swap(v[0], v.back());
-//std::shuffle(v.begin(), v.end() - 1, g);
-//print_c(v);
-//
-//
-//
-//}
-//*/
