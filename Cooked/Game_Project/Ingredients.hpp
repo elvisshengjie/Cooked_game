@@ -74,5 +74,8 @@ public:
 
 	void update();
 	const std::vector<Recipe>& getActiveRecipes() const;
+	Recipe generateRandomRecipe();
+	void replaceRecipe(const Recipe& completedRecipe);
+
 };
 

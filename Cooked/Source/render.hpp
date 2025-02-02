@@ -4,6 +4,7 @@
 #include <AEEngine.h> // Include necessary headers first
 #include <vector>
 #include "Ingredients.hpp"
+#include "player.hpp"
 
 // Define Rect class before any function declarations
 class Rect {
@@ -32,7 +33,7 @@ void Renderegg(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void RenderDustbin(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void RenderIngredientbox(AEGfxVertexList* mesh);
-void RenderStove(AEGfxVertexList* mesh);
+void RenderStove(AEGfxVertexList* mesh,Stove& stove, player& Player);
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box);
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox);
 

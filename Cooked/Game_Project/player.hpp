@@ -25,7 +25,7 @@ class player
 		void playerThrow();
 		void playerPickUp(Ingredients& boxIngredient);
 		void playerDrop(Stove& stove);
-		
+		void playerUpdate(Stove& stove, RecipeSystem& recipeSystem);
 
 };
 
