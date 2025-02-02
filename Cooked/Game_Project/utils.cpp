@@ -29,17 +29,24 @@ Stove::Stove(float posX, float posY, float w, float h)
 
 Stove Wok(-50.0f, -200.0f, 200.0f, 100.0f);
 
-void Stove::putIngredient(const std::string& ingredient)
+bool Stove::putIngredient(const std::string& ingredient)
 {
-	//Add return codes for edge cases, testing.
-	if (!isCooking) {
-		stoveItems.push_back(ingredient);
+	if (isCooking) {
+		return false;
 	}
+	//Add return codes for edge cases, testing.
+	if (!isCooking && stoveItems.size() < 7) {
+		stoveItems.push_back(ingredient);
+		return true;
+	}
+	return false;
 }
 
 //clears items in stove after cooking
 void Stove::clearWok() {
 	stoveItems.clear();
+	isCooking = false;
+	cookingRecipeName = "";
 }
 
 bool Stove::canCook(player& player) const
@@ -51,22 +58,35 @@ bool Stove::canCook(player& player) const
 // 	return recipe.matchesWok(stoveItems);
 // }
 
-bool Stove::matchesAnyActiveRecipe(const std::vector<Recipe>& activeRecipes) const {
-	for (const Recipe& recipe : activeRecipes) {
-		if (recipe.matchesWok(stoveItems)) {
-			return true; 
-		}
-	}
-	return false; 
-}
-void Stove::startCooking()
+//bool Stove::matchesAnyActiveRecipe(const std::vector<Recipe>& activeRecipes) const {
+//	for (const Recipe& recipe : activeRecipes) {
+//		if (recipe.matchesWok(stoveItems)) {
+//			return true;
+//		}
+//	}
+//	return false;
+//}
+void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 {
-	if (!isCooking) {
-		int numIngredients = stoveItems.size();
-		double cookingTime = 2.0 + numIngredients;
-		cookingTimer.start(cookingTime);
-		isCooking = true;
-		stoveItems.clear();
+	if (isCooking || stoveItems.size() < 2) {
+		return;
+	}
+	isCooking = true;
+
+	double cookingTime = 2.0 + (1 * stoveItems.size());
+
+	cookingTimer.start(cookingTime);
+
+	bool recipeMatched = false;
+
+	cookingRecipeName = "Unknown Dish";
+
+	for (auto const recipe : activeRecipes) {
+		if (recipe.matchesWok(stoveItems)) {
+			cookingRecipeName = recipe.Name;
+			recipeMatched = true;
+			break;
+		}
 	}
 
 }
@@ -81,7 +101,19 @@ double Stove::remainingCookingTime()
 	}
 	return remainTime;
 }
+void Stove::update(RecipeSystem& recipeSystem) {
+	if (isCooking && cookingTimer.completed()) {
+		for (const Recipe& recipe : recipeSystem.getActiveRecipes()) {
+			if (recipe.Name == cookingRecipeName) {
+				recipeSystem.replaceRecipe(recipe);
+				break;
+			}
+		}
+		clearWok();
+	}
+}
 
+// Getter Functions
 float Stove::getX() const
 {
 	return x;
@@ -98,4 +130,16 @@ float Stove::getW() const {
 
 float Stove::getH() const {
 	return height;
+}
+
+bool Stove::isCurrentlyCooking() const {
+	return isCooking;
+}
+
+std::string Stove::getCookingRecipeName() const {
+	return cookingRecipeName;
+}
+
+std::vector<std::string> Stove::getStoveItems()const {
+	return stoveItems;
 }

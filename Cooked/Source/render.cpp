@@ -215,7 +215,7 @@ void RenderIngredientsOnBoxes(
 
 
 // Function to Render Stove with Red Color
-void RenderStove(AEGfxVertexList* mesh) {
+void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player) {
     AEMtx33 stoveTransform;
     AEMtx33Scale(&stoveTransform, stove1.width, stove1.height);
     AEMtx33TransApply(&stoveTransform, &stoveTransform, stove1.x, stove1.y);
@@ -226,6 +226,16 @@ void RenderStove(AEGfxVertexList* mesh) {
     AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
     AEGfxSetTransparency(1.0f);
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+
+    if (!stove.isCurrentlyCooking() && stove.canCook(Player)) {
+        AEGfxPrint(FontID, "Press Q to Cook!", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    if (stove.isCurrentlyCooking()) {
+        std::string timerText = "Cooking: " + stove.getCookingRecipeName() +
+            " (" + std::to_string((int)stove.remainingCookingTime()) + "s)";
+        AEGfxPrint(FontID, timerText.c_str(), -0.4f, -0.1f, 0.7f, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
 }
 
 void RenderRecipeBox(AEGfxVertexList* mesh, const Recipe& recipe, float x, float y)

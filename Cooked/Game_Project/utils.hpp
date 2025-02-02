@@ -5,6 +5,8 @@
 #include <string>
 
 
+class RecipeSystem;
+
 class player;
 
 class Recipe;
@@ -27,27 +29,27 @@ class Stove
 private:
 	std::vector<std::string> stoveItems;
 	Timer cookingTimer{};
+	std::string cookingRecipeName;
 	bool isCooking;
 	float x, y, width, height;
-
 
 public:
 
 	Stove(float posX, float posY, float w, float h);
 
-	void putIngredient(const std::string& ingredient);
+	bool putIngredient(const std::string& ingredient);
 
 	void clearWok();
 
 	bool canCook(player& player) const;
 
-	//bool matchesCurrentRecipe(const Recipe& recipe) const;
+	void startCooking(const std::vector<Recipe>& activeRecipes);
 
-	void startCooking();
+	void update(RecipeSystem &recipeSystem);
 
 	double remainingCookingTime();
 
-	bool matchesAnyActiveRecipe(const std::vector<Recipe>& activeRecipes) const;
+	//bool matchesAnyActiveRecipe(const std::vector<Recipe>& activeRecipes) const;
 
 	float getX() const;
 
@@ -56,6 +58,11 @@ public:
 	float getW() const;
 
 	float getH() const;
+	
+	bool isCurrentlyCooking()const;
 
+	std::string getCookingRecipeName()const;
+
+	std::vector<std::string> getStoveItems()const;
 };
 extern Stove Wok;

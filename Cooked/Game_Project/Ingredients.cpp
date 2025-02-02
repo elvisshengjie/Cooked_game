@@ -56,12 +56,12 @@ bool Recipe::matchesWok(const std::vector<std::string> &wokIngredients)const
 RecipeSystem::RecipeSystem() {
 	std::srand(std::time(0)); // Srand Seed with time
 
-	allRecipes.push_back(Recipe("Cheesy Potato Mash", { "Potato", "Cheese" }));
-	allRecipes.push_back(Recipe("Cheese Omelette", { "Cheese", "Egg" }));
-	allRecipes.push_back(Recipe("Beef Stir-Fry with Rice", { "Beef", "Rice", "Egg" }));
-	allRecipes.push_back(Recipe("Chicken Fried Rice", { "Chicken", "Rice", "Egg" }));
-	allRecipes.push_back(Recipe("Beef & Cheese Stuffed Potato", { "Potato", "Beef", "Cheese", "Egg" }));
-	allRecipes.push_back(Recipe("Loaded Protein Bowl", { "Chicken", "Rice", "Egg", "Cheese", "Potato", "Beef" }));
+	allRecipes.push_back(Recipe("Cheesy Potato Mash", { "POTATO", "CHEESE" }));
+	allRecipes.push_back(Recipe("Cheese Omelette", { "CHEESE", "EGG" }));
+	allRecipes.push_back(Recipe("Beef Stir-Fry with Rice", { "BEEF", "RICE", "EGG" }));
+	allRecipes.push_back(Recipe("Chicken Fried Rice", { "CHICKEN", "RICE", "EGG" }));
+	allRecipes.push_back(Recipe("Beef & Cheese Stuffed Potato", { "POTATO", "BEEF", "CHEESE", "EGG" }));
+	allRecipes.push_back(Recipe("Loaded Protein Bowl", { "CHICKEN", "RICE", "EGG", "CHEESE", "POTATO", "BEEF" }));
 
 	// Start with 3 random recipes
 	for (int i = 0; i < 3; i++) {
@@ -81,6 +81,26 @@ void RecipeSystem::update() {
 const std::vector<Recipe>& RecipeSystem::getActiveRecipes() const {
 	return activeRecipes;
 }
+Recipe RecipeSystem::generateRandomRecipe() {
+	if (allRecipes.empty()) {
+		std::cerr << "Error: No available recipes in allRecipes!" << std::endl;
+		return Recipe("", {}); // Return an empty recipe if no options exist
+	}
+
+	int randomIndex = rand() % allRecipes.size();  // Pick a random index
+	return allRecipes[randomIndex];  // Return a randomly chosen recipe
+}
+
+void RecipeSystem::replaceRecipe(const Recipe& completedRecipe) {
+	for (size_t i = 0; i < activeRecipes.size(); ++i) {
+		if (activeRecipes[i].Name == completedRecipe.Name) {
+			activeRecipes[i] = generateRandomRecipe();
+			return;
+		}
+	}
+}
+
+
 //void randomizenIngredient()
 //
 //

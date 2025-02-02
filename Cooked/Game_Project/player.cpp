@@ -4,7 +4,10 @@
 #include <iostream>
 
 
+s8 FontId = -1;
+
 player players1;
+
 void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 	// Draw the player (blue rectangle)
 	AEMtx33 rectplayer;
@@ -167,9 +170,11 @@ void player::playerDrop(Stove& stove) {
 		if (Hand != EMPTY) {
 			if (playerCheckCollison(stove.getX(), stove.getY(), stove.getW(), stove.getH()))
 			{
-				stove.putIngredient(IngredientToString(Hand));  // Convert enum to string
+				if (stove.putIngredient(IngredientToString(Hand))) {
+					Hand = EMPTY;
+				}
 				std::cout << "Dropped ingredient: " << IngredientToString(Hand) << " into the stove!" << std::endl;
-				Hand = EMPTY;  // Player no longer holds the ingredient
+				 // Player no longer holds the ingredient
 			}
 			else if (playerCheckCollison(-750.0f, -300.0f,150.0f, 200.0f))
 			{
@@ -179,6 +184,17 @@ void player::playerDrop(Stove& stove) {
 			else {
 				return;
 			}
+		}
+	}
+}
+void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem) {
+	if (playerCheckCollison(stove.getX(), stove.getY(), stove.getW(), stove.getH()) &&
+		stove.canCook(*this))
+	{
+		std::cout << "Press Q to Cook!" << std::endl;
+		if (AEInputCheckTriggered(AEVK_Q)) {  // Press E to Cook
+			stove.startCooking(recipeSystem.getActiveRecipes());
+			return;
 		}
 	}
 }

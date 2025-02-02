@@ -31,6 +31,7 @@ class CoreEngine
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
     RecipeSystem recipeSystem;
+    
 public:
     void Init();
     void Update();
@@ -129,11 +130,15 @@ void CoreEngine::Update()
         AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
         RenderDustbin(pMesh, dTex);
        
-        
+        players1.playerUpdate(Wok,recipeSystem);
+
+        Wok.update(recipeSystem);
+
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         RenderIngredientbox(pMesh);
         RenderActiveRecipes(pMesh, recipeSystem);
         
+
         
         
         
@@ -142,7 +147,7 @@ void CoreEngine::Update()
         
         
 		
-        RenderStove(pMesh);
+        RenderStove(pMesh, Wok,players1);
         players1.playerdraw(pMesh, IngredientMesh);
 
         for (size_t i = 0; i < collisionBoxes.size(); i++) {
