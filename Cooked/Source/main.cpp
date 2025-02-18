@@ -3,7 +3,7 @@
 #include <crtdbg.h> // To check for memory leaks
 #include "AEEngine.h"
 #include <AEGraphics.h>
-
+#include "main_menu.hpp"
 #include <math.h>
 #include "player.hpp"
 #include "render.hpp"
@@ -14,12 +14,17 @@
 // ---------------------------------------------------------------------------
 // main
                    // Increases health
-
+enum class GameState {
+    MAIN_MENU,
+    GAME
+};
 
 // Function to check if player is within a circle
 class CoreEngine
 {
     bool gGameRunning = true;
+    GameState currentState = GameState::MAIN_MENU;
+
     AEGfxVertexList* pMesh = nullptr;
     AEGfxVertexList* IngredientMesh = nullptr;
     AEGfxTexture* bTex = nullptr;
@@ -31,6 +36,7 @@ class CoreEngine
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
     RecipeSystem recipeSystem;
+    MainMenu mainMenu;
     
 public:
     void Init();
@@ -101,6 +107,8 @@ void CoreEngine::Init()
     );
     IngredientMesh = AEGfxMeshEnd();
 
+    mainMenu.Init();
+
 }
 
 void CoreEngine::Update()
@@ -113,81 +121,96 @@ void CoreEngine::Update()
         if (AEInputCheckTriggered(AEVK_ESCAPE) || !AESysDoesWindowExist())
             gGameRunning = false;
 
-
-        players1.playerMove(6.0);
-        players1.ClampToScreen();
-        for (size_t i = 0; i < objectcollision.size(); i++) {
-            const Rect& object = objectcollision[i];
-
-
-            players1.playerCheckCollisonobject(object.x, object.y, object.width, object.height);
-
-
+        if (currentState == GameState::MAIN_MENU) {
+            mainMenu.Update();
+            mainMenu.Render();
+        }
+        // Check if the player selected "Start Game"
+        if (mainMenu.IsStartGameSelected()) {
+            currentState = GameState::GAME;
         }
 
-        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-        Renderbackground(pMesh, bTex);
-        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-        RenderDustbin(pMesh, dTex);
-       
-        players1.playerUpdate(Wok,recipeSystem);
-
-        Wok.update(recipeSystem);
-
-        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-        RenderIngredientbox(pMesh);
-        RenderActiveRecipes(pMesh, recipeSystem);
-        
-
-        
-        
-        
-        
-        
-        
-        
-		
-        RenderStove(pMesh, Wok,players1);
-        players1.playerdraw(pMesh, IngredientMesh);
-
-        for (size_t i = 0; i < collisionBoxes.size(); i++) {
-            const Rect& collBox = collisionBoxes[i];
-            const Rect& visualBox = highingredientBoxes[i];
-
-            if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)) {
-                // Optionally, render a highlight for the box.
-                RenderhighlightIngredientBox(pMesh, visualBox);
-                // Handle pickup/drop for the current box.
-                players1.playerPickUp(g_currentBoxIngredients[i]);
-            }
-            if (players1.playerCheckCollison(Wok.getX(), Wok.getY(), Wok.getW(), Wok.getH()) ||
-                players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y, objectcollision[0].width, objectcollision[0].height))
-            {
-
-                players1.playerDrop(Wok);
-            }
+        else if (mainMenu.IsQuitSelected()) {
+            gGameRunning = false;
         }
 
-        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-       
-         RenderIngredientsOnBoxes(
-            pMesh,
-            chickenTex,  
-            beefTex,
-            cheeseTex,
-            eggTex,
-            riceTex,
-            potatoTex
-        );
+
+        else if (currentState == GameState::GAME) {
+            players1.playerMove(6.0);
+            players1.ClampToScreen();
+            for (size_t i = 0; i < objectcollision.size(); i++) {
+                const Rect& object = objectcollision[i];
+
+
+                players1.playerCheckCollisonobject(object.x, object.y, object.width, object.height);
+
+
+            }
+
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            Renderbackground(pMesh, bTex);
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            RenderDustbin(pMesh, dTex);
+
+            players1.playerUpdate(Wok, recipeSystem);
+
+            Wok.update(recipeSystem);
+
+            AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+            RenderIngredientbox(pMesh);
+            RenderActiveRecipes(pMesh, recipeSystem);
 
 
 
-        AESysFrameEnd();
+
+
+
+
+
+
+
+            RenderStove(pMesh, Wok, players1);
+            players1.playerdraw(pMesh, IngredientMesh);
+
+            for (size_t i = 0; i < collisionBoxes.size(); i++) {
+                const Rect& collBox = collisionBoxes[i];
+                const Rect& visualBox = highingredientBoxes[i];
+
+                if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)) {
+                    // Optionally, render a highlight for the box.
+                    RenderhighlightIngredientBox(pMesh, visualBox);
+                    // Handle pickup/drop for the current box.
+                    players1.playerPickUp(g_currentBoxIngredients[i]);
+                }
+                if (players1.playerCheckCollison(Wok.getX(), Wok.getY(), Wok.getW(), Wok.getH()) ||
+                    players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y, objectcollision[0].width, objectcollision[0].height))
+                {
+
+                    players1.playerDrop(Wok);
+                }
+            }
+
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+            RenderIngredientsOnBoxes(
+                pMesh,
+                chickenTex,
+                beefTex,
+                cheeseTex,
+                eggTex,
+                riceTex,
+                potatoTex
+            );
+
+
+
+            AESysFrameEnd();
+        }
     }
-
 }
 
 void CoreEngine::Exit(){
+    mainMenu.Cleanup();
     if (pMesh) AEGfxMeshFree(pMesh);
     if (IngredientMesh)AEGfxMeshFree(IngredientMesh);
     if (bTex) AEGfxTextureUnload(bTex);

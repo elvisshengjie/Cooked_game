@@ -62,3 +62,6 @@ extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;
 extern s8 FontID;
+extern s8 FontID_main_menu;
+//main_menu rendering
+void InitFontMain_menu();

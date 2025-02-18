@@ -10,12 +10,20 @@
 // Function to Render Dustbin with Texture
 
 s8 FontID = -1;
+s8 FontID_main_menu = -1;
+void InitFontMain_menu()
+{
+    FontID_main_menu = AEGfxCreateFont("./Assets/Cute Dino.otf",24);
+    assert(FontID_main_menu >= 0 && "Failed to load font!");
+
+}
 
 void InitFont()
 {
     FontID = AEGfxCreateFont("./Assets/buggy-font.ttf", 24);  // Ensure valid .ttf file
     assert(FontID >= 0 && "Failed to load font!");
 }
+
 
 std::vector<Rect> highingredientBoxes = {
     {90.0f, 90.0f,-200.0f ,175.0f},
@@ -208,7 +216,6 @@ void RenderIngredientsOnBoxes(
         AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
     }
 }
-
 
 
 
