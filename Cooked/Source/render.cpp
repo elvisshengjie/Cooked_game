@@ -58,7 +58,7 @@ Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
 Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
 Rect stove1{ 200.0f, 100.0f,-50.0f, -200.0f };
-
+Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
 
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
@@ -315,4 +315,20 @@ void RenderActiveRecipes(AEGfxVertexList* mesh,const RecipeSystem& recipeSystem)
         if (i >= recipeBoxes.size()) break; // Prevent overflow
         RenderRecipeBox(mesh, activeRecipes[i], recipeBoxes[i].x, recipeBoxes[i].y);
     }
+}
+
+void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex)
+{
+    AEMtx33 background_main_menu;
+    AEMtx33Scale(&background_main_menu, backgroundMain_menu.width, backgroundMain_menu.height);
+    AEMtx33TransApply(&background_main_menu, &background_main_menu, backgroundMain_menu.x, backgroundMain_menu.y);
+    AEGfxSetTransform(background_main_menu.m);
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+    AEGfxSetTransform(background_main_menu.m);
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }

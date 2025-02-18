@@ -1,7 +1,9 @@
 #pragma once
 #include <vector>
 #include <string>
-
+#include "AEEngine.h"
+#include <AEGraphics.h>
+#include "render.hpp"
 class MainMenu {
 public:
     MainMenu();
@@ -14,7 +16,7 @@ public:
     void Update();
 
     // Renders the menu options on the screen
-    void Render();
+    void Render(AEGfxVertexList* mesh);
 
     // Returns true if the user has chosen to start the game
     bool IsStartGameSelected() const;
@@ -25,7 +27,13 @@ public:
     // Clean up any allocated resources
     void Cleanup();
 
+    
+   
+    //main_menu rendering
+ 
 private:
     std::vector<std::string> menuOptions;
     int selectedOption;
+    int FontID_main_menu = -1;
+    AEGfxTexture* background = nullptr;
 };

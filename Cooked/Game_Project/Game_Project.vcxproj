@@ -106,10 +106,10 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp" />
+    <ClCompile Include="..\Source\main_menu.cpp" />
     <ClCompile Include="..\Source\render.cpp" />
     <ClCompile Include="collison.cpp" />
     <ClCompile Include="Ingredients.cpp" />
-    <ClCompile Include="main_menu.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
@@ -127,10 +127,10 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q
     <Image Include="..\Assets\Assets\PlanetTexture.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Source\main_menu.hpp" />
     <ClInclude Include="..\Source\render.hpp" />
     <ClInclude Include="collison.hpp" />
     <ClInclude Include="Ingredients.hpp" />
-    <ClInclude Include="main_menu.hpp" />
     <ClInclude Include="player.hpp" />
     <ClInclude Include="utils.hpp" />
   </ItemGroup>

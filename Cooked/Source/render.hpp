@@ -24,6 +24,7 @@ public:
 // Forward declare your rendering functions
 
 // Function declarations using Rect
+void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Renderchicken(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Renderbeef(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Rendercheese(AEGfxVertexList* mesh, AEGfxTexture* tex);
