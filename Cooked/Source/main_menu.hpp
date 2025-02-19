@@ -8,7 +8,7 @@
 // Simple Button structure for menu items
 struct Button {
     std::string label;
-    float x, y;      // Center position of the button
+    float x, y;      
     float width, height;
 };
 
@@ -26,18 +26,18 @@ public:
     // Renders the menu background and buttons
     void Render(AEGfxVertexList* mesh);
 
-    // Returns true if the user has selected "Start Game"
+   
     bool IsStartGameSelected() const;
 
-    // Returns true if the user has selected "Quit Game"
+   
     bool IsQuitSelected() const;
 
-    // Clean up any allocated resources
+    
     void Cleanup();
 
 private:
-    std::vector<Button> buttons;          // List of buttons
-    int selectedOption;                   // Currently highlighted option
+    std::vector<Button> buttons;          
+    int selectedOption;                   
     int FontID_main_menu = -1;
     AEGfxTexture* background = nullptr;
 

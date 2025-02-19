@@ -50,17 +50,16 @@ public:
 // CoreEngine::Init
 void CoreEngine::Init()
 {
-    // Window and engine initialization
     AESysSetWindowTitle("Health Bar Demo");
     AESysReset();
 
     // Seed the random generator once
     srand(static_cast<unsigned>(time(nullptr)));
 
-    // Initialize the main menu
+  
     mainMenu.Init();
 
-    // Initialize fonts
+  
     InitFont();
 
     // Initialize random box ingredients
@@ -110,14 +109,14 @@ void CoreEngine::Update()
 {
     while (gGameRunning)
     {
-        // Start a new frame
+       
         AESysFrameStart();
 
         // Check global exit conditions (Esc or window closed)
         if (AEInputCheckTriggered(AEVK_ESCAPE) || !AESysDoesWindowExist())
             gGameRunning = false;
 
-        // Handle states
+        
         switch (currentState)
         {
         case GameState::MAIN_MENU:
@@ -208,17 +207,16 @@ void CoreEngine::Update()
 // CoreEngine::Exit
 void CoreEngine::Exit()
 {
-    // Clean up the menu
+ 
     mainMenu.Cleanup();
 
-    // Free resources
+  
     if (pMesh)           AEGfxMeshFree(pMesh);
     if (IngredientMesh)  AEGfxMeshFree(IngredientMesh);
     if (bTex)            AEGfxTextureUnload(bTex);
     if (dTex)            AEGfxTextureUnload(dTex);
 
-    // Add any other texture unload calls if needed
-    // e.g., AEGfxTextureUnload(chickenTex), etc.
+  
 
     AESysExit();
 }
@@ -235,10 +233,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // Initialize Alpha Engine
     AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
 
-    // Create and run the core engine
+    
     CoreEngine ce;
     ce.Init();
     ce.Update();
