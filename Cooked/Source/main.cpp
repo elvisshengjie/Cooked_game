@@ -43,15 +43,14 @@ public:
 
 void CoreEngine::Init()
 {
-    
-    gTimer.start(300);
     // Initialization of your own variables go here
+    gTimer.start(300);
 
     // Using custom window procedure
  
 
     // Changing the window title
-    AESysSetWindowTitle("Health Bar Demo");
+    AESysSetWindowTitle("Cooked!");
 
 
     AESysReset();
