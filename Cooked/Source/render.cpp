@@ -306,6 +306,10 @@ void RenderActiveRecipes(AEGfxVertexList* mesh,const RecipeSystem& recipeSystem)
 void displayScore(int score)
 {
     std::string scoreStr = std::to_string(score);
-    const char* cstr = scoreStr.c_str();
-    AEGfxPrint(FontID, cstr, 0.75f, 0.6f, 2.5f, 0.0f, 0.0f, 0.0f, 1.0f);
+    AEGfxPrint(FontID, scoreStr.c_str(), 0.8f, 0.6f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+}
+void displayTimer(double gTimer)
+{
+    std::string str = std::to_string(static_cast<int>(gTimer));
+    AEGfxPrint(FontID, str.c_str(), 0.7f, -0.8f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }

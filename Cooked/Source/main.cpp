@@ -31,6 +31,8 @@ class CoreEngine
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
     RecipeSystem recipeSystem;
+    Timer gTimer;
+
     
 public:
     void Init();
@@ -42,7 +44,7 @@ public:
 void CoreEngine::Init()
 {
     
-
+    gTimer.start(300);
     // Initialization of your own variables go here
 
     // Using custom window procedure
@@ -139,14 +141,9 @@ void CoreEngine::Update()
         RenderActiveRecipes(pMesh, recipeSystem);
         
 
-        
-        
-        
-        
-        
-        
-        
+       
         displayScore(score);
+        displayTimer(gTimer.getRemainingTime());
         RenderStove(pMesh, Wok,players1);
         players1.playerdraw(pMesh, IngredientMesh);
 

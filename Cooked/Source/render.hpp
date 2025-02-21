@@ -50,6 +50,7 @@ void RenderRecipeBox(AEGfxVertexList* mesh , const Recipe& recipe, float x, floa
 void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem);
 
 void displayScore(int);
+void displayTimer(double);
 
 void InitFont();
 
