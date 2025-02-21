@@ -146,7 +146,7 @@ void CoreEngine::Update()
         
         
         
-		
+        displayScore(score);
         RenderStove(pMesh, Wok,players1);
         players1.playerdraw(pMesh, IngredientMesh);
 

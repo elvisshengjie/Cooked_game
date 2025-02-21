@@ -32,6 +32,7 @@ private:
 	std::string cookingRecipeName;
 	bool isCooking;
 	float x, y, width, height;
+	bool recipeMatched;
 
 public:
 
@@ -66,3 +67,5 @@ public:
 	std::vector<std::string> getStoveItems()const;
 };
 extern Stove Wok;
+extern int score;
+int updateScore(bool);

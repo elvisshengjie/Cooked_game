@@ -1,14 +1,7 @@
 // render.cpp
 #include "render.hpp"
-#include "Ingredients.hpp"
-#include <AEGraphics.h>
-#include <assert.h>
-#include <crtdbg.h> // To check for memory leaks
-#include <math.h> 
-#include <vector>
-#include <AEEngine.h> // Replace with the actual header for your graphics framework
-// Function to Render Dustbin with Texture
 
+// Function to Render Dustbin with Texture
 s8 FontID = -1;
 
 void InitFont()
@@ -308,4 +301,11 @@ void RenderActiveRecipes(AEGfxVertexList* mesh,const RecipeSystem& recipeSystem)
         if (i >= recipeBoxes.size()) break; // Prevent overflow
         RenderRecipeBox(mesh, activeRecipes[i], recipeBoxes[i].x, recipeBoxes[i].y);
     }
+}
+
+void displayScore(int score)
+{
+    std::string scoreStr = std::to_string(score);
+    const char* cstr = scoreStr.c_str();
+    AEGfxPrint(FontID, cstr, 0.75f, 0.6f, 2.5f, 0.0f, 0.0f, 0.0f, 1.0f);
 }
