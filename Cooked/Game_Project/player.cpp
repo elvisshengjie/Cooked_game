@@ -82,21 +82,39 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 
 void player::playerMove(float speed)
 {
-	if (AEInputCheckCurr(AEVK_W))
-	{
-		this->y += speed;
+	float dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
+	const float normalize_speed = speed * 0.707f;
+	if (AEInputCheckCurr(AEVK_W) && AEInputCheckCurr(AEVK_D)) { //NE
+		this->x += normalize_speed * dt;
+		this->y += normalize_speed * dt;
 	}
-	if (AEInputCheckCurr(AEVK_S))
-	{
-		this->y -= speed;
+	else if (AEInputCheckCurr(AEVK_W) && AEInputCheckCurr(AEVK_A)) { //NW
+		this->x -= normalize_speed * dt;
+		this->y += normalize_speed * dt;
 	}
-	if (AEInputCheckCurr(AEVK_D))
-	{
-		this->x += speed;
+	else if (AEInputCheckCurr(AEVK_S) && AEInputCheckCurr(AEVK_D)) { //SE
+		this->x += normalize_speed * dt;
+		this->y -= normalize_speed * dt;
 	}
-	if (AEInputCheckCurr(AEVK_A))
+	else if (AEInputCheckCurr(AEVK_S) && AEInputCheckCurr(AEVK_A)) { //SW
+		this->x -= normalize_speed * dt;
+		this->y -= normalize_speed * dt;
+	}
+	else if (AEInputCheckCurr(AEVK_W))
 	{
-		this->x -= speed;
+		this->y += speed * dt;
+	}
+	else if (AEInputCheckCurr(AEVK_S))
+	{
+		this->y -= speed * dt;
+	}
+	else if (AEInputCheckCurr(AEVK_D))
+	{
+		this->x += speed * dt;
+	}
+	else if (AEInputCheckCurr(AEVK_A))
+	{
+		this->x -= speed * dt;
 	}
 }
 
