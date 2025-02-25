@@ -11,8 +11,8 @@ class player
 	private:
 		float x{ 0 };
 		float y{ 0 };
-		float width = 50;
-		float height = 50;
+		float width{ 50 };
+		float height { 50 };
 		Ingredients Hand = EMPTY;
 		
 

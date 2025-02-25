@@ -5,6 +5,14 @@
 #include <vector>
 #include "Ingredients.hpp"
 #include "player.hpp"
+#include <AEGraphics.h>
+#include <assert.h>
+#include <crtdbg.h> // To check for memory leaks
+#include <math.h> 
+#include <vector>
+#include <string>
+
+
 
 // Define Rect class before any function declarations
 class Rect {
@@ -41,6 +49,9 @@ void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBo
 void RenderRecipeBox(AEGfxVertexList* mesh , const Recipe& recipe, float x, float y);
 
 void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem);
+
+void displayScore(int);
+void displayTimer(double);
 
 void InitFont();
 

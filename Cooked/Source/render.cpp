@@ -1,14 +1,7 @@
 // render.cpp
 #include "render.hpp"
-#include "Ingredients.hpp"
-#include <AEGraphics.h>
-#include <assert.h>
-#include <crtdbg.h> // To check for memory leaks
-#include <math.h> 
-#include <vector>
-#include <AEEngine.h> // Replace with the actual header for your graphics framework
-// Function to Render Dustbin with Texture
 
+// Function to Render Dustbin with Texture
 s8 FontID = -1;
 s8 FontID_main_menu = -1;
 void InitFontMain_menu()
@@ -331,4 +324,14 @@ void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex)
     AEGfxTextureSet(tex, 0, 0);
     AEGfxSetTransform(background_main_menu.m);
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+void displayScore(int score)
+{
+    std::string scoreStr = std::to_string(score);
+    AEGfxPrint(FontID, scoreStr.c_str(), 0.8f, 0.6f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+}
+void displayTimer(double gTimer)
+{
+    std::string str = std::to_string(static_cast<int>(gTimer));
+    AEGfxPrint(FontID, str.c_str(), 0.7f, -0.8f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }

@@ -40,6 +40,9 @@ class CoreEngine
     RecipeSystem recipeSystem;
     MainMenu mainMenu;
 
+    Timer gTimer;
+
+    
 public:
     void Init();
     void Update();
@@ -50,7 +53,16 @@ public:
 // CoreEngine::Init
 void CoreEngine::Init()
 {
-    AESysSetWindowTitle("Health Bar Demo");
+    // Initialization of your own variables go here
+    gTimer.start(300);
+
+    // Using custom window procedure
+ 
+
+    // Changing the window title
+    AESysSetWindowTitle("Cooked!");
+
+
     AESysReset();
 
     // Seed the random generator once
@@ -199,6 +211,58 @@ void CoreEngine::Update()
         }
 
         // End the frame
+        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+        Renderbackground(pMesh, bTex);
+        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+        RenderDustbin(pMesh, dTex);
+       
+        players1.playerUpdate(Wok,recipeSystem);
+
+        Wok.update(recipeSystem);
+
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        RenderIngredientbox(pMesh);
+        RenderActiveRecipes(pMesh, recipeSystem);
+        
+
+       
+        displayScore(score);
+        displayTimer(gTimer.getRemainingTime());
+        RenderStove(pMesh, Wok,players1);
+        players1.playerdraw(pMesh, IngredientMesh);
+
+        for (size_t i = 0; i < collisionBoxes.size(); i++) {
+            const Rect& collBox = collisionBoxes[i];
+            const Rect& visualBox = highingredientBoxes[i];
+
+            if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)) {
+                // Optionally, render a highlight for the box.
+                RenderhighlightIngredientBox(pMesh, visualBox);
+                // Handle pickup/drop for the current box.
+                players1.playerPickUp(g_currentBoxIngredients[i]);
+            }
+            if (players1.playerCheckCollison(Wok.getX(), Wok.getY(), Wok.getW(), Wok.getH()) ||
+                players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y, objectcollision[0].width, objectcollision[0].height))
+            {
+
+                players1.playerDrop(Wok);
+            }
+        }
+
+        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+       
+         RenderIngredientsOnBoxes(
+            pMesh,
+            chickenTex,  
+            beefTex,
+            cheeseTex,
+            eggTex,
+            riceTex,
+            potatoTex
+        );
+
+
+
         AESysFrameEnd();
     }
 }
