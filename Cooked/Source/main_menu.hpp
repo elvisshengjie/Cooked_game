@@ -12,6 +12,9 @@ struct Button {
     float width, height;
 };
 
+// Helper: Check if a point is inside a button (using center coordinates)
+bool IsPointInsideButton(float px, float py, const Button& btn);
+
 class MainMenu {
 public:
     MainMenu();
@@ -43,7 +46,27 @@ private:
 
     // Flag set when the mouse click activates the "Start Game" button
     bool m_StartGameActivated = false;
-
-    // Helper: Check if a point is inside a button (using center coordinates)
-    bool IsPointInsideButton(float px, float py, const Button& btn) const;
 };
+
+#if 0
+class WinScreen
+{
+private:
+    std::vector<Button> buttons;
+    int selected{};
+    int FontID{ -1 };
+    AEGfxTexture* background{ nullptr };
+    bool m_StartGameActivated{ false };
+
+public:
+    WinScreen() = default;
+    ~WinScreen();
+    void Init();
+    int Update();
+    void Render();
+
+    bool restartSelected();
+    bool menuSelected();
+    bool quitSelected();
+};
+#endif

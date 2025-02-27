@@ -13,7 +13,7 @@ void InitFontMain_menu()
 
 void InitFont()
 {
-    FontID = AEGfxCreateFont("./Assets/buggy-font.ttf", 24);  // Ensure valid .ttf file
+    FontID = AEGfxCreateFont("./Assets/Cute Dino.otf", 24); 
     assert(FontID >= 0 && "Failed to load font!");
 }
 

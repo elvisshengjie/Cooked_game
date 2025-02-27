@@ -53,7 +53,9 @@ void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem
 void displayScore(int);
 void displayTimer(double);
 
+//Font
 void InitFont();
+void InitFontMain_menu();
 
 //void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
 void RenderIngredientsOnBoxes(
@@ -75,5 +77,3 @@ extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;
 extern s8 FontID;
 extern s8 FontID_main_menu;
-//main_menu rendering
-void InitFontMain_menu();
