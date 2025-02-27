@@ -44,6 +44,7 @@ class CoreEngine
     RecipeSystem recipeSystem;
     MainMenu     mainMenu;
     QTE          qteGauge;
+    Stove        Wok;
     //WinScreen    winScreen;
 
     Timer gTimer;

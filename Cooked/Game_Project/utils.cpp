@@ -5,7 +5,6 @@
 #include "player.hpp"
 #include <iostream>
 
-//Timer::Timer(double duration) : countdownDuration(duration), startTime(0.0) {}
 int score{};
 void Timer::start(double duration) {
 	this->countdownDuration = duration;
@@ -23,10 +22,6 @@ bool Timer::completed() const {
 }
 
 // Constructor initializes the Wok position
-Stove::Stove(float posX, float posY, float w, float h)
-	: x{ posX }, y{ posY }, width{ w }, height{ h }, isCooking{ false }, recipeMatched{ false } {}
-
-Stove Wok(-50.0f, -200.0f, 200.0f, 100.0f);
 
 bool Stove::putIngredient(const std::string& ingredient)
 {

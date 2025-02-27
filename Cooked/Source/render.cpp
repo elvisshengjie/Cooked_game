@@ -203,8 +203,6 @@ void RenderIngredientsOnBoxes(
 
 
 
-
-
 // Function to Render Stove with Red Color
 void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE& qteGauge) {
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);

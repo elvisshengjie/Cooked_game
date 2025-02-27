@@ -38,12 +38,13 @@ private:
 
 	bool isCooking;
 
-	float x, y, width, height;
+	float x{ -50.0f };
+	float y = { -200.0f };
+	float width = {200.0f};
+	float height = { 100.0f };
+
 	bool recipeMatched;
-
 public:
-
-	Stove(float posX, float posY, float w, float h);
 
 	bool putIngredient(const std::string& ingredient);
 
@@ -56,8 +57,6 @@ public:
 	void update(RecipeSystem &recipeSystem);
 
 	double remainingCookingTime();
-
-	//bool matchesAnyActiveRecipe(const std::vector<Recipe>& activeRecipes) const;
 
 	float getX() const;
 
