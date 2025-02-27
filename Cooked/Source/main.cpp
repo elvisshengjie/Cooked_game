@@ -257,6 +257,7 @@ void CoreEngine::Exit()
     // Free memory
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
+    if (pStoveMesh)   AEGfxMeshFree(pStoveMesh);
 
     if (bTex)             AEGfxTextureUnload(bTex);
     if (dTex)             AEGfxTextureUnload(dTex);
