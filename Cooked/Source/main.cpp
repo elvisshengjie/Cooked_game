@@ -41,19 +41,15 @@ public:
 
 void CoreEngine::Init()
 {
-    
-
     // Initialization of your own variables go here
 
     // Using custom window procedure
  
-
     // Changing the window title
+
     AESysSetWindowTitle("Health Bar Demo");
 
-
     AESysReset();
-
 
     AEGfxMeshStart();
     srand(static_cast<unsigned>(time(nullptr)));  // Seed the random generator once
@@ -136,17 +132,7 @@ void CoreEngine::Update()
 
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         RenderIngredientbox(pMesh);
-        RenderActiveRecipes(pMesh, recipeSystem);
-        
-
-        
-        
-        
-        
-        
-        
-        
-		
+        RenderActiveRecipes(pMesh, recipeSystem);        
         RenderStove(pMesh, Wok,players1);
         players1.playerdraw(pMesh, IngredientMesh);
 

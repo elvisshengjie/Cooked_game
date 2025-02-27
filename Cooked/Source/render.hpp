@@ -41,6 +41,8 @@ void RenderRecipeBox(AEGfxVertexList* mesh , const Recipe& recipe, float x, floa
 
 void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem);
 
+//void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& QTEGauge);
+
 void InitFont();
 
 //void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);

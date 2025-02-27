@@ -13,10 +13,13 @@ class Recipe;
 
 class Timer {
 private:
-	double countdownDuration; //countdown in s
-	double startTime; //start time in s
+
+	double countdownDuration; //Countdown in s
+
+	double startTime; //Start Time in s
 
 public:
+
 	void start(double duration);
 
 	double getRemainingTime() const;
@@ -28,9 +31,13 @@ class Stove
 {
 private:
 	std::vector<std::string> stoveItems;
+
 	Timer cookingTimer{};
+
 	std::string cookingRecipeName;
+
 	bool isCooking;
+
 	float x, y, width, height;
 
 public:
@@ -66,3 +73,40 @@ public:
 	std::vector<std::string> getStoveItems()const;
 };
 extern Stove Wok;
+
+class QTE {
+	private:
+		float x = 0.0f; // Center of the gauge on screen
+		float y = -0.4f;
+		float w = 600.0f;
+		float h = 20.0f;
+		
+		float sliderPos = 0.0f;
+		float sliderSpd = 0.01f; 
+
+		float targetZoneStart = 0.3f; // Start of the target zone (0 to 1) - NOMNOMlised
+		float targetZoneEnd = 0.5f;  // End of the target zone (0 to 1) - NOMNOMlised 
+
+		bool movingRight = true;
+
+	public:
+		QTE();
+
+		void update(float dt);
+
+		//void render(AEGfxVertexList* mesh);
+
+		bool checkTarget() const;
+
+		void reset();
+
+		void render(AEGfxVertexList* mesh)const;
+		////getters
+		//float getX()const;
+		//float getY()const;
+		//float getW()const;
+		//float getH()const;
+		//float getTargetStart()const;
+		//float getTargetZoneEnd()const;
+		//float getSliderPos()const;
+};

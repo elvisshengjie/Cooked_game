@@ -309,3 +309,22 @@ void RenderActiveRecipes(AEGfxVertexList* mesh,const RecipeSystem& recipeSystem)
         RenderRecipeBox(mesh, activeRecipes[i], recipeBoxes[i].x, recipeBoxes[i].y);
     }
 }
+
+//void RenderQTEGauge(AEGfxVertexList* mesh,  QTE& QTEGauge) {
+//    AEMtx33 gaugeTransform , targetTransform , sliderTransform;
+//
+//    // Render the gauge background
+//    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+//    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+//    AEGfxSetTransparency(1.0f);
+//
+//    // Gauge Background (Grey)
+//    AEGfxSetTransform(nullptr);
+//    AEGfxSetBlendColor(0.5f, 0.5f, 0.5f, 1.0f);
+//    
+//    // Target Zone (Green)
+//    AEGfxSetBlendColor(0.0f, 1.0f, 0.0f, 1.0f);
+//
+//    // Slider (Red)
+//    AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
+//}

@@ -4,6 +4,8 @@
 #include <vector>
 #include <algorithm>
 #include <cstdlib> 
+#include <random>
+#include <iostream>
 #include "utils.hpp"
 
 //class Timer;
