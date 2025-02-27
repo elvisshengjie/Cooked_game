@@ -5,6 +5,14 @@
 #include <vector>
 #include "Ingredients.hpp"
 #include "player.hpp"
+#include <AEGraphics.h>
+#include <assert.h>
+#include <crtdbg.h> // To check for memory leaks
+#include <math.h> 
+#include <vector>
+#include <string>
+
+
 
 // Define Rect class before any function declarations
 class Rect {
@@ -24,6 +32,7 @@ public:
 // Forward declare your rendering functions
 
 // Function declarations using Rect
+void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Renderchicken(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Renderbeef(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Rendercheese(AEGfxVertexList* mesh, AEGfxTexture* tex);
@@ -41,7 +50,9 @@ void RenderRecipeBox(AEGfxVertexList* mesh , const Recipe& recipe, float x, floa
 
 void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem);
 
-//void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& QTEGauge);
+void displayScore(int);
+void displayTimer(double);
+
 
 void InitFont();
 
@@ -64,3 +75,6 @@ extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;
 extern s8 FontID;
+extern s8 FontID_main_menu;
+//main_menu rendering
+void InitFontMain_menu();

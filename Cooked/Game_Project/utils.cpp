@@ -6,7 +6,7 @@
 #include <iostream>
 
 //Timer::Timer(double duration) : countdownDuration(duration), startTime(0.0) {}
-
+int score{};
 void Timer::start(double duration) {
 	this->countdownDuration = duration;
 	startTime = AEGetTime(nullptr);
@@ -24,7 +24,7 @@ bool Timer::completed() const {
 
 // Constructor initializes the Wok position
 Stove::Stove(float posX, float posY, float w, float h)
-	: x{ posX }, y{ posY }, width{ w }, height{ h }, isCooking{ false } {}
+	: x{ posX }, y{ posY }, width{ w }, height{ h }, isCooking{ false }, recipeMatched{ false } {}
 
 Stove Wok(-50.0f, -200.0f, 200.0f, 100.0f);
 
@@ -64,7 +64,7 @@ void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 
 	cookingTimer.start(cookingTime);
 
-	bool recipeMatched = false;
+	recipeMatched = false;
 
 	cookingRecipeName = "Unknown Dish";
 
@@ -97,6 +97,7 @@ void Stove::update(RecipeSystem& recipeSystem) {
 			}
 		}
 		clearWok();
+		score = updateScore(recipeMatched);
 	}
 }
 
@@ -197,10 +198,18 @@ void QTE::reset() {
 	targetZoneStart = dist(gen);
 	targetZoneEnd = targetZoneStart + zoneWidth;
 }
-//float QTE::getX()const { return x; }
-//float QTE::getY()const { return y; }
-//float QTE::getW()const { return w; }
-//float QTE::getH()const { return h; }
-//float QTE::getTargetStart()const { return targetZoneStart; }
-//float QTE::getTargetZoneEnd()const { return targetZoneEnd; }
-//float QTE::getSliderPos()const { return sliderPos; }
+
+
+int updateScore(bool recipeMatched)
+{
+	if (recipeMatched)
+	{
+		score += 5;
+	}
+	else
+	{
+		score -= 2;
+	}
+	return score;
+}
+

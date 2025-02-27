@@ -1,21 +1,22 @@
 // render.cpp
 #include "render.hpp"
-#include "Ingredients.hpp"
-#include <AEGraphics.h>
-#include <assert.h>
-#include <crtdbg.h> // To check for memory leaks
-#include <math.h> 
-#include <vector>
-#include <AEEngine.h> // Replace with the actual header for your graphics framework
-// Function to Render Dustbin with Texture
 
+// Function to Render Dustbin with Texture
 s8 FontID = -1;
+s8 FontID_main_menu = -1;
+void InitFontMain_menu()
+{
+    FontID_main_menu = AEGfxCreateFont("./Assets/Cute Dino.otf",24);
+    assert(FontID_main_menu >= 0 && "Failed to load font!");
+
+}
 
 void InitFont()
 {
     FontID = AEGfxCreateFont("./Assets/buggy-font.ttf", 24);  // Ensure valid .ttf file
     assert(FontID >= 0 && "Failed to load font!");
 }
+
 
 std::vector<Rect> highingredientBoxes = {
     {90.0f, 90.0f,-200.0f ,175.0f},
@@ -50,7 +51,7 @@ Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
 Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
 Rect stove1{ 200.0f, 100.0f,-50.0f, -200.0f };
-
+Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
 
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
@@ -213,7 +214,6 @@ void RenderIngredientsOnBoxes(
 
 
 
-
 // Function to Render Stove with Red Color
 void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player) {
     AEMtx33 stoveTransform;
@@ -310,21 +310,29 @@ void RenderActiveRecipes(AEGfxVertexList* mesh,const RecipeSystem& recipeSystem)
     }
 }
 
-//void RenderQTEGauge(AEGfxVertexList* mesh,  QTE& QTEGauge) {
-//    AEMtx33 gaugeTransform , targetTransform , sliderTransform;
-//
-//    // Render the gauge background
-//    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-//    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-//    AEGfxSetTransparency(1.0f);
-//
-//    // Gauge Background (Grey)
-//    AEGfxSetTransform(nullptr);
-//    AEGfxSetBlendColor(0.5f, 0.5f, 0.5f, 1.0f);
-//    
-//    // Target Zone (Green)
-//    AEGfxSetBlendColor(0.0f, 1.0f, 0.0f, 1.0f);
-//
-//    // Slider (Red)
-//    AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
-//}
+
+void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex)
+{
+    AEMtx33 background_main_menu;
+    AEMtx33Scale(&background_main_menu, backgroundMain_menu.width, backgroundMain_menu.height);
+    AEMtx33TransApply(&background_main_menu, &background_main_menu, backgroundMain_menu.x, backgroundMain_menu.y);
+    AEGfxSetTransform(background_main_menu.m);
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+    AEGfxSetTransform(background_main_menu.m);
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+void displayScore(int score)
+{
+    std::string scoreStr = std::to_string(score);
+    AEGfxPrint(FontID, scoreStr.c_str(), 0.8f, 0.6f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+}
+void displayTimer(double gTimer)
+{
+    std::string str = std::to_string(static_cast<int>(gTimer));
+    AEGfxPrint(FontID, str.c_str(), 0.7f, -0.8f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+}

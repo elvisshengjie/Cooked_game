@@ -1,120 +1,144 @@
 #include <iostream>
-// includes
 #include <crtdbg.h> // To check for memory leaks
 #include "AEEngine.h"
 #include <AEGraphics.h>
-
-#include <math.h>
-#include "player.hpp"
+#include "main_menu.hpp"
 #include "render.hpp"
 #include "utils.hpp"
 #include "collison.hpp"
-
+#include "player.hpp"
+#include <math.h>
 
 // ---------------------------------------------------------------------------
-// main
-                   // Increases health
+// Define your game states
+enum class GameState {
+    MAIN_MENU,
+    GAME
+};
 
-
-// Function to check if player is within a circle
+// CoreEngine class
 class CoreEngine
 {
     bool gGameRunning = true;
-    AEGfxVertexList* pMesh = nullptr;
-    AEGfxVertexList* IngredientMesh = nullptr;
-    AEGfxTexture* bTex = nullptr;
-    AEGfxTexture* dTex = nullptr;
-	AEGfxTexture* chickenTex = nullptr;
+    GameState currentState = GameState::MAIN_MENU;
+
+    // Meshes
+    AEGfxVertexList* pMesh = nullptr;          // Generic mesh (background, dustbin, etc.)
+    AEGfxVertexList* IngredientMesh = nullptr; // Generic mesh for ingredients
+
+    // Textures
+    AEGfxTexture* bTex = nullptr; // Background/floor
+    AEGfxTexture* dTex = nullptr; // Dustbin
+    AEGfxTexture* chickenTex = nullptr;
     AEGfxTexture* beefTex = nullptr;
     AEGfxTexture* cheeseTex = nullptr;
     AEGfxTexture* eggTex = nullptr;
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
+
+    // Systems
     RecipeSystem recipeSystem;
-    
+    MainMenu     mainMenu;
+
+    Timer gTimer;
+
 public:
     void Init();
     void Update();
     void Exit();
-
 };
 
+// ------------------------------------------------------------
+// CoreEngine::Init
 void CoreEngine::Init()
 {
     // Initialization of your own variables go here
 
-    // Using custom window procedure
- 
-    // Changing the window title
+   // Changing the window title
 
-    AESysSetWindowTitle("Health Bar Demo");
+    AESysSetWindowTitle("Cooked!");
 
+    // AESysReset() re-initializes various engine systems
     AESysReset();
 
-    AEGfxMeshStart();
-    srand(static_cast<unsigned>(time(nullptr)));  // Seed the random generator once
+    // Seed the random generator once
+    srand(static_cast<unsigned>(time(nullptr)));
 
+    // Initialize the main menu
+    mainMenu.Init();
+
+    // Start the timer
+    gTimer.start(300);
+
+    // Initialize fonts (used for both the menu and the game)
     InitFont();
-   
-    // Initialize our 3 current box ingredients
+
+    // Initialize random box ingredients
     for (int i = 0; i < 3; ++i)
     {
         g_currentBoxIngredients[i] = GetRandomIngredient();
     }
 
-    AEGfxTriAdd(
-        -0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,  // bottom-left: red
-        0.5f, -0.5f, 0xFF00FF00, 1.0f, 1.0f,   // bottom-right: green
-        -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);  // top-left: blue
-
-    AEGfxTriAdd(
-        0.5f, -0.5f, 0xFF00FF00, 1.0f, 1.0f,   // bottom-right: green
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,    // top-right: white
-        -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);  // top-left: blue
-
-    pMesh = AEGfxMeshEnd();
-    bTex = AEGfxTextureLoad("Assets/floor.png");
-    dTex = AEGfxTextureLoad("Assets/dustbin.png");
-	chickenTex = AEGfxTextureLoad("Assets/chicken.png");
-	beefTex = AEGfxTextureLoad("Assets/beef.png");
-	cheeseTex = AEGfxTextureLoad("Assets/cheese.png");
-	eggTex = AEGfxTextureLoad("Assets/egg.png");
-	riceTex = AEGfxTextureLoad("Assets/rice.png");
-	potatoTex = AEGfxTextureLoad("Assets/potato.png");
-	
-
-
+    // 1. Create a mesh (pMesh) for generic rectangles
     AEGfxMeshStart();
     AEGfxTriAdd(
-        -0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,  // Bottom-left
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,  // Bottom-right
-        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f   // Top-left
-    );
+        -0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFF00FF00, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
     AEGfxTriAdd(
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,  // Bottom-right
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,  // Top-right
-        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f   // Top-left
-    );
-    IngredientMesh = AEGfxMeshEnd();
+        0.5f, -0.5f, 0xFF00FF00, 1.0f, 1.0f,
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
+    pMesh = AEGfxMeshEnd();
 
+    // 2. Load textures
+    bTex = AEGfxTextureLoad("Assets/floor.png");
+    dTex = AEGfxTextureLoad("Assets/dustbin.png");
+    chickenTex = AEGfxTextureLoad("Assets/chicken.png");
+    beefTex = AEGfxTextureLoad("Assets/beef.png");
+    cheeseTex = AEGfxTextureLoad("Assets/cheese.png");
+    eggTex = AEGfxTextureLoad("Assets/egg.png");
+    riceTex = AEGfxTextureLoad("Assets/rice.png");
+    potatoTex = AEGfxTextureLoad("Assets/potato.png");
+
+    // 3. Create a mesh (IngredientMesh) for ingredient rectangles
+    AEGfxMeshStart();
+    AEGfxTriAdd(
+        -0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+    AEGfxTriAdd(
+        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+    IngredientMesh = AEGfxMeshEnd();
 }
 
+// ------------------------------------------------------------
+// CoreEngine::Update
 void CoreEngine::Update()
 {
-
-    while (gGameRunning) {
-
+    while (gGameRunning)
+    {
         AESysFrameStart();
 
+        // Global exit conditions (Esc key or window closed)
         if (AEInputCheckTriggered(AEVK_ESCAPE) || !AESysDoesWindowExist())
             gGameRunning = false;
 
+        // -- SWITCH ON CURRENT STATE --
+        switch (currentState)
+        {
+            // ------------------------------
+            // MAIN MENU
+            // ------------------------------
+        case GameState::MAIN_MENU:
+        {
+            // Update & render Main Menu
+            mainMenu.Update();
 
-        players1.playerMove(6.0);
-        players1.ClampToScreen();
-        for (size_t i = 0; i < objectcollision.size(); i++) {
-            const Rect& object = objectcollision[i];
-
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            mainMenu.Render(pMesh);
 
             players1.playerCheckCollisonobject(object.x, object.y, object.width, object.height);
 
@@ -148,53 +172,142 @@ void CoreEngine::Update()
             }
             if (players1.playerCheckCollison(Wok.getX(), Wok.getY(), Wok.getW(), Wok.getH()) ||
                 players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y, objectcollision[0].width, objectcollision[0].height))
+            // Check menu selection
+            if (mainMenu.IsStartGameSelected())
             {
-
-                players1.playerDrop(Wok);
+                currentState = GameState::GAME;
+            }
+            else if (mainMenu.IsQuitSelected())
+            {
+                gGameRunning = false;
             }
         }
+        break;
 
-        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-       
-         RenderIngredientsOnBoxes(
-            pMesh,
-            chickenTex,  
-            beefTex,
-            cheeseTex,
-            eggTex,
-            riceTex,
-            potatoTex
-        );
+        // ------------------------------
+        // GAME
+        // ------------------------------
+        case GameState::GAME:
+        {
+            // 1. Update Player & Collisions
+            players1.playerMove(6.0);
+            players1.ClampToScreen();
 
+            for (size_t i = 0; i < objectcollision.size(); i++)
+            {
+                const Rect& object = objectcollision[i];
+                players1.playerCheckCollisonobject(object.x, object.y, object.width, object.height);
+            }
 
+            // 2. Render the game world
+            // Background / Floor
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            Renderbackground(pMesh, bTex);
 
-        AESysFrameEnd();
+            // Dustbin
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            RenderDustbin(pMesh, dTex);
+
+            // Player update logic (picking up, dropping, etc.)
+            players1.playerUpdate(Wok, recipeSystem);
+
+            // Stove / Wok logic (cooking)
+            Wok.update(recipeSystem);
+
+            // Ingredient boxes (3 boxes at top?), Active recipes, etc.
+            AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+            RenderIngredientbox(pMesh);
+            RenderActiveRecipes(pMesh, recipeSystem);
+
+            // Render Stove & Player
+            RenderStove(pMesh, Wok, players1);
+            players1.playerdraw(pMesh, IngredientMesh);
+
+            // Collision boxes for ingredients or special objects
+            for (size_t i = 0; i < collisionBoxes.size(); i++)
+            {
+                const Rect& collBox = collisionBoxes[i];
+                const Rect& visualBox = highingredientBoxes[i];
+
+                // If player is colliding with ingredient box
+                if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height))
+                {
+                    // Render highlight
+                    RenderhighlightIngredientBox(pMesh, visualBox);
+                    // Handle pickup
+                    players1.playerPickUp(g_currentBoxIngredients[i]);
+                }
+
+                // Drop logic (stove or dustbin, etc.)
+                if (players1.playerCheckCollison(Wok.getX(), Wok.getY(), Wok.getW(), Wok.getH()) ||
+                    players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y,
+                        objectcollision[0].width, objectcollision[0].height))
+                {
+                    players1.playerDrop(Wok);
+                }
+            }
+
+            // Render ingredients on the boxes
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            RenderIngredientsOnBoxes(pMesh,
+                chickenTex, beefTex, cheeseTex,
+                eggTex, riceTex, potatoTex);
+
+            // Show score & timer at the top
+            displayScore(score);
+            displayTimer(gTimer.getRemainingTime());
+        }
+        break;
+        } // End of switch
+
+        // --------------------------------
+        AESysFrameEnd(); // End the frame
     }
-
 }
 
-void CoreEngine::Exit(){
-    if (pMesh) AEGfxMeshFree(pMesh);
-    if (IngredientMesh)AEGfxMeshFree(IngredientMesh);
-    if (bTex) AEGfxTextureUnload(bTex);
-    if (dTex) AEGfxTextureUnload(dTex);
-        AESysExit();
-    
+// ------------------------------------------------------------
+// CoreEngine::Exit
+void CoreEngine::Exit()
+{
+    // Cleanup main menu
+    mainMenu.Cleanup();
+
+    // Free memory
+    if (pMesh)            AEGfxMeshFree(pMesh);
+    if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
+
+    if (bTex)             AEGfxTextureUnload(bTex);
+    if (dTex)             AEGfxTextureUnload(dTex);
+    if (chickenTex)       AEGfxTextureUnload(chickenTex);
+    if (beefTex)          AEGfxTextureUnload(beefTex);
+    if (cheeseTex)        AEGfxTextureUnload(cheeseTex);
+    if (eggTex)           AEGfxTextureUnload(eggTex);
+    if (riceTex)          AEGfxTextureUnload(riceTex);
+    if (potatoTex)        AEGfxTextureUnload(potatoTex);
+
+    AESysExit();
 }
+
+// ------------------------------------------------------------
+// WinMain
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
-    _In_ LPWSTR    lpCmdLine,
-    _In_ int       nCmdShow) {
+    _In_ LPWSTR lpCmdLine,
+    _In_ int nCmdShow)
+{
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
+
+    // Initialize the engine
     AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
 
+    // Create and run our CoreEngine
     CoreEngine ce;
     ce.Init();
     ce.Update();
     ce.Exit();
+
+    return 0;
 }
-
-

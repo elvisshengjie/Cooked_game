@@ -39,6 +39,7 @@ private:
 	bool isCooking;
 
 	float x, y, width, height;
+	bool recipeMatched;
 
 public:
 
@@ -101,12 +102,7 @@ class QTE {
 		void reset();
 
 		void render(AEGfxVertexList* mesh)const;
-		////getters
-		//float getX()const;
-		//float getY()const;
-		//float getW()const;
-		//float getH()const;
-		//float getTargetStart()const;
-		//float getTargetZoneEnd()const;
-		//float getSliderPos()const;
+
 };
+extern int score;
+int updateScore(bool);
