@@ -52,7 +52,6 @@ void displayTimer(double);
 
 //Font
 void InitFont();
-//void InitFontMain_menu();
 
 //void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
 void RenderIngredientsOnBoxes(

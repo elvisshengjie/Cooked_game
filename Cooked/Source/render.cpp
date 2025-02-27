@@ -302,6 +302,7 @@ void RenderActiveRecipes(AEGfxVertexList* mesh,const RecipeSystem& recipeSystem)
     }
 }
 
+
 void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex)
 {
     AEMtx33 background_main_menu;

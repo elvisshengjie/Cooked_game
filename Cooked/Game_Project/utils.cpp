@@ -3,6 +3,7 @@
 #include "utils.hpp"
 #include "Ingredients.hpp"
 #include "player.hpp"
+#include <iostream>
 
 //Timer::Timer(double duration) : countdownDuration(duration), startTime(0.0) {}
 int score{};
@@ -20,8 +21,6 @@ double Timer::getRemainingTime() const {
 bool Timer::completed() const {
 	return getRemainingTime() <= 0.0;
 }
-
-
 
 // Constructor initializes the Wok position
 Stove::Stove(float posX, float posY, float w, float h)
@@ -54,18 +53,6 @@ bool Stove::canCook(player& player) const
 	return !isCooking && stoveItems.size() >= 2 && player.playerCheckCollison(x, y, width, height);
 }
 
-// bool Stove::matchesCurrentRecipe(const Recipe& recipe) const {
-// 	return recipe.matchesWok(stoveItems);
-// }
-
-//bool Stove::matchesAnyActiveRecipe(const std::vector<Recipe>& activeRecipes) const {
-//	for (const Recipe& recipe : activeRecipes) {
-//		if (recipe.matchesWok(stoveItems)) {
-//			return true;
-//		}
-//	}
-//	return false;
-//}
 void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 {
 	if (isCooking || stoveItems.size() < 2) {
@@ -102,11 +89,11 @@ double Stove::remainingCookingTime()
 	return remainTime;
 }
 void Stove::update(RecipeSystem& recipeSystem) {
-	if (isCooking && cookingTimer.completed()) {
+	if (isCooking && cookingTimer.completed()) {	
 		for (const Recipe& recipe : recipeSystem.getActiveRecipes()) {
 			if (recipe.Name == cookingRecipeName) {
 				recipeSystem.replaceRecipe(recipe);
-				break;
+				break;	
 			}
 		}
 		clearWok();
@@ -143,6 +130,73 @@ std::string Stove::getCookingRecipeName() const {
 
 std::vector<std::string> Stove::getStoveItems()const {
 	return stoveItems;
+}
+
+QTE::QTE() {
+	reset();
+}
+
+void QTE::update(float dt) {
+	if (movingRight) {
+		sliderPos += sliderSpd * dt;
+		if (sliderPos >= 1.0f) {
+			sliderPos = 1.0f;
+			movingRight = false;
+		}
+	}
+	else {
+		sliderPos -= sliderSpd * dt;
+		if (sliderPos <= 0.0f) {
+			sliderPos = 0.0f;
+			movingRight = true;
+		}
+	}
+}
+bool QTE::checkTarget()const {
+	return (sliderPos >= targetZoneStart && sliderPos <= targetZoneEnd);
+}
+
+void QTE::render(AEGfxVertexList* mesh) const{
+
+	AEMtx33 bgTransform, sliderTransform, targetTransform;
+
+	AEMtx33Scale(&bgTransform, w, h);
+	AEMtx33TransApply(&bgTransform, &bgTransform, x, y);
+	AEGfxSetTransform(bgTransform.m);
+	AEGfxSetBlendColor(0.5f, 0.5f, 0.5f, 1.0f);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+
+	float targetStartX = x - w / 2 + targetZoneStart * w;
+	float targetWidth = (targetZoneEnd - targetZoneStart) * w;
+
+
+	AEMtx33Scale(&targetTransform, targetWidth, h);
+	AEMtx33TransApply(&targetTransform, &targetTransform, targetStartX + targetWidth / 2, y);
+	AEGfxSetTransform(targetTransform.m);
+	AEGfxSetBlendColor(0.0f, 1.0f, 0.0f, 1.0f);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+
+	float sliderX = x - w / 2 + sliderPos * w;
+
+	AEMtx33Scale(&sliderTransform, 10.0f, h * 1.5f);
+	AEMtx33TransApply(&sliderTransform, &sliderTransform, sliderX, y);
+	AEGfxSetTransform(sliderTransform.m);
+	AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+
+}
+
+void QTE::reset() {
+	sliderPos = 0.0f;
+	movingRight = true;
+
+	// Randomize the target zone position
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dist(0.1f, 0.8f);
+	float zoneWidth = 0.2f; // 20% of the gauge as the target zone
+	targetZoneStart = dist(gen);
+	targetZoneEnd = targetZoneStart + zoneWidth;
 }
 
 

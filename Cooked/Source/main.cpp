@@ -56,7 +56,7 @@ public:
 // CoreEngine::Init
 void CoreEngine::Init()
 {
- 
+
 
     // Changing the window title
     AESysSetWindowTitle("Cooked!");

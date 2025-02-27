@@ -4,7 +4,6 @@
 #include <iostream>
 
 
-s8 FontId = -1;
 
 player players1;
 
@@ -166,14 +165,16 @@ void player::playerPickUp(Ingredients& boxIngredient)
 void player::playerDrop(Stove& stove) {
 	//std::cout << "Attempted";
 	if (AEInputCheckTriggered(AEVK_E)) {
-		std::cout << "Attempted";
+		std::cout << "Attempted\n";
 		if (Hand != EMPTY) {
 			if (playerCheckCollison(stove.getX(), stove.getY(), stove.getW(), stove.getH()))
 			{
+				std::cout << IngredientToString(Hand) << "\n";
 				if (stove.putIngredient(IngredientToString(Hand))) {
+					std::cout << "Dropped ingredient: " << IngredientToString(Hand) << " into the stove!" << std::endl;
 					Hand = EMPTY;
 				}
-				std::cout << "Dropped ingredient: " << IngredientToString(Hand) << " into the stove!" << std::endl;
+				return;				
 				 // Player no longer holds the ingredient
 			}
 			else if (playerCheckCollison(-750.0f, -300.0f,150.0f, 200.0f))
