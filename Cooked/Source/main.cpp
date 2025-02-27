@@ -29,6 +29,7 @@ class CoreEngine
     // Meshes
     AEGfxVertexList* pMesh = nullptr;          // Generic mesh (background, dustbin, etc.)
     AEGfxVertexList* IngredientMesh = nullptr; // Generic mesh for ingredients
+    AEGfxVertexList* pStoveMesh = nullptr; // Generic mesh for Stove
 
     // Textures
     AEGfxTexture* bTex = nullptr; // Background/floor
@@ -44,6 +45,9 @@ class CoreEngine
     // Systems
     RecipeSystem recipeSystem;
     MainMenu     mainMenu;
+
+    QTE          qteGauge;
+    Stove        Wok;
     WinScreen    winScreen;
 
     Timer gTimer;
@@ -96,6 +100,17 @@ void CoreEngine::Init()
         0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
         -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
     pMesh = AEGfxMeshEnd();
+
+    AEGfxMeshStart();
+    AEGfxTriAdd(
+        -0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFF00FF00, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
+    AEGfxTriAdd(
+        0.5f, -0.5f, 0xFF00FF00, 1.0f, 1.0f,
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
+    pStoveMesh = AEGfxMeshEnd();
 
     // 2. Load textures
     bTex = AEGfxTextureLoad("Assets/floor.png");
@@ -208,7 +223,7 @@ void CoreEngine::Update()
             RenderDustbin(pMesh, dTex);
 
             // Player update logic (picking up, dropping, etc.)
-            players1.playerUpdate(Wok, recipeSystem);
+            players1.playerUpdate(Wok, recipeSystem, qteGauge);
 
             // Stove / Wok logic (cooking)
             Wok.update(recipeSystem);
@@ -219,8 +234,10 @@ void CoreEngine::Update()
             RenderActiveRecipes(pMesh, recipeSystem);
 
             // Render Stove & Player
-            RenderStove(pMesh, Wok, players1);
+            AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+            RenderStove(pStoveMesh, Wok, players1,qteGauge);
             players1.playerdraw(pMesh, IngredientMesh);
+            RenderQTEGauge(pMesh, qteGauge);
 
             // Collision boxes for ingredients or special objects
             for (size_t i = 0; i < collisionBoxes.size(); i++)
@@ -279,6 +296,7 @@ void CoreEngine::Exit()
     // Free memory
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
+    if (pStoveMesh)   AEGfxMeshFree(pStoveMesh);
 
     if (bTex)             AEGfxTextureUnload(bTex);
     if (dTex)             AEGfxTextureUnload(dTex);

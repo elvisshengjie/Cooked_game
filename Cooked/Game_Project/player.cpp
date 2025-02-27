@@ -165,7 +165,6 @@ void player::playerPickUp(Ingredients& boxIngredient)
 void player::playerDrop(Stove& stove) {
 	//std::cout << "Attempted";
 	if (AEInputCheckTriggered(AEVK_E)) {
-		std::cout << "Attempted\n";
 		if (Hand != EMPTY) {
 			if (playerCheckCollison(stove.getX(), stove.getY(), stove.getW(), stove.getH()))
 			{
@@ -188,14 +187,26 @@ void player::playerDrop(Stove& stove) {
 		}
 	}
 }
-void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem) {
+void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gauge) {
 	if (playerCheckCollison(stove.getX(), stove.getY(), stove.getW(), stove.getH()) &&
 		stove.canCook(*this))
 	{
-		std::cout << "Press Q to Cook!" << std::endl;
-		if (AEInputCheckTriggered(AEVK_Q)) {  // Press E to Cook
-			stove.startCooking(recipeSystem.getActiveRecipes());
-			return;
+		if (AEInputCheckTriggered(AEVK_Q) && !QTE_Gauge.isActive) {  // Press Q to Cook
+			QTE_Gauge.start();
+		}
+	}
+	if (QTE_Gauge.isActive) {
+		QTE_Gauge.update(AEFrameRateControllerGetFrameTime());
+		if (QTE_Gauge.isCompleted) {
+			if (QTE_Gauge.isSuccess) {
+				std::cout << "QTE Successful! Cooking started." << std::endl;
+				stove.startCooking(recipeSystem.getActiveRecipes());
+			}
+			else {
+				std::cout << "QTE Failed! Ingredients thrown away." << std::endl;
+				stove.clearWok(); // Clear the wok if QTE fails
+			}
+			QTE_Gauge.reset(); // Reset QTE state
 		}
 	}
 }

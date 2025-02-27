@@ -37,12 +37,13 @@ private:
 
 	bool isCooking;
 
-	float x, y, width, height;
+	float x{ -50.0f };
+	float y = { -200.0f };
+	float width = {200.0f};
+	float height = { 100.0f };
+
 	bool recipeMatched;
-
 public:
-
-	Stove(float posX, float posY, float w, float h);
 
 	bool putIngredient(const std::string& ingredient);
 
@@ -55,8 +56,6 @@ public:
 	void update(RecipeSystem &recipeSystem);
 
 	double remainingCookingTime();
-
-	//bool matchesAnyActiveRecipe(const std::vector<Recipe>& activeRecipes) const;
 
 	float getX() const;
 
@@ -75,32 +74,39 @@ public:
 extern Stove Wok;
 
 class QTE {
-	private:
-		float x = 0.0f; // Center of the gauge on screen
-		float y = -0.4f;
-		float w = 600.0f;
-		float h = 20.0f;
-		
-		float sliderPos = 0.0f;
-		float sliderSpd = 0.01f; 
+private:
+	float x{ 0.0f }; // Center of the gauge on screen
+	float y{ -0.4f };
+	float w = { 600.0f };
+	float h = { 20.0f };
 
-		float targetZoneStart = 0.3f; // Start of the target zone (0 to 1) - NOMNOMlised
-		float targetZoneEnd = 0.5f;  // End of the target zone (0 to 1) - NOMNOMlised 
+	float sliderPos = { 0.0f }; // Start of the slider Position (0 to 1) - NOMNOMlised
+	float sliderSpd = { 0.8f};
 
-		bool movingRight = true;
+	float targetZoneStart = { 0.3f }; // Start of the target zone (0 to 1) - NOMNOMlised
+	float targetZoneEnd = {0.5f};  // End of the target zone (0 to 1) - NOMNOMlisesd 
+
+	bool movingRight = true;
 
 	public:
+
 		QTE();
 
 		void update(float dt);
-
-		//void render(AEGfxVertexList* mesh);
 
 		bool checkTarget() const;
 
 		void reset();
 
 		void render(AEGfxVertexList* mesh)const;
+
+		void start();
+
+		bool isActive = false;
+
+		bool isCompleted = false;
+
+		bool isSuccess = false;
 
 };
 extern int score;

@@ -5,7 +5,6 @@
 #include "player.hpp"
 #include <iostream>
 
-//Timer::Timer(double duration) : countdownDuration(duration), startTime(0.0) {}
 int score{};
 void Timer::start(double duration) {
 	this->countdownDuration = duration;
@@ -23,10 +22,6 @@ bool Timer::completed() const {
 }
 
 // Constructor initializes the Wok position
-Stove::Stove(float posX, float posY, float w, float h)
-	: x{ posX }, y{ posY }, width{ w }, height{ h }, isCooking{ false }, recipeMatched{ false } {}
-
-Stove Wok(-50.0f, -200.0f, 200.0f, 100.0f);
 
 bool Stove::putIngredient(const std::string& ingredient)
 {
@@ -137,6 +132,9 @@ QTE::QTE() {
 }
 
 void QTE::update(float dt) {
+	if (!isActive) {
+		return;
+	}
 	if (movingRight) {
 		sliderPos += sliderSpd * dt;
 		if (sliderPos >= 1.0f) {
@@ -151,6 +149,16 @@ void QTE::update(float dt) {
 			movingRight = true;
 		}
 	}
+	if (AEInputCheckTriggered(AEVK_R)) {
+		isCompleted = true;
+
+		if (checkTarget()) {
+			isSuccess = true;
+		}
+		else {
+			isSuccess = false;
+		}
+	}
 }
 bool QTE::checkTarget()const {
 	return (sliderPos >= targetZoneStart && sliderPos <= targetZoneEnd);
@@ -158,12 +166,16 @@ bool QTE::checkTarget()const {
 
 void QTE::render(AEGfxVertexList* mesh) const{
 
+	if (!isActive) {
+		return;
+	}
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEMtx33 bgTransform, sliderTransform, targetTransform;
 
 	AEMtx33Scale(&bgTransform, w, h);
 	AEMtx33TransApply(&bgTransform, &bgTransform, x, y);
 	AEGfxSetTransform(bgTransform.m);
-	AEGfxSetBlendColor(0.5f, 0.5f, 0.5f, 1.0f);
+	AEGfxSetColorToAdd(0.5f, 0.5f, 0.5f, 1.0f);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
 	float targetStartX = x - w / 2 + targetZoneStart * w;
@@ -173,7 +185,7 @@ void QTE::render(AEGfxVertexList* mesh) const{
 	AEMtx33Scale(&targetTransform, targetWidth, h);
 	AEMtx33TransApply(&targetTransform, &targetTransform, targetStartX + targetWidth / 2, y);
 	AEGfxSetTransform(targetTransform.m);
-	AEGfxSetBlendColor(0.0f, 1.0f, 0.0f, 1.0f);
+	AEGfxSetColorToAdd(0.0f, 1.0f, 0.0f, 1.0f);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
 	float sliderX = x - w / 2 + sliderPos * w;
@@ -181,15 +193,27 @@ void QTE::render(AEGfxVertexList* mesh) const{
 	AEMtx33Scale(&sliderTransform, 10.0f, h * 1.5f);
 	AEMtx33TransApply(&sliderTransform, &sliderTransform, sliderX, y);
 	AEGfxSetTransform(sliderTransform.m);
-	AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
+	AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 1.0f);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
 }
 
 void QTE::reset() {
-	sliderPos = 0.0f;
-	movingRight = true;
+	isActive = false; // Make sure QTE is deactivated on reset
+	isCompleted = false;
+	isSuccess = false;
 
+}
+	
+
+void QTE::start() {
+	if (isActive) return;
+	isActive = true;
+	isCompleted = false;
+	isSuccess = false;
+	sliderPos = 0.0f;
+
+	std::cout << isActive;
 	// Randomize the target zone position
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -198,7 +222,6 @@ void QTE::reset() {
 	targetZoneStart = dist(gen);
 	targetZoneEnd = targetZoneStart + zoneWidth;
 }
-
 
 int updateScore(bool recipeMatched)
 {
