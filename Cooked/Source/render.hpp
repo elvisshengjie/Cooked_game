@@ -21,9 +21,6 @@ public:
     float height{};
     float x{};
     float y{};
-
-    
-
 };
 
 
@@ -55,7 +52,7 @@ void displayTimer(double);
 
 //Font
 void InitFont();
-void InitFontMain_menu();
+//void InitFontMain_menu();
 
 //void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
 void RenderIngredientsOnBoxes(
@@ -76,4 +73,4 @@ extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;
 extern s8 FontID;
-extern s8 FontID_main_menu;
+//extern s8 FontID_main_menu;

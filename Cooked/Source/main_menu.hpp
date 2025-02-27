@@ -17,7 +17,7 @@ bool IsPointInsideButton(float px, float py, const Button& btn);
 
 class MainMenu {
 public:
-    MainMenu();
+    MainMenu() = default;
     ~MainMenu();
 
     // Initializes menu resources (fonts, background texture, buttons)
@@ -40,12 +40,11 @@ public:
 
 private:
     std::vector<Button> buttons;          
-    int selectedOption;                   
-    int FontID_main_menu = -1;
-    AEGfxTexture* background = nullptr;
+    int selectedOption{};
+    AEGfxTexture* background{ nullptr };
 
     // Flag set when the mouse click activates the "Start Game" button
-    bool m_StartGameActivated = false;
+    bool m_StartGameActivated{ false };
 };
 
 #if 0
@@ -54,7 +53,6 @@ class WinScreen
 private:
     std::vector<Button> buttons;
     int selected{};
-    int FontID{ -1 };
     AEGfxTexture* background{ nullptr };
     bool m_StartGameActivated{ false };
 
