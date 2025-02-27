@@ -13,7 +13,10 @@
 // Define your game states
 enum class GameState {
     MAIN_MENU,
-    GAME
+    GAME,
+    PAUSE_MENU,
+    WIN_SCREEN,
+    LOSE_SCREEN
 };
 
 // CoreEngine class
@@ -41,6 +44,7 @@ class CoreEngine
     RecipeSystem recipeSystem;
     MainMenu     mainMenu;
     QTE          qteGauge;
+    //WinScreen    winScreen;
 
     Timer gTimer;
 
@@ -67,6 +71,7 @@ void CoreEngine::Init()
 
     // Initialize the main menu
     mainMenu.Init();
+    //winScreen.Init();
 
     // Start the timer
     gTimer.start(300);
@@ -163,7 +168,18 @@ void CoreEngine::Update()
             }
         }
         break;
+#if 0
+        case GameState::WIN_SCREEN:
+        {
+            // Update & render Main Menu
+            winScreen.Update();
 
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            winScreen.Render(pMesh);
+
+        }
+        break;
+#endif
         // ------------------------------
         // GAME
         // ------------------------------

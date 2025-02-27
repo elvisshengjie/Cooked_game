@@ -1,19 +1,11 @@
 // render.cpp
 #include "render.hpp"
 
-// Function to Render Dustbin with Texture
 s8 FontID = -1;
-s8 FontID_main_menu = -1;
-void InitFontMain_menu()
-{
-    FontID_main_menu = AEGfxCreateFont("./Assets/Cute Dino.otf",24);
-    assert(FontID_main_menu >= 0 && "Failed to load font!");
-
-}
 
 void InitFont()
 {
-    FontID = AEGfxCreateFont("./Assets/buggy-font.ttf", 24);  // Ensure valid .ttf file
+    FontID = AEGfxCreateFont("./Assets/Cute Dino.otf", 24); 
     assert(FontID >= 0 && "Failed to load font!");
 }
 

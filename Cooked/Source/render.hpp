@@ -22,9 +22,6 @@ public:
     float height{};
     float x{};
     float y{};
-
-    
-
 };
 
 
@@ -55,7 +52,7 @@ void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem
 void displayScore(int);
 void displayTimer(double);
 
-
+//Font
 void InitFont();
 
 //void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
@@ -76,6 +73,4 @@ extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;
 extern s8 FontID;
-extern s8 FontID_main_menu;
-//main_menu rendering
-void InitFontMain_menu();
+//extern s8 FontID_main_menu;
