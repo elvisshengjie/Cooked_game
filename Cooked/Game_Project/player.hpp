@@ -31,9 +31,9 @@ private:
 	float dt{};
 	// dash
 
-	float dashspeed{ 500 };
-	float dashCooldown{3};
-	float dashDuration{1};
+	float dashspeed{ 1000 };
+	float dashCooldown{1};
+	float dashDuration{0.2};
 	int rawX{};
 	int rawY{};
 	float mouseX{};
