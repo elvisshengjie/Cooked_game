@@ -76,32 +76,39 @@ public:
 extern Stove Wok;
 
 class QTE {
-	private:
-		float x = 0.0f; // Center of the gauge on screen
-		float y = -0.4f;
-		float w = 600.0f;
-		float h = 20.0f;
-		
-		float sliderPos = 0.0f;
-		float sliderSpd = 0.01f; 
+private:
+	float x{ 0.0f }; // Center of the gauge on screen
+	float y{ -0.4f };
+	float w = { 600.0f };
+	float h = { 20.0f };
 
-		float targetZoneStart = 0.3f; // Start of the target zone (0 to 1) - NOMNOMlised
-		float targetZoneEnd = 0.5f;  // End of the target zone (0 to 1) - NOMNOMlised 
+	float sliderPos = { 0.0f }; // Start of the slider Position (0 to 1) - NOMNOMlised
+	float sliderSpd = { 0.8f};
 
-		bool movingRight = true;
+	float targetZoneStart = { 0.3f }; // Start of the target zone (0 to 1) - NOMNOMlised
+	float targetZoneEnd = {0.5f};  // End of the target zone (0 to 1) - NOMNOMlisesd 
+
+	bool movingRight = true;
 
 	public:
+
 		QTE();
 
 		void update(float dt);
-
-		//void render(AEGfxVertexList* mesh);
 
 		bool checkTarget() const;
 
 		void reset();
 
 		void render(AEGfxVertexList* mesh)const;
+
+		void start();
+
+		bool isActive = false;
+
+		bool isCompleted = false;
+
+		bool isSuccess = false;
 
 };
 extern int score;

@@ -50,7 +50,6 @@ std::vector<Rect> recipeBoxes = {
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
 Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
-Rect stove1{ 200.0f, 100.0f,-50.0f, -200.0f };
 Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
 
 
@@ -215,19 +214,24 @@ void RenderIngredientsOnBoxes(
 
 
 // Function to Render Stove with Red Color
-void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player) {
+void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE& qteGauge) {
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
     AEMtx33 stoveTransform;
-    AEMtx33Scale(&stoveTransform, stove1.width, stove1.height);
-    AEMtx33TransApply(&stoveTransform, &stoveTransform, stove1.x, stove1.y);
+
+    AEMtx33Scale(&stoveTransform, stove.getW(), stove.getH());
+    AEMtx33TransApply(&stoveTransform, &stoveTransform, stove.getX(), stove.getY());
     AEGfxSetTransform(stoveTransform.m);
-    AEGfxSetColorToMultiply(1.0f, 0.0f, 0.0f, 1.0f);
-    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+
+    AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 1.0f);
+
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
     AEGfxSetTransparency(1.0f);
+
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
-    if (!stove.isCurrentlyCooking() && stove.canCook(Player)) {
+    if (!stove.isCurrentlyCooking() && stove.canCook(Player) && !qteGauge.isActive ) {
         AEGfxPrint(FontID, "Press Q to Cook!", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
@@ -326,6 +330,16 @@ void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex)
     AEGfxSetTransform(background_main_menu.m);
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
+
+void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge) {
+    if (!qteGauge.isActive) { return; }
+    else {
+
+        qteGauge.render(mesh);
+        AEGfxPrint(FontID, "Press R !", -0.1f, -0.2f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
+}
+
 void displayScore(int score)
 {
     std::string scoreStr = std::to_string(score);

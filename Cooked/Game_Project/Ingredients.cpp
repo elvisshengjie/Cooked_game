@@ -2,7 +2,6 @@
 #include "Ingredients.hpp"
 #include "utils.hpp"
 
-
 Ingredients GetRandomIngredient(Ingredients previousIngredient)
 {
 	// Use a static random engine so that it isn't re-seeded on every call.
@@ -19,19 +18,6 @@ Ingredients GetRandomIngredient(Ingredients previousIngredient)
 }
 std::vector<Ingredients> g_currentBoxIngredients(3);
 
-//std::string IngredientToString(Ingredients ing)
-//{
-//	switch (ing)
-//	{
-//	case CHICKEN: return "CHICKEN";a
-//	case RICE:    return "RICE";
-//	case EGG:     return "EGG";
-//	case CHEESE:  return "CHEESE";
-//	case POTATO:  return "POTATO";
-//	case BEEF:    return "BEEF";
-//	default:      return "???";
-//	}
-//}
 //Constructor
 Recipe::Recipe(std::string recipeName, std::vector<std::string> ingredientList)
 	: Name(recipeName), Ingredients(ingredientList) {}
