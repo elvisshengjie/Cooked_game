@@ -52,10 +52,9 @@ public:
 // CoreEngine::Init
 void CoreEngine::Init()
 {
-    // Initialization of your own variables go here
 
-   // Changing the window title
 
+    // Changing the window title
     AESysSetWindowTitle("Cooked!");
 
     // AESysReset() re-initializes various engine systems
@@ -140,38 +139,6 @@ void CoreEngine::Update()
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             mainMenu.Render(pMesh);
 
-            players1.playerCheckCollisonobject(object.x, object.y, object.width, object.height);
-
-
-        }
-
-        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-        Renderbackground(pMesh, bTex);
-        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-        RenderDustbin(pMesh, dTex);
-       
-        players1.playerUpdate(Wok,recipeSystem);
-
-        Wok.update(recipeSystem);
-
-        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-        RenderIngredientbox(pMesh);
-        RenderActiveRecipes(pMesh, recipeSystem);        
-        RenderStove(pMesh, Wok,players1);
-        players1.playerdraw(pMesh, IngredientMesh);
-
-        for (size_t i = 0; i < collisionBoxes.size(); i++) {
-            const Rect& collBox = collisionBoxes[i];
-            const Rect& visualBox = highingredientBoxes[i];
-
-            if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)) {
-                // Optionally, render a highlight for the box.
-                RenderhighlightIngredientBox(pMesh, visualBox);
-                // Handle pickup/drop for the current box.
-                players1.playerPickUp(g_currentBoxIngredients[i]);
-            }
-            if (players1.playerCheckCollison(Wok.getX(), Wok.getY(), Wok.getW(), Wok.getH()) ||
-                players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y, objectcollision[0].width, objectcollision[0].height))
             // Check menu selection
             if (mainMenu.IsStartGameSelected())
             {
