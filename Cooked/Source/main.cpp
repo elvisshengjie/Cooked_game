@@ -19,6 +19,7 @@ enum class GameState {
     LOSE_SCREEN
 };
 
+
 // CoreEngine class
 class CoreEngine
 {
@@ -38,11 +39,12 @@ class CoreEngine
     AEGfxTexture* eggTex = nullptr;
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
+    AEGfxTexture* backgroundTex{ nullptr };
 
     // Systems
     RecipeSystem recipeSystem;
     MainMenu     mainMenu;
-    //WinScreen    winScreen;
+    WinScreen    winScreen;
 
     Timer gTimer;
 
@@ -69,7 +71,7 @@ void CoreEngine::Init()
 
     // Initialize the main menu
     mainMenu.Init();
-    //winScreen.Init();
+    winScreen.Init();
 
     // Start the timer
     gTimer.start(300);
@@ -104,6 +106,7 @@ void CoreEngine::Init()
     eggTex = AEGfxTextureLoad("Assets/egg.png");
     riceTex = AEGfxTextureLoad("Assets/rice.png");
     potatoTex = AEGfxTextureLoad("Assets/potato.png");
+    backgroundTex = AEGfxTextureLoad("Assets/cafe.jpg");
 
     // 3. Create a mesh (IngredientMesh) for ingredient rectangles
     AEGfxMeshStart();
@@ -155,18 +158,31 @@ void CoreEngine::Update()
             }
         }
         break;
-#if 0
+
         case GameState::WIN_SCREEN:
         {
             // Update & render Main Menu
-            winScreen.Update();
+            int check = winScreen.Update();
+
+            // Check menu selection
+            if (check == 1)
+            {
+                currentState = GameState::GAME;
+            }
+            else if (check == 2)
+            {
+                currentState = GameState::MAIN_MENU;
+            }
+            else if (check == 3)
+            {
+                gGameRunning = false;
+            }
 
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-            winScreen.Render(pMesh);
-
+            winScreen.Render(pMesh, backgroundTex);
         }
         break;
-#endif
+
         // ------------------------------
         // GAME
         // ------------------------------
@@ -239,6 +255,11 @@ void CoreEngine::Update()
             // Show score & timer at the top
             displayScore(score);
             displayTimer(gTimer.getRemainingTime());
+
+            if (score > 30)
+            {
+                currentState = GameState::WIN_SCREEN;
+            }
         }
         break;
         } // End of switch

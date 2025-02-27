@@ -1,9 +1,4 @@
 #include "Main_Menu.hpp"
-#include "AEEngine.h"
-#include "AEInput.h"
-#include "render.hpp"
-#include <AEGraphics.h>
-#include <cassert>
 
 bool IsPointInsideButton(float px, float py, const Button& btn) {
     float left = btn.x - btn.width / 2.0f;
@@ -13,10 +8,8 @@ bool IsPointInsideButton(float px, float py, const Button& btn) {
     return (px >= left && px <= right && py <= top && py >= bottom);
 }
 
-
 // Destructor
 MainMenu::~MainMenu() {}
-
 
 void MainMenu::Init() {
     background = AEGfxTextureLoad("Assets/cafe.jpg");
@@ -101,24 +94,17 @@ void MainMenu::Cleanup() {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-#if 0
 // Destructor
-WinScreen::~WinScreen() 
-{
-    AEGfxTextureUnload(background);
-}
+WinScreen::~WinScreen() {}
 
 void WinScreen::Init()
 {
-    void InitFont();
-    background = AEGfxTextureLoad("Assets/cafe.jpg");
-
     // Define button positions and sizes.
-    float centerX = 0.0f;      // Center horizontally
-    float startY = 0.5f;       // Starting y position for the top button
-    float buttonWidth = 1.0f;  // Width of each button
-    float buttonHeight = 0.15f;
-    float spacing = 0.2f;      // Vertical spacing between button centers
+    float centerX{ 0.0f };      // Center horizontally
+    float startY{};       // Starting y position for the top button
+    float buttonWidth{ 1.0f };  // Width of each button
+    float buttonHeight{ 0.15f };//Height of each button
+    float spacing{ 0.2f };      // Vertical spacing between button centers
 
     buttons.clear();
     buttons.push_back({ "Restart", centerX, startY, buttonWidth, buttonHeight });
@@ -147,23 +133,62 @@ int WinScreen::Update()
                 switch (i)
                 {
                     case 0: //restart game
-                        m_StartGameActivated = true;
+                        //m_StartGameActivated = true;
+                        return 1;
                         break;
                     case 1: //main menu
-                        menuSelected();
-
-
-                default:
-                    break;
+                        return 2;
+                        break;
+                    case 2:
+                        return 3;
+                        break;
+                    default:
+                        break;
                 }
                 
             }
         }
     }
 }
-void WinScreen::Render();
+void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex)
+{
+    Rect background{ 1600.0f,900.0f,0.0f,0.0f };
+    DrawRect(background, tex, mesh);
 
-bool WinScreen::restartSelected();
-bool WinScreen::menuSelected();
-bool WinScreen::quitSelected();
-#endif
+    AEGfxVertexList* pMesh{};
+    AEGfxMeshStart();
+    AEGfxTriAdd(
+        -0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+    AEGfxTriAdd(
+        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+    pMesh = AEGfxMeshEnd();
+
+    Rect box{ 600.0f, 700.0f, 0.0f, 0.0f };
+    DrawRect(box, 0xFAF4E3ED, pMesh);
+
+    // Render each button. We assume AEGfxPrint centers the text.
+    for (size_t i = 0; i < buttons.size(); i++) {
+        const Button& btn = buttons[i];
+        unsigned int color = (i == static_cast<size_t>(selected)) ? 0xFFFFFF00 : 0xFFFFFFFF;
+        AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.1f, btn.y, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    AEGfxPrint(FontID, "You win!", -0.23f, 0.4, 4.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+bool WinScreen::IsRestartGameSelected()
+{
+    return true;
+}
+bool WinScreen::IsMenuSelected()
+{
+    return true;
+}
+bool WinScreen::IsQuitSelected()
+{
+    return true;
+}

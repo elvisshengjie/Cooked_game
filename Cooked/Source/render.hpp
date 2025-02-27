@@ -23,7 +23,9 @@ public:
     float y{};
 };
 
-
+////////////////////////////helper functions//////////////////
+void DrawRect(Rect, unsigned int, AEGfxVertexList*);
+void DrawRect(Rect, AEGfxTexture*, AEGfxVertexList*);
 // ... Other boxes ...
 
 // Forward declare your rendering functions

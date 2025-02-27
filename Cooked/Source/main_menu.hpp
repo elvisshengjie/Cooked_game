@@ -4,11 +4,13 @@
 #include "AEEngine.h"
 #include <AEGraphics.h>
 #include "render.hpp"
+#include "AEInput.h"
+#include <cassert>
 
 // Simple Button structure for menu items
 struct Button {
     std::string label;
-    float x, y;      
+    float x, y;
     float width, height;
 };
 
@@ -47,13 +49,12 @@ private:
     bool m_StartGameActivated{ false };
 };
 
-#if 0
+
 class WinScreen
 {
 private:
     std::vector<Button> buttons;
     int selected{};
-    AEGfxTexture* background{ nullptr };
     bool m_StartGameActivated{ false };
 
 public:
@@ -61,10 +62,9 @@ public:
     ~WinScreen();
     void Init();
     int Update();
-    void Render();
+    void Render(AEGfxVertexList*, AEGfxTexture*);
 
-    bool restartSelected();
-    bool menuSelected();
-    bool quitSelected();
+    bool IsRestartGameSelected();
+    bool IsMenuSelected();
+    bool IsQuitSelected();
 };
-#endif

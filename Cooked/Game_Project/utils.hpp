@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 
-
 class RecipeSystem;
 
 class player;
