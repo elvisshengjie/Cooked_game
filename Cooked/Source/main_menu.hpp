@@ -37,8 +37,8 @@ public:
 
 private:
     std::vector<Button> buttons;          
-    int selectedOption;                   
-    int FontID_main_menu = -1;
+    size_t selectedOption;                   
+    s8 FontID_main_menu = -1;
     AEGfxTexture* background = nullptr;
 
     // Flag set when the mouse click activates the "Start Game" button

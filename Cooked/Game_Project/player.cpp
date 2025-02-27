@@ -1,8 +1,4 @@
 #include "player.hpp"
-#include "collison.hpp"
-#include <assert.h>
-#include <iostream>
-
 
 s8 FontId = -1;
 
@@ -82,8 +78,15 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 
 void player::playerMove(float speed)
 {
-	float dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
-	const float normalize_speed = speed * 0.707f;
+	dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
+	if (isDashing) {
+		this->x += DirectX * dashspeed * dt; //DirectX * dashspeed *dt
+		this->y += DirectY * dashspeed * dt;
+
+	}
+	else if(!isDashing){
+		
+	normalize_speed = speed * 0.707f;
 	if (AEInputCheckCurr(AEVK_W) && AEInputCheckCurr(AEVK_D)) { //NE
 		this->x += normalize_speed * dt;
 		this->y += normalize_speed * dt;
@@ -116,6 +119,7 @@ void player::playerMove(float speed)
 	{
 		this->x -= speed * dt;
 	}
+}
 }
 
 bool player::playerCheckCollison(float x1, float y1, float width1, float height1)const
@@ -204,6 +208,60 @@ void player::playerDrop(Stove& stove) {
 			}
 		}
 	}
+}
+
+void player::playerDash() {
+
+	
+
+	if (dashCounter == 1) {
+		if (AEInputCheckTriggered(AEVK_SPACE)) {
+			rawX, rawY;
+			AEInputGetCursorPosition(&rawX, &rawY);
+			// Convert from screen-space (assuming 1600x900) to centered coordinates:
+			mouseX = (rawX - 800);// 800.0f;
+			mouseY = (450 - rawY); // 450.0f;
+
+			DirectX = mouseX - x;
+			DirectY = mouseY - y;
+
+			Magnitude = (DirectX * DirectX + DirectY * DirectY);
+			Magnitude = sqrt(Magnitude);
+
+			if (Magnitude > 0) {
+				DirectX /= Magnitude;
+				DirectY /= Magnitude;
+
+			}
+			isDashing = true;
+			cooldown.start(dashDuration);
+
+			}
+
+		}
+	if (isDashing) {
+		float remainTimedash2 = cooldown.getRemainingTime();
+		std::cout << "Remaining time: " << remainTimedash2 << std::endl;
+		if (AEIsF32Zero(remainTimedash2)) {
+			dashCounter = 0;
+			isDashing = false;
+			cooldown2.start(dashCooldown);
+		}
+
+	}
+
+	 
+	if (dashCounter == 0 && !isDashing)
+	{
+		float remainTimedash = cooldown2.getRemainingTime();
+		if (remainTimedash <= 0) {
+			dashCounter = 1;
+		}
+	}
+
+
+
+	
 }
 void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem) {
 	if (playerCheckCollison(stove.getX(), stove.getY(), stove.getW(), stove.getH()) &&

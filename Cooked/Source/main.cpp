@@ -157,7 +157,9 @@ void CoreEngine::Update()
         case GameState::GAME:
         {
             // 1. Update Player & Collisions
+            players1.playerDash();
             players1.playerMove(400.0);
+            
             players1.ClampToScreen();
 
             for (size_t i = 0; i < objectcollision.size(); i++)
