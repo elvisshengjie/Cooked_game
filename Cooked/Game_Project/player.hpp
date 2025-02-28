@@ -32,7 +32,7 @@ private:
 	// dash
 
 	float dashspeed{ 1000 };
-	float dashCooldown{1};
+	float dashCooldown{0.5};
 	float dashDuration{0.2};
 	int rawX{};
 	int rawY{};
