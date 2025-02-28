@@ -70,8 +70,8 @@ void MainMenu::Render(AEGfxVertexList* mesh) {
 
     // Render each button. We assume AEGfxPrint centers the text.
     for (size_t i = 0; i < buttons.size(); i++) {
-        const Button& btn = buttons[i];        
-        AEGfxPrint(FontID_main_menu, btn.label.c_str(), btn.x, btn.y, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        const Button& btn = buttons[i];      
+        AEGfxPrint(FontID, btn.label.c_str(), btn.x, btn.y, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
     }
 }
