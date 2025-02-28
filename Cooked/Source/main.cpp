@@ -13,8 +13,12 @@
 // Define your game states
 enum class GameState {
     MAIN_MENU,
-    GAME
+    GAME,
+    PAUSE_MENU,
+    WIN_SCREEN,
+    LOSE_SCREEN
 };
+
 
 // CoreEngine class
 class CoreEngine
@@ -25,6 +29,7 @@ class CoreEngine
     // Meshes
     AEGfxVertexList* pMesh = nullptr;          // Generic mesh (background, dustbin, etc.)
     AEGfxVertexList* IngredientMesh = nullptr; // Generic mesh for ingredients
+    AEGfxVertexList* pStoveMesh = nullptr; // Generic mesh for Stove
 
     // Textures
     AEGfxTexture* bTex = nullptr; // Background/floor
@@ -35,10 +40,15 @@ class CoreEngine
     AEGfxTexture* eggTex = nullptr;
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
+    AEGfxTexture* backgroundTex{ nullptr };
 
     // Systems
     RecipeSystem recipeSystem;
     MainMenu     mainMenu;
+
+    QTE          qteGauge;
+    Stove        Wok;
+    WinScreen    winScreen;
 
     Timer gTimer;
 
@@ -52,7 +62,7 @@ public:
 // CoreEngine::Init
 void CoreEngine::Init()
 {
- 
+
 
     // Changing the window title
     AESysSetWindowTitle("Cooked!");
@@ -65,6 +75,7 @@ void CoreEngine::Init()
 
     // Initialize the main menu
     mainMenu.Init();
+    winScreen.Init();
 
     // Start the timer
     gTimer.start(300);
@@ -90,6 +101,17 @@ void CoreEngine::Init()
         -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
     pMesh = AEGfxMeshEnd();
 
+    AEGfxMeshStart();
+    AEGfxTriAdd(
+        -0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFF00FF00, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
+    AEGfxTriAdd(
+        0.5f, -0.5f, 0xFF00FF00, 1.0f, 1.0f,
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
+    pStoveMesh = AEGfxMeshEnd();
+
     // 2. Load textures
     bTex = AEGfxTextureLoad("Assets/floor.png");
     dTex = AEGfxTextureLoad("Assets/dustbin.png");
@@ -99,6 +121,7 @@ void CoreEngine::Init()
     eggTex = AEGfxTextureLoad("Assets/egg.png");
     riceTex = AEGfxTextureLoad("Assets/rice.png");
     potatoTex = AEGfxTextureLoad("Assets/potato.png");
+    backgroundTex = AEGfxTextureLoad("Assets/cafe.jpg");
 
     // 3. Create a mesh (IngredientMesh) for ingredient rectangles
     AEGfxMeshStart();
@@ -151,6 +174,30 @@ void CoreEngine::Update()
         }
         break;
 
+        case GameState::WIN_SCREEN:
+        {
+            // Update & render Main Menu
+            int check = winScreen.Update();
+
+            // Check menu selection
+            if (check == 1)
+            {
+                currentState = GameState::GAME;
+            }
+            else if (check == 2)
+            {
+                currentState = GameState::MAIN_MENU;
+            }
+            else if (check == 3)
+            {
+                gGameRunning = false;
+            }
+
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            winScreen.Render(pMesh, backgroundTex);
+        }
+        break;
+
         // ------------------------------
         // GAME
         // ------------------------------
@@ -178,7 +225,7 @@ void CoreEngine::Update()
             RenderDustbin(pMesh, dTex);
 
             // Player update logic (picking up, dropping, etc.)
-            players1.playerUpdate(Wok, recipeSystem);
+            players1.playerUpdate(Wok, recipeSystem, qteGauge);
 
             // Stove / Wok logic (cooking)
             Wok.update(recipeSystem);
@@ -189,8 +236,10 @@ void CoreEngine::Update()
             RenderActiveRecipes(pMesh, recipeSystem);
 
             // Render Stove & Player
-            RenderStove(pMesh, Wok, players1);
+            AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+            RenderStove(pStoveMesh, Wok, players1,qteGauge);
             players1.playerdraw(pMesh, IngredientMesh);
+            RenderQTEGauge(pMesh, qteGauge);
 
             // Collision boxes for ingredients or special objects
             for (size_t i = 0; i < collisionBoxes.size(); i++)
@@ -225,6 +274,11 @@ void CoreEngine::Update()
             // Show score & timer at the top
             displayScore(score);
             displayTimer(gTimer.getRemainingTime());
+
+            if (score > 30)
+            {
+                currentState = GameState::WIN_SCREEN;
+            }
         }
         break;
         } // End of switch
@@ -244,6 +298,7 @@ void CoreEngine::Exit()
     // Free memory
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
+    if (pStoveMesh)   AEGfxMeshFree(pStoveMesh);
 
     if (bTex)             AEGfxTextureUnload(bTex);
     if (dTex)             AEGfxTextureUnload(dTex);

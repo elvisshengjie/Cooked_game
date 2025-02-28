@@ -4,17 +4,22 @@
 #include "AEEngine.h"
 #include <AEGraphics.h>
 #include "render.hpp"
+#include "AEInput.h"
+#include <cassert>
 
 // Simple Button structure for menu items
 struct Button {
     std::string label;
-    float x, y;      
+    float x, y;
     float width, height;
 };
 
+// Helper: Check if a point is inside a button (using center coordinates)
+bool IsPointInsideButton(float px, float py, const Button& btn);
+
 class MainMenu {
 public:
-    MainMenu();
+    MainMenu() = default;
     ~MainMenu();
 
     // Initializes menu resources (fonts, background texture, buttons)
@@ -42,8 +47,25 @@ private:
     AEGfxTexture* background = nullptr;
 
     // Flag set when the mouse click activates the "Start Game" button
-    bool m_StartGameActivated = false;
+    bool m_StartGameActivated{ false };
+};
 
-    // Helper: Check if a point is inside a button (using center coordinates)
-    bool IsPointInsideButton(float px, float py, const Button& btn) const;
+
+class WinScreen
+{
+private:
+    std::vector<Button> buttons;
+    int selected{};
+    bool m_StartGameActivated{ false };
+
+public:
+    WinScreen() = default;
+    ~WinScreen();
+    void Init();
+    int Update();
+    void Render(AEGfxVertexList*, AEGfxTexture*);
+
+    bool IsRestartGameSelected();
+    bool IsMenuSelected();
+    bool IsQuitSelected();
 };

@@ -4,9 +4,10 @@
 #include <vector>
 #include <algorithm>
 #include <cstdlib> 
+#include <random>
+#include <iostream>
 #include "utils.hpp"
 
-//class Timer;
 /*
 	Ingredients :
 	chicken, rice ,egg , cheese , potato , beef
@@ -46,12 +47,6 @@ Ingredients GetRandomIngredient(Ingredients previousIngredient = EMPTY);
 std::string IngredientToString(Ingredients ing);
 extern std::vector<Ingredients> g_currentBoxIngredients;
 
-
-
-
-
-const std::string validIngredients[] = { "chicken", "rice", "egg", 
-										"cheese", "potato", "beef" };
 
 class Recipe {
 public:

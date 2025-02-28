@@ -1,19 +1,61 @@
 // render.cpp
 #include "render.hpp"
 
-// Function to Render Dustbin with Texture
-s8 FontID = -1;
-s8 FontID_main_menu = -1;
-void InitFontMain_menu()
+////////////////////////////helper function cuz AE is dumb and doesnt know how to draw rects by themsleves//////////////////////
+//input color in HEX code format pls :>
+void DrawRect(Rect rect, unsigned int color, AEGfxVertexList* pMesh)
 {
-    FontID_main_menu = AEGfxCreateFont("./Assets/Cute Dino.otf",24);
-    assert(FontID_main_menu >= 0 && "Failed to load font!");
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 
+    // Extract each color component using bitwise operations
+    float r = ((color >> 24) & 0xFF) / 255.0f; // Red
+    float g = ((color >> 16) & 0xFF) / 255.0f; // Green
+    float b = ((color >> 8) & 0xFF) / 255.0f;  // Blue
+    float a = (color & 0xFF) / 255.0f;       // Alpha
+
+    // Transform matrix for positioning the rectangle
+    AEMtx33 transform;
+    AEMtx33Scale(&transform, rect.width, rect.height);
+    AEMtx33TransApply(&transform, &transform, rect.x, rect.y);
+    AEGfxSetTransform(transform.m);
+
+    AEGfxSetColorToMultiply(r, g, b, a);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+
+    // Draw the rectangle using a built-in mesh or custom vertex data
+    AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 }
+
+//draw overload for texture :>
+void DrawRect(Rect rect, AEGfxTexture* tex, AEGfxVertexList* pMesh)
+{
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+    // Transform matrix for positioning the rectangle
+    AEMtx33 transform;
+    AEMtx33Scale(&transform, rect.width, rect.height);
+    AEMtx33TransApply(&transform, &transform, rect.x, rect.y);
+    AEGfxSetTransform(transform.m);
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+    AEGfxSetTransform(transform.m);
+    
+    // Draw the rectangle using a built-in mesh
+    AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+}
+
+
+s8 FontID = -1;
 
 void InitFont()
 {
-    FontID = AEGfxCreateFont("./Assets/buggy-font.ttf", 24);  // Ensure valid .ttf file
+    FontID = AEGfxCreateFont("./Assets/Cute Dino.otf", 24); 
     assert(FontID >= 0 && "Failed to load font!");
 }
 
@@ -50,8 +92,8 @@ std::vector<Rect> recipeBoxes = {
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
 Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
-Rect stove1{ 200.0f, 100.0f,-50.0f, -200.0f };
 Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
+
 
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
@@ -173,32 +215,32 @@ void RenderIngredientsOnBoxes(
         case CHICKEN:
             AEGfxTextureSet(chickenTex, 0, 0);
             // Optionally, you can tint it:
-            AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
+            //AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
             
             break;
         case BEEF:
             AEGfxTextureSet(beefTex, 0, 0);
-            AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
+            //AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
             
             break;
         case CHEESE:
             AEGfxTextureSet(cheeseTex, 0, 0);
-            AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
+            //AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
             
             break;
         case EGG:
             AEGfxTextureSet(eggTex, 0, 0);
-            AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
+            //AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
             
             break;
         case RICE:
             AEGfxTextureSet(riceTex, 0, 0);
-            AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+            //AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
            
             break;
         case POTATO:
             AEGfxTextureSet(potatoTex, 0, 0);
-            AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
+            //AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
             
             break;
         default:
@@ -212,22 +254,25 @@ void RenderIngredientsOnBoxes(
 
 
 
-
-
 // Function to Render Stove with Red Color
-void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player) {
+void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE& qteGauge) {
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
     AEMtx33 stoveTransform;
-    AEMtx33Scale(&stoveTransform, stove1.width, stove1.height);
-    AEMtx33TransApply(&stoveTransform, &stoveTransform, stove1.x, stove1.y);
+
+    AEMtx33Scale(&stoveTransform, stove.getW(), stove.getH());
+    AEMtx33TransApply(&stoveTransform, &stoveTransform, stove.getX(), stove.getY());
     AEGfxSetTransform(stoveTransform.m);
-    AEGfxSetColorToMultiply(1.0f, 0.0f, 0.0f, 1.0f);
-    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+
+    AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 1.0f);
+
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
     AEGfxSetTransparency(1.0f);
+
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
-    if (!stove.isCurrentlyCooking() && stove.canCook(Player)) {
+    if (!stove.isCurrentlyCooking() && stove.canCook(Player) && !qteGauge.isActive ) {
         AEGfxPrint(FontID, "Press Q to Cook!", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
@@ -310,6 +355,7 @@ void RenderActiveRecipes(AEGfxVertexList* mesh,const RecipeSystem& recipeSystem)
     }
 }
 
+
 void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex)
 {
     AEMtx33 background_main_menu;
@@ -325,6 +371,18 @@ void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex)
     AEGfxSetTransform(background_main_menu.m);
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
+
+
+void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge) {
+    if (!qteGauge.isActive) { return; }
+    else {
+
+        qteGauge.render(mesh);
+        AEGfxPrint(FontID, "Press R !", -0.1f, -0.2f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
+}
+
+
 void displayScore(int score)
 {
     std::string scoreStr = std::to_string(score);

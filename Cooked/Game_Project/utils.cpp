@@ -3,8 +3,8 @@
 #include "utils.hpp"
 #include "Ingredients.hpp"
 #include "player.hpp"
+#include <iostream>
 
-//Timer::Timer(double duration) : countdownDuration(duration), startTime(0.0) {}
 int score{};
 void Timer::start(double duration) {
 	this->countdownDuration = duration;
@@ -21,13 +21,7 @@ bool Timer::completed() const {
 	return getRemainingTime() <= 0.0;
 }
 
-
-
 // Constructor initializes the Wok position
-Stove::Stove(float posX, float posY, float w, float h)
-	: x{ posX }, y{ posY }, width{ w }, height{ h }, isCooking{ false }, recipeMatched{ false } {}
-
-Stove Wok(-50.0f, -200.0f, 200.0f, 100.0f);
 
 bool Stove::putIngredient(const std::string& ingredient)
 {
@@ -54,18 +48,6 @@ bool Stove::canCook(player& player) const
 	return !isCooking && stoveItems.size() >= 2 && player.playerCheckCollison(x, y, width, height);
 }
 
-// bool Stove::matchesCurrentRecipe(const Recipe& recipe) const {
-// 	return recipe.matchesWok(stoveItems);
-// }
-
-//bool Stove::matchesAnyActiveRecipe(const std::vector<Recipe>& activeRecipes) const {
-//	for (const Recipe& recipe : activeRecipes) {
-//		if (recipe.matchesWok(stoveItems)) {
-//			return true;
-//		}
-//	}
-//	return false;
-//}
 void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 {
 	if (isCooking || stoveItems.size() < 2) {
@@ -102,11 +84,11 @@ double Stove::remainingCookingTime()
 	return remainTime;
 }
 void Stove::update(RecipeSystem& recipeSystem) {
-	if (isCooking && cookingTimer.completed()) {
+	if (isCooking && cookingTimer.completed()) {	
 		for (const Recipe& recipe : recipeSystem.getActiveRecipes()) {
 			if (recipe.Name == cookingRecipeName) {
 				recipeSystem.replaceRecipe(recipe);
-				break;
+				break;	
 			}
 		}
 		clearWok();
@@ -145,6 +127,101 @@ std::vector<std::string> Stove::getStoveItems()const {
 	return stoveItems;
 }
 
+QTE::QTE() {
+	reset();
+}
+
+void QTE::update(float dt) {
+	if (!isActive) {
+		return;
+	}
+	if (movingRight) {
+		sliderPos += sliderSpd * dt;
+		if (sliderPos >= 1.0f) {
+			sliderPos = 1.0f;
+			movingRight = false;
+		}
+	}
+	else {
+		sliderPos -= sliderSpd * dt;
+		if (sliderPos <= 0.0f) {
+			sliderPos = 0.0f;
+			movingRight = true;
+		}
+	}
+	if (AEInputCheckTriggered(AEVK_R)) {
+		isCompleted = true;
+
+		if (checkTarget()) {
+			isSuccess = true;
+		}
+		else {
+			isSuccess = false;
+		}
+	}
+}
+bool QTE::checkTarget()const {
+	return (sliderPos >= targetZoneStart && sliderPos <= targetZoneEnd);
+}
+
+void QTE::render(AEGfxVertexList* mesh) const{
+
+	if (!isActive) {
+		return;
+	}
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 bgTransform, sliderTransform, targetTransform;
+
+	AEMtx33Scale(&bgTransform, w, h);
+	AEMtx33TransApply(&bgTransform, &bgTransform, x, y);
+	AEGfxSetTransform(bgTransform.m);
+	AEGfxSetColorToAdd(0.5f, 0.5f, 0.5f, 1.0f);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+
+	float targetStartX = x - w / 2 + targetZoneStart * w;
+	float targetWidth = (targetZoneEnd - targetZoneStart) * w;
+
+
+	AEMtx33Scale(&targetTransform, targetWidth, h);
+	AEMtx33TransApply(&targetTransform, &targetTransform, targetStartX + targetWidth / 2, y);
+	AEGfxSetTransform(targetTransform.m);
+	AEGfxSetColorToAdd(0.0f, 1.0f, 0.0f, 1.0f);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+
+	float sliderX = x - w / 2 + sliderPos * w;
+
+	AEMtx33Scale(&sliderTransform, 10.0f, h * 1.5f);
+	AEMtx33TransApply(&sliderTransform, &sliderTransform, sliderX, y);
+	AEGfxSetTransform(sliderTransform.m);
+	AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 1.0f);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+
+}
+
+void QTE::reset() {
+	isActive = false; // Make sure QTE is deactivated on reset
+	isCompleted = false;
+	isSuccess = false;
+
+}
+	
+
+void QTE::start() {
+	if (isActive) return;
+	isActive = true;
+	isCompleted = false;
+	isSuccess = false;
+	sliderPos = 0.0f;
+
+	std::cout << isActive;
+	// Randomize the target zone position
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dist(0.1f, 0.8f);
+	float zoneWidth = 0.2f; // 20% of the gauge as the target zone
+	targetZoneStart = dist(gen);
+	targetZoneEnd = targetZoneStart + zoneWidth;
+}
 
 int updateScore(bool recipeMatched)
 {
