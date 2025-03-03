@@ -13,6 +13,8 @@ MainMenu::~MainMenu() {}
 
 void MainMenu::Init() {
     background = AEGfxTextureLoad("Assets/cafe.jpg");
+    DigipenLogo = AEGfxTextureLoad("Assets/DigiPen_Singapore_WEB_RED.png");
+
     assert(background && "Failed to load background texture!");
 
     // Define button positions and sizes.
@@ -31,48 +33,59 @@ void MainMenu::Init() {
 }
 
 void MainMenu::Update() {
-    // Reset the activation flag each frame.
-    m_StartGameActivated = false;
-  
-    if (AEInputCheckTriggered(AEVK_DOWN)) {
-        selectedOption = (selectedOption + 1) % buttons.size();
-    }
-    if (AEInputCheckTriggered(AEVK_UP)) {
-        selectedOption = (selectedOption - 1 + buttons.size()) % buttons.size();
-    }
+    time += AEFrameRateControllerGetFrameTime();
+    if (time > 5) {
+        // Reset the activation flag each frame.
 
-    // Mouse input: Process on left-click.
-    if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-        
-        int rawX, rawY;
-        AEInputGetCursorPosition(&rawX, &rawY);
-        // Convert from screen-space (assuming 1600x900) to centered coordinates:
-        float mouseX{ (rawX - 800) / 800.0f };
-        float mouseY{ (450 - rawY) / 450.0f };
+        m_StartGameActivated = false;
 
-        // Check each button to see if the mouse is over it.
-        for (size_t i = 0; i < buttons.size(); i++) {
-            if (IsPointInsideButton(mouseX, mouseY, buttons[i])) {
-                selectedOption = static_cast<int>(i);
-                // If "Start Game" (button 0) is clicked, set activation flag.
-                if (i == 0) {
-                    m_StartGameActivated = true;
+        if (AEInputCheckTriggered(AEVK_DOWN)) {
+            selectedOption = (selectedOption + 1) % buttons.size();
+        }
+        if (AEInputCheckTriggered(AEVK_UP)) {
+            selectedOption = (selectedOption - 1 + buttons.size()) % buttons.size();
+        }
+
+        // Mouse input: Process on left-click.
+        if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+            int rawX, rawY;
+            AEInputGetCursorPosition(&rawX, &rawY);
+            // Convert from screen-space (assuming 1600x900) to centered coordinates:
+            float mouseX{ (rawX - 800) / 800.0f };
+            float mouseY{ (450 - rawY) / 450.0f };
+
+            // Check each button to see if the mouse is over it.
+            for (size_t i = 0; i < buttons.size(); i++) {
+                if (IsPointInsideButton(mouseX, mouseY, buttons[i])) {
+                    selectedOption = static_cast<int>(i);
+                    // If "Start Game" (button 0) is clicked, set activation flag.
+                    if (i == 0) {
+                        m_StartGameActivated = true;
+                    }
+
                 }
-              
             }
         }
     }
 }
 
 void MainMenu::Render(AEGfxVertexList* mesh) {
-    
-    RenderMain_menu_background(mesh, background);
+    time += AEFrameRateControllerGetFrameTime();
+    if (time > 5) {
+        RenderMain_menu_background(mesh, background);
 
-    // Render each button. We assume AEGfxPrint centers the text.
-    for (size_t i = 0; i < buttons.size(); i++) {
-        const Button& btn = buttons[i];      
-        AEGfxPrint(FontID, btn.label.c_str(), btn.x, btn.y, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        // Render each button. We assume AEGfxPrint centers the text.
+        for (size_t i = 0; i < buttons.size(); i++) {
+            const Button& btn = buttons[i];
+            AEGfxPrint(FontID, btn.label.c_str(), btn.x, btn.y, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
+        }
+    }
+    else {
+        AEGfxSetBackgroundColor(0, 0, 0);
+        RenderMain_digipenLogo(mesh, DigipenLogo);
+        
     }
 }
 
@@ -89,6 +102,7 @@ bool MainMenu::IsQuitSelected() const {
 
 void MainMenu::Cleanup() {
     AEGfxTextureUnload(background);
+    AEGfxTextureUnload(DigipenLogo);
 }
 
 

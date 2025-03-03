@@ -93,7 +93,7 @@ Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
 Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
 Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
-
+Rect digipen_logo{ 1000, 455 * 1000 / 1525,0.0f,0.0f };
 
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
@@ -369,6 +369,23 @@ void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex)
     AEGfxSetTransparency(1.0f);
     AEGfxTextureSet(tex, 0, 0);
     AEGfxSetTransform(background_main_menu.m);
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+
+void RenderMain_digipenLogo(AEGfxVertexList* mesh, AEGfxTexture* tex)
+{
+  
+    AEMtx33 digipen_logo1;
+    AEMtx33Scale(&digipen_logo1, digipen_logo.width, digipen_logo.height);
+    AEMtx33TransApply(&digipen_logo1, &digipen_logo1, digipen_logo.x, digipen_logo.y);
+    AEGfxSetTransform(digipen_logo1.m);
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(tex, 0, 0);
+    AEGfxSetTransform(digipen_logo1.m);
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 
