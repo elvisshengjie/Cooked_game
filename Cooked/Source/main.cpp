@@ -12,6 +12,7 @@
 // ---------------------------------------------------------------------------
 // Define your game states
 enum class GameState {
+    
     MAIN_MENU,
     GAME,
     PAUSE_MENU,
@@ -41,10 +42,10 @@ class CoreEngine
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
     AEGfxTexture* backgroundTex{ nullptr };
-
+    AEGfxTexture* DigipenLogo = nullptr;
     // Systems
     RecipeSystem recipeSystem;
-    MainMenu     mainMenu;
+   // MainMenu     mainMenu;
 
     QTE          qteGauge;
     Stove        Wok;
@@ -113,6 +114,7 @@ void CoreEngine::Init()
     pStoveMesh = AEGfxMeshEnd();
 
     // 2. Load textures
+    DigipenLogo = AEGfxTextureLoad("Assets/DigiPen_Singapore_WEB_RED.png");
     bTex = AEGfxTextureLoad("Assets/floor.png");
     dTex = AEGfxTextureLoad("Assets/dustbin.png");
     chickenTex = AEGfxTextureLoad("Assets/chicken.png");
@@ -151,6 +153,7 @@ void CoreEngine::Update()
         // -- SWITCH ON CURRENT STATE --
         switch (currentState)
         {
+
             // ------------------------------
             // MAIN MENU
             // ------------------------------

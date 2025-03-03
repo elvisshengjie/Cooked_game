@@ -40,11 +40,19 @@ public:
     
     void Cleanup();
 
+    double GetTime() {
+        return time;
+    }
+    
+
 private:
+    double time = 0;
     std::vector<Button> buttons;          
     size_t selectedOption;                   
     s8 FontID_main_menu = -1;
     AEGfxTexture* background = nullptr;
+    AEGfxTexture* DigipenLogo = nullptr;
+    
 
     // Flag set when the mouse click activates the "Start Game" button
     bool m_StartGameActivated{ false };
@@ -58,6 +66,7 @@ private:
     int selected{};
     bool m_StartGameActivated{ false };
 
+   
 public:
     WinScreen() = default;
     ~WinScreen();
