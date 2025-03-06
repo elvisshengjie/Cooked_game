@@ -7,6 +7,7 @@
 #include "utils.hpp"
 #include "collison.hpp"
 #include "player.hpp"
+#include "mouse.hpp"
 #include <math.h>
 
 // ---------------------------------------------------------------------------
@@ -214,7 +215,10 @@ void CoreEngine::Update()
                 const Rect& object = objectcollision[i];
                 players1.playerCheckCollisonobject(object.x, object.y, object.width, object.height);
             }
-
+			// 2. Update Mouse
+            mouse1.mouseMove(100.0f);
+            mouse2.mouseMove(50.0f);
+            mouse3.mouseMove(70.0f);
             // 2. Render the game world
             // Background / Floor
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -239,6 +243,9 @@ void CoreEngine::Update()
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh, Wok, players1,qteGauge);
             players1.playerdraw(pMesh, IngredientMesh);
+            mouse1.mousedraw(pMesh, IngredientMesh);
+            mouse2.mousedraw(pMesh, IngredientMesh);
+            mouse3.mousedraw(pMesh, IngredientMesh);
             RenderQTEGauge(pMesh, qteGauge);
 
             // Collision boxes for ingredients or special objects

@@ -1,58 +1,85 @@
 #pragma once
-#include <crtdbg.h>		// To check for memory leaks
-#include <math.h> 
-#include <AEEngine.h> // Replace with the actual header for your graphics framework
+
+#include <crtdbg.h>   // For memory leak checks (Windows)
+#include <math.h>
+#include <AEEngine.h> // Replace with your actual engine/graphics headers
 #include "Ingredients.hpp"
 #include "collison.hpp"
 #include <assert.h>
 #include <iostream>
-#include <math.h>
-#include "mouse.hpp"
 
+class Rect;
+
+// Forward declarations if needed:
+// extern Ingredients ingredient1_box; 
+// (Often you keep `ingredient1_box` in another .cpp/.h, with "extern" in a header.)
 
 class mouse
 {
 public:
-	void mousedraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2)const;
-	void mouseMove(float speed);
-	bool mouseCheckCollison(float x1, float y1, float width1, float height1)const;
-	void mouseCheckCollisonobject(float x1, float y1, float width1, float height1);
-	void ClampToScreen();
-	//void playerThrow();
-	void mouseEating(Ingredients& boxIngredient);
-	//void playerDrop(Stove& stove);
-	//void playerUpdate(Stove& stove, RecipeSystem& recipeSystem, QTE& QTE_Gauge);
-	//void playerDash();
+    mouse(float startX, float startY)
+        : x(startX), y(startY)
+    {
+    }
+    // Draw function (renders the mouse on screen)
+    void mousedraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const;
+
+    // Movement + pathfinding toward nearest ingredient
+    void mouseMove(float speed);
+
+    // Collision checks
+    bool mouseCheckCollison(float x1, float y1, float width1, float height1) const;
+    void mouseCheckCollisonobject(float x1, float y1, float width1, float height1);
+
+    // Keep the mouse position within screen boundaries
+    void ClampToScreen();
+
+    // The mouse "eats" or steals the ingredient
+    void mouseEating(Ingredients& boxIngredient);
+
+    // OPTIONAL: Expose position if you need from outside
+    // float getX() const { return x; }
+    // float getY() const { return y; }
+    // void  setPosition(float newX, float newY) { x = newX; y = newY; }
+
 private:
-	float x{};
-	float y{};
-	float width{ 50 };
-	float height{ 50 };
-	float normalize_speed{};
-	float dt{};
-	// dash
+    // Position & size
+    float x{};
+    float y{};
+    float width{ 50.0f };
+    float height{ 50.0f };
 
-	float dashspeed{ 700 };
-	float dashCooldown{ 0.5 };
-	float dashDuration{ 0.2 };
-	int rawX{};
-	int rawY{};
-	float mouseX{};
-	float mouseY{};
-	bool isDashing{ false };
-	float DirectX{};
-	float DirectY{};
-	float DirectionX{};
-	float DirectionY{};
-	float Magnitude{};
-	int dashCounter{ 1 };
-	Ingredients Hand = EMPTY;
+    // Internal movement timing
+    float dt{};
 
-	Timer cooldown;
-	Timer cooldown2;
+    // For pathfinding / nearest-target logic
+    bool  hasTarget = false;  // Do we have a current ingredient target?
+    float targetX = 0.0f;  // X coordinate of our current target
+    float targetY = 0.0f;  // Y coordinate of our current target
 
+    // Example "dash" variables (if you need them)
+    float dashspeed{ 700.0f };
+    float dashCooldown{ 0.5f };
+    float dashDuration{ 0.2f };
+    int   rawX{};
+    int   rawY{};
+    float mouseX{};
+    float mouseY{};
+    bool  isDashing{ false };
+    float DirectX{};
+    float DirectY{};
+    float DirectionX{};
+    float DirectionY{};
+    float Magnitude{};
+    int   dashCounter{ 1 };
+    Timer cooldown;
+    Timer cooldown2;
+
+    // The mouse "Hand": what ingredient is it holding
+    Ingredients Hand = EMPTY;
 };
 
+// We declare an extern mouse object if it¡¯s used globally
 extern mouse mouse1;
-
-//hello
+extern mouse mouse2;
+extern mouse mouse3;
