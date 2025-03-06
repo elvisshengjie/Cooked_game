@@ -6,9 +6,9 @@
 // #include "../Source/collison.hpp"
 
 // This is your global mouse object
-mouse mouse1(-400.0f, 100.0f);
-mouse mouse2(0.0f, 150.0f);
-mouse mouse3(400.0f, 100.0f);
+mouse mouse1(-2500.0f, 100.0f);
+mouse mouse2(2200.0f, 500.0f);
+mouse mouse3(3300.0f, 100.0f);
 
 
 // (Possibly) an external reference to an ingredient box declared elsewhere:
@@ -106,7 +106,7 @@ void mouse::mouseMove(float speed)
     }
 
     // Keep the mouse within screen boundaries
-    ClampToScreen();
+    /*ClampToScreen();*/
 }
 
 //-----------------------------------------------------------------
