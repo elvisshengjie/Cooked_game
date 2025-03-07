@@ -76,11 +76,47 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 }
 
 void player::playerMove(float speed)
+
 {
+	if (dx == 0 && dy == 0) {
+		cannotdash == true;
+	}
+	if (AEInputCheckCurr(AEVK_W)) {
+		dy += 1;
+		cannotdash == false;
+	}if (AEInputCheckCurr(AEVK_S)) {
+		dy -= 1;
+		cannotdash == false;
+	}if (AEInputCheckCurr(AEVK_A)) {
+		dx -= 1;
+		cannotdash == false;
+	}
+	if (AEInputCheckCurr(AEVK_D)) {
+		dx += 1;
+		cannotdash == false;
+	}
+	
+
+	if (dx != 0.0f || dy != 0.0f) {
+		angle = atan2(dy, dx);
+
+	}
 	dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
-	if (isDashing) {
-		this->x += DirectX * dashspeed * dt; //DirectX * dashspeed *dt
-		this->y += DirectY * dashspeed * dt;
+
+	
+	if (isDashing && !cannotdash)  {
+		
+		
+		mangnituded = sqrt(dx * dx + dy * dy);
+		normdx = dx / mangnituded;
+		normdy = dy / mangnituded;
+		
+		
+
+		this->x += normdx * dashspeed * dt; //DirectX * dashspeed *dt
+		this->y += normdy * dashspeed * dt;
+		dx = 0;
+		dy = 0;
 
 	}
 	else if(!isDashing){
@@ -216,23 +252,29 @@ void player::playerDash() {
 
 	if (dashCounter == 1) {
 		if (AEInputCheckTriggered(AEVK_SPACE)) {
-			rawX, rawY;
-			AEInputGetCursorPosition(&rawX, &rawY);
-			// Convert from screen-space (assuming 1600x900) to centered coordinates:
-			mouseX = (rawX - 800);// 800.0f;
-			mouseY = (450 - rawY); // 450.0f;
-
-			DirectX = mouseX - x;
-			DirectY = mouseY - y;
-
-			Magnitude = (DirectX * DirectX + DirectY * DirectY);
-			Magnitude = sqrt(Magnitude);
-
-			if (Magnitude > 0) {
-				DirectX /= Magnitude;
-				DirectY /= Magnitude;
-
+			
+				// Prevent dashing if the player is not moving
+			if (dx == 0 && dy == 0) {
+				return;  // Stop execution if no movement direction
 			}
+			//rawX, rawY;
+			//AEInputGetCursorPosition(&rawX, &rawY);
+			//// Convert from screen-space (assuming 1600x900) to centered coordinates:
+			//mouseX = (rawX - 800);// 800.0f;
+			//mouseY = (450 - rawY); // 450.0f;
+
+			//DirectX = mouseX - x;
+			//DirectY = mouseY - y;
+
+			//Magnitude = (DirectX * DirectX + DirectY * DirectY);
+			//Magnitude = sqrt(Magnitude);
+
+			//if (Magnitude > 0) {
+			//	DirectX /= Magnitude;
+			//	DirectY /= Magnitude;
+
+			//}
+
 			isDashing = true;
 			cooldown.start(dashDuration);
 

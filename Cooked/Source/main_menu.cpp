@@ -1,5 +1,6 @@
 #include "Main_Menu.hpp"
 
+
 bool IsPointInsideButton(float px, float py, const Button& btn) {
     float left = btn.x - btn.width / 2.0f;
     float right = btn.x + btn.width / 2.0f;
@@ -34,10 +35,15 @@ void MainMenu::Init() {
 
 void MainMenu::Update() {
     time += AEFrameRateControllerGetFrameTime();
-    if (time > 5) {
+    if (time > 5 || AEInputCheckTriggered(AEVK_LBUTTON) || AEInputCheckTriggered(AEVK_RBUTTON) || AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_RETURN) || AEInputCheckTriggered(AEVK_ESCAPE)) {
         // Reset the activation flag each frame.
-
+        flag = true;
+    }
+    if (flag) {
         m_StartGameActivated = false;
+        m_StartGameActivated4 = false;
+        
+        
 
         if (AEInputCheckTriggered(AEVK_DOWN)) {
             selectedOption = (selectedOption + 1) % buttons.size();
@@ -59,28 +65,34 @@ void MainMenu::Update() {
             for (size_t i = 0; i < buttons.size(); i++) {
                 if (IsPointInsideButton(mouseX, mouseY, buttons[i])) {
                     selectedOption = static_cast<int>(i);
+                    std::cout << "yes";
                     // If "Start Game" (button 0) is clicked, set activation flag.
                     if (i == 0) {
                         m_StartGameActivated = true;
                     }
+                    else if (i == 4) {
+                        m_StartGameActivated4 = true;
+                    }
 
                 }
             }
+ 
         }
     }
 }
 
 void MainMenu::Render(AEGfxVertexList* mesh) {
-    time += AEFrameRateControllerGetFrameTime();
-    if (time > 5) {
+    
+    if (flag){
         RenderMain_menu_background(mesh, background);
-
+        
         // Render each button. We assume AEGfxPrint centers the text.
         for (size_t i = 0; i < buttons.size(); i++) {
             const Button& btn = buttons[i];
             AEGfxPrint(FontID, btn.label.c_str(), btn.x, btn.y, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
         }
+        
     }
     else {
         AEGfxSetBackgroundColor(0, 0, 0);
@@ -91,12 +103,12 @@ void MainMenu::Render(AEGfxVertexList* mesh) {
 
 
 bool MainMenu::IsStartGameSelected() const {
-    return (selectedOption == 0 && (AEInputCheckTriggered(AEVK_SPACE) || m_StartGameActivated));
+    return ((m_StartGameActivated ) );
 }
 
 
 bool MainMenu::IsQuitSelected() const {
-    return (selectedOption == 4 && AEInputCheckTriggered(AEVK_SPACE));
+    return ((m_StartGameActivated4));
 }
 
 

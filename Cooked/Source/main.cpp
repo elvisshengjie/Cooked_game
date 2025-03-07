@@ -172,7 +172,10 @@ void CoreEngine::Update()
             }
             else if (mainMenu.IsQuitSelected())
             {
+                std::cout << "Out";
                 gGameRunning = false;
+                
+
             }
         }
         break;

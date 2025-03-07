@@ -6,6 +6,7 @@
 #include "render.hpp"
 #include "AEInput.h"
 #include <cassert>
+#include <iostream>
 
 // Simple Button structure for menu items
 struct Button {
@@ -52,10 +53,11 @@ private:
     s8 FontID_main_menu = -1;
     AEGfxTexture* background = nullptr;
     AEGfxTexture* DigipenLogo = nullptr;
-    
-
+    bool flag = false;
+  
     // Flag set when the mouse click activates the "Start Game" button
     bool m_StartGameActivated{ false };
+    bool m_StartGameActivated4 {false};
 };
 
 

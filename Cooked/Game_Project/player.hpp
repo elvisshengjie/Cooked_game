@@ -29,8 +29,11 @@ private:
 	float height{ 50 };
 	float normalize_speed{};
 	float dt{};
-	// dash
 
+	// dash
+	float dy{}, dx{}, angle{}, normdy{}, normdx{};
+	float mangnituded{};
+	bool cannotdash;
 	float dashspeed{ 1000 };
 	float dashCooldown{0.5};
 	float dashDuration{0.2};
