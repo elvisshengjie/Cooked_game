@@ -8,7 +8,7 @@
 // This is your global mouse object
 mouse mouse1(-2500.0f, 100.0f);
 mouse mouse2(2200.0f, 500.0f);
-mouse mouse3(3300.0f, 100.0f);
+mouse mouse3(3300.0f, 0.0f);
 
 
 // (Possibly) an external reference to an ingredient box declared elsewhere:

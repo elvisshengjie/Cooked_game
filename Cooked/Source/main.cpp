@@ -216,9 +216,9 @@ void CoreEngine::Update()
                 players1.playerCheckCollisonobject(object.x, object.y, object.width, object.height);
             }
 			// 2. Update Mouse
-            mouse1.mouseMove(100.0f);
-            mouse2.mouseMove(50.0f);
-            mouse3.mouseMove(70.0f);
+            mouse1.mouseMove(200.0f);
+            mouse2.mouseMove(150.0f);
+            mouse3.mouseMove(170.0f);
             // 2. Render the game world
             // Background / Floor
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -255,7 +255,7 @@ void CoreEngine::Update()
                 const Rect& visualBox = highingredientBoxes[i];
 
                 // If player is colliding with ingredient box
-                if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height))
+                if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)&&!mouse1.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height) && !mouse2.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height) && !mouse3.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height))
                 {
                     // Render highlight
                     RenderhighlightIngredientBox(pMesh, visualBox);
