@@ -7,11 +7,13 @@
 #include "utils.hpp"
 #include "collison.hpp"
 #include "player.hpp"
+#include "mouse.hpp"
 #include <math.h>
 
 // ---------------------------------------------------------------------------
 // Define your game states
 enum class GameState {
+    
     MAIN_MENU,
     GAME,
     PAUSE_MENU,
@@ -25,7 +27,7 @@ class CoreEngine
 {
     bool gGameRunning = true;
     GameState currentState = GameState::MAIN_MENU;
-
+    Timer mouseDeviceCooldownTimer{};
     // Meshes
     AEGfxVertexList* pMesh = nullptr;          // Generic mesh (background, dustbin, etc.)
     AEGfxVertexList* IngredientMesh = nullptr; // Generic mesh for ingredients
@@ -48,13 +50,13 @@ class CoreEngine
 
     // Systems
     RecipeSystem recipeSystem;
-    MainMenu     mainMenu;
+   MainMenu     mainMenu;
 
     QTE          qteGauge;
     Stove        Wok;
     WinScreen    winScreen;
 
-    Timer gTimer;
+    Timer gTimer{};
 
 public:
     void Init();
@@ -116,6 +118,7 @@ void CoreEngine::Init()
     pStoveMesh = AEGfxMeshEnd();
 
     // 2. Load textures
+   
     bTex = AEGfxTextureLoad("Assets/floor.png");
     dTex = AEGfxTextureLoad("Assets/dustbin.png");
     chickenTex = AEGfxTextureLoad("Assets/chicken.png");
@@ -157,6 +160,7 @@ void CoreEngine::Update()
         // -- SWITCH ON CURRENT STATE --
         switch (currentState)
         {
+
             // ------------------------------
             // MAIN MENU
             // ------------------------------
@@ -176,7 +180,10 @@ void CoreEngine::Update()
             }
             else if (mainMenu.IsQuitSelected())
             {
+                std::cout << "Out";
                 gGameRunning = false;
+                
+
             }
         }
         break;
@@ -222,7 +229,10 @@ void CoreEngine::Update()
                 const Rect& object = objectcollision[i];
                 players1.playerCheckCollisonobject(object.x, object.y, object.width, object.height);
             }
-
+			// 2. Update Mouse
+            mouse1.mouseMove(200.0f);
+            mouse2.mouseMove(150.0f);
+            mouse3.mouseMove(170.0f);
             // 2. Render the game world
             // Background / Floor
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -232,31 +242,63 @@ void CoreEngine::Update()
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             RenderDustbin(pMesh, dTex);
 
+
+
             // Player update logic (picking up, dropping, etc.)
             players1.playerUpdate(Wok, recipeSystem, qteGauge);
 
             // Stove / Wok logic (cooking)
             Wok.update(recipeSystem);
+            
 
+            // Only show device UI when player is colliding with the device.
+            if (players1.playerCheckCollison(collisionBoxes[3].x, collisionBoxes[3].y, collisionBoxes[3].width, collisionBoxes[3].height))
+            {
+                if (!mouseDeviceCooldownTimer.completed())
+                {
+                    float remaining = static_cast<float>(mouseDeviceCooldownTimer.getRemainingTime());
+                    std::string cooldownStr = "Device cooldown: " + std::to_string(static_cast<int>(remaining)) + " s";
+                    AEGfxPrint(FontID, cooldownStr.c_str(), 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+                }
+                else
+                {
+                    AEGfxPrint(FontID, "Press E to activate device", 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+                    if (AEInputCheckTriggered(AEVK_E))
+                    {
+                        // Generate a random chase duration between 20 and 30 seconds.
+                        float chaseDuration = 20.0f + static_cast<float>(rand()) / RAND_MAX * 10.0f;
+                        mouse1.chaseAway(chaseDuration);
+                        mouse2.chaseAway(chaseDuration);
+                        mouse3.chaseAway(chaseDuration);
+                        mouseDeviceCooldownTimer.start(25.0);
+                    }
+                }
+            }
+
+            
             // Ingredient boxes (3 boxes at top?), Active recipes, etc.
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderIngredientbox(pMesh);
             RenderActiveRecipes(pMesh, recipeSystem);
-
+            //mouse Device
+            mouseDevicefun(pMesh);
             // Render Stove & Player
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh,Wok, players1,qteGauge,stoveTex,stoveDirtyTex,stoveCookTex);
             players1.playerdraw(pMesh, IngredientMesh);
+            mouse1.mousedraw(pMesh);
+            mouse2.mousedraw(pMesh);
+            mouse3.mousedraw(pMesh);
             RenderQTEGauge(pMesh, qteGauge);
 
             // Collision boxes for ingredients or special objects
-            for (size_t i = 0; i < collisionBoxes.size(); i++)
+            for (size_t i = 0; i < g_currentBoxIngredients.size(); i++)
             {
                 const Rect& collBox = collisionBoxes[i];
                 const Rect& visualBox = highingredientBoxes[i];
 
                 // If player is colliding with ingredient box
-                if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height))
+                if (players1.playerCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)&&!mouse1.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height) && !mouse2.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height) && !mouse3.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height))
                 {
                     // Render highlight
                     RenderhighlightIngredientBox(pMesh, visualBox);
@@ -272,7 +314,13 @@ void CoreEngine::Update()
                     players1.playerDrop(Wok);
                 }
             }
+            // Check collision with the mouse device
+            if (players1.playerCheckCollison(collisionBoxes[3].x, collisionBoxes[3].y, collisionBoxes[3].width, collisionBoxes[3].height)) {
+                // Render highlight for the mouse device.
+                RenderhighlightIngredientBox(pMesh, collisionBoxes[3]);
 
+               
+            }
             // Render ingredients on the boxes
             RenderIngredientsOnBoxes(pMesh,
                 chickenTex, beefTex, cheeseTex,
@@ -300,9 +348,12 @@ void CoreEngine::Update()
 void CoreEngine::Exit()
 {
     // Cleanup main menu
-    mainMenu.Cleanup();
 
+    mainMenu.Cleanup();
+    DestroyFront();
     // Free memory
+    if (backgroundTex) AEGfxTextureUnload(backgroundTex);
+
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
     if (pStoveMesh)       AEGfxMeshFree(pStoveMesh);
@@ -317,8 +368,7 @@ void CoreEngine::Exit()
     if (potatoTex)        AEGfxTextureUnload(potatoTex);
     if (stoveTex)         AEGfxTextureUnload(stoveTex);
     if (stoveDirtyTex)    AEGfxTextureUnload(stoveDirtyTex);
-    if (stoveCookTex)    AEGfxTextureUnload(stoveCookTex);
-
+    if (stoveCookTex)     AEGfxTextureUnload(stoveCookTex);
 
 
     AESysExit();

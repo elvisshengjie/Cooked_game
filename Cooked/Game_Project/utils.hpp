@@ -43,11 +43,11 @@ private:
 
 	std::string cookingRecipeName;
 
-	bool recipeMatched;
 
 public:
 
 	Timer cookingTimer{};
+
 	bool isCooking;
 
 	float x{ -50.0f };
@@ -57,7 +57,10 @@ public:
 
 	bool isCleaning = false;
 
-	bool isDirty = false;;
+	bool isDirty = false;
+
+	bool recipeMatched{};
+public:
 
 	bool putIngredient(const std::string& ingredient);
 

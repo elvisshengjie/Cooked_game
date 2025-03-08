@@ -33,12 +33,13 @@ void DrawRect(Rect, AEGfxTexture*, AEGfxVertexList*);
 
 // Function declarations using Rect
 void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex);
-void Renderchicken(AEGfxVertexList* mesh, AEGfxTexture* tex);
-void Renderbeef(AEGfxVertexList* mesh, AEGfxTexture* tex);
-void Rendercheese(AEGfxVertexList* mesh, AEGfxTexture* tex);
-void Renderrice(AEGfxVertexList* mesh, AEGfxTexture* tex);
-void Renderpotato(AEGfxVertexList* mesh, AEGfxTexture* tex);
-void Renderegg(AEGfxVertexList* mesh, AEGfxTexture* tex);
+void RenderMain_digipenLogo(AEGfxVertexList* mesh, AEGfxTexture* tex);
+//void Renderchicken(AEGfxVertexList* mesh, AEGfxTexture* tex);
+//void Renderbeef(AEGfxVertexList* mesh, AEGfxTexture* tex);
+//void Rendercheese(AEGfxVertexList* mesh, AEGfxTexture* tex);
+//void Renderrice(AEGfxVertexList* mesh, AEGfxTexture* tex);
+//void Renderpotato(AEGfxVertexList* mesh, AEGfxTexture* tex);
+//void Renderegg(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void RenderDustbin(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void RenderIngredientbox(AEGfxVertexList* mesh);
@@ -53,10 +54,10 @@ void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem
 
 void displayScore(int);
 void displayTimer(double);
-
+void mouseDevicefun(AEGfxVertexList* mesh);
 //Font
 void InitFont();
-
+void DestroyFront();
 //void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
 void RenderIngredientsOnBoxes(
     AEGfxVertexList* mesh,
@@ -75,4 +76,5 @@ extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;
 extern s8 FontID;
+extern Rect mouseDevice;
 //extern s8 FontID_main_menu;

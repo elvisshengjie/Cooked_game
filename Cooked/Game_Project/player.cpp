@@ -79,11 +79,52 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 }
 
 void player::playerMove(float speed)
+
 {
+	if (dx == 0 && dy == 0) {
+		
+	}
+	if (AEInputCheckCurr(AEVK_W)) {
+		dy += 1;
+		
+	}if (AEInputCheckCurr(AEVK_S)) {
+		dy -= 1;
+		
+	}if (AEInputCheckCurr(AEVK_A)) {
+		dx -= 1;
+		
+	}
+	if (AEInputCheckCurr(AEVK_D)) {
+		dx += 1;
+		
+	}
+	
+
+	if (dx != 0.0f || dy != 0.0f) {
+		angle = atan2(dy, dx);
+
+	}
 	dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
-	if (isDashing) {
-		this->x += DirectX * dashspeed * dt; //DirectX * dashspeed *dt
-		this->y += DirectY * dashspeed * dt;
+
+	
+	if (isDashing ) {
+		
+
+		mangnituded = sqrt(dx * dx + dy * dy);
+		if (mangnituded != 0) {
+			normdx = dx / mangnituded;
+			normdy = dy / mangnituded;
+		}
+		else {
+			normdx = 0;
+				normdy = 0;
+		}
+		
+
+		this->x += normdx * dashspeed * dt; //DirectX * dashspeed *dt
+		this->y += normdy * dashspeed * dt;
+		dx = 0;
+		dy = 0;
 
 	}
 	else if(!isDashing){
@@ -228,23 +269,13 @@ void player::playerDash() {
 
 	if (dashCounter == 1) {
 		if (AEInputCheckTriggered(AEVK_SPACE)) {
-			rawX, rawY;
-			AEInputGetCursorPosition(&rawX, &rawY);
-			// Convert from screen-space (assuming 1600x900) to centered coordinates:
-			mouseX = (rawX - 800);// 800.0f;
-			mouseY = (450 - rawY); // 450.0f;
-
-			DirectX = mouseX - x;
-			DirectY = mouseY - y;
-
-			Magnitude = (DirectX * DirectX + DirectY * DirectY);
-			Magnitude = sqrt(Magnitude);
-
-			if (Magnitude > 0) {
-				DirectX /= Magnitude;
-				DirectY /= Magnitude;
-
+			
+				// Prevent dashing if the player is not moving
+			if (dx == 0 && dy == 0) {
+				return;  // Stop execution if no movement direction
 			}
+		
+
 			isDashing = true;
 			cooldown.start(dashDuration);
 
@@ -252,8 +283,8 @@ void player::playerDash() {
 
 		}
 	if (isDashing) {
-		float remainTimedash2 = cooldown.getRemainingTime();
-		std::cout << "Remaining time: " << remainTimedash2 << std::endl;
+		float remainTimedash2 = static_cast<float>( cooldown.getRemainingTime());
+	
 		if (AEIsF32Zero(remainTimedash2)) {
 			dashCounter = 0;
 			isDashing = false;
@@ -265,7 +296,7 @@ void player::playerDash() {
 	 
 	if (dashCounter == 0 && !isDashing)
 	{
-		float remainTimedash = cooldown2.getRemainingTime();
+		float remainTimedash = static_cast<float>(cooldown2.getRemainingTime());
 		if (remainTimedash <= 0) {
 			dashCounter = 1;
 		}
@@ -285,7 +316,7 @@ void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gaug
 		}
 	}
 	if (QTE_Gauge.isActive) {
-		QTE_Gauge.update(AEFrameRateControllerGetFrameTime());
+		QTE_Gauge.update(static_cast<float>(AEFrameRateControllerGetFrameTime()));
 		if (QTE_Gauge.isCompleted) {
 			if (QTE_Gauge.isSuccess) {
 				std::cout << "QTE Successful! Cooking started." << std::endl;
