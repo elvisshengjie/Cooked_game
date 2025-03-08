@@ -28,7 +28,6 @@ public:
 AEGfxVertexList* CreateMesh();
 void DrawRect(Rect, unsigned int, AEGfxVertexList*);
 void DrawRect(Rect, AEGfxTexture*, AEGfxVertexList*);
-void FreeRect(AEGfxVertexList*);
 // ... Other boxes ...
 
 // Forward declare your rendering functions

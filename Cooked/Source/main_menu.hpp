@@ -75,7 +75,7 @@ public:
     ~WinScreen();
     void Init();
     int Update();
-    void Render(AEGfxVertexList*, AEGfxVertexList*, AEGfxTexture*, const char* condition);
+    void Render(AEGfxVertexList*, AEGfxTexture*, AEGfxTexture*, const char* condition);
 
     bool IsRestartGameSelected();
     bool IsMenuSelected();

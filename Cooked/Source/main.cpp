@@ -28,7 +28,6 @@ class CoreEngine
     bool gGameRunning = true;
     GameState currentState = GameState::MAIN_MENU;
     Timer mouseDeviceCooldownTimer{};
-    GameState currentState;
 
     // Meshes
     AEGfxVertexList* pMesh = nullptr;          // Generic mesh (background, dustbin, etc.)
@@ -46,6 +45,7 @@ class CoreEngine
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
     AEGfxTexture* backgroundTex{ nullptr };
+    AEGfxTexture* paperTex{ nullptr };
     
     // Systems
     RecipeSystem recipeSystem;
@@ -71,7 +71,7 @@ void CoreEngine::Init()
     currentState = GameState::MAIN_MENU;
     // Changing the window title
 
-    gTimer.start(5);
+    gTimer.start(300);
     AESysSetWindowTitle("Cooked!");
 
     // AESysReset() re-initializes various engine systems
@@ -131,6 +131,7 @@ void CoreEngine::Init()
     riceTex = AEGfxTextureLoad("Assets/rice.png");
     potatoTex = AEGfxTextureLoad("Assets/potato.png");
     backgroundTex = AEGfxTextureLoad("Assets/cafe.jpg");
+    paperTex = AEGfxTextureLoad("Assets/paperUI.png");
 
     // 3. Create a mesh (IngredientMesh) for ingredient rectangles
     AEGfxMeshStart();
@@ -209,7 +210,7 @@ void CoreEngine::Update()
                 gGameRunning = false;
             }
             
-            winScreen.Render(pMesh, uiMesh, backgroundTex, "You Win!");
+            winScreen.Render(pMesh, backgroundTex, paperTex, "You Win!");
             
         }
         break;
@@ -234,7 +235,7 @@ void CoreEngine::Update()
             }
 
            // AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-            loseScreen.Render(pMesh, uiMesh, backgroundTex, "You Lose :(");
+            loseScreen.Render(pMesh, backgroundTex, paperTex, "You Lose :(");
         }
         break;
 
@@ -407,9 +408,8 @@ void CoreEngine::Exit()
     if (eggTex)           AEGfxTextureUnload(eggTex);
     if (riceTex)          AEGfxTextureUnload(riceTex);
     if (potatoTex)        AEGfxTextureUnload(potatoTex);
-    
-
     if (backgroundTex)    AEGfxTextureUnload(backgroundTex);
+    if (paperTex)         AEGfxTextureUnload(paperTex);
 
     AESysExit();
 }

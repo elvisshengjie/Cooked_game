@@ -1,6 +1,7 @@
 // render.cpp
 #include "render.hpp"
 
+////////////////////////////helper functions :D////////////////////////////////////////////
 AEGfxVertexList* CreateMesh()
 {
     AEGfxVertexList* pMesh{};
@@ -16,7 +17,7 @@ AEGfxVertexList* CreateMesh()
     pMesh = AEGfxMeshEnd();
     return pMesh;
 }
-////////////////////////////helper function cuz AE is dumb and doesnt know how to draw rects by themsleves//////////////////////
+
 //input color in HEX code format (RR GG BB AA) pls :>
 void DrawRect(Rect rect, unsigned int color, AEGfxVertexList* pMesh)
 {
