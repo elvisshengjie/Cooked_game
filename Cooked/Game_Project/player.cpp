@@ -106,11 +106,16 @@ void player::playerMove(float speed)
 	
 	if (isDashing ) {
 		
-		
+
 		mangnituded = sqrt(dx * dx + dy * dy);
-		normdx = dx / mangnituded;
-		normdy = dy / mangnituded;
-		
+		if (mangnituded != 0) {
+			normdx = dx / mangnituded;
+			normdy = dy / mangnituded;
+		}
+		else {
+			normdx = 0;
+				normdy = 0;
+		}
 		
 
 		this->x += normdx * dashspeed * dt; //DirectX * dashspeed *dt
