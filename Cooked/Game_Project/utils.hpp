@@ -35,14 +35,14 @@ private:
 
 	std::string cookingRecipeName;
 
-	bool isCooking;
+	bool isCooking{};
 
 	float x{ -50.0f };
 	float y = { -200.0f };
 	float width = {200.0f};
 	float height = { 100.0f };
 
-	bool recipeMatched;
+	bool recipeMatched{};
 public:
 
 	bool putIngredient(const std::string& ingredient);

@@ -18,7 +18,7 @@ mouse mouse3(3300.0f, 0.0f);
 //-----------------------------------------------------------------
 // mousedraw: Renders the mouse shape/texture
 //-----------------------------------------------------------------
-void mouse::mousedraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const
+void mouse::mousedraw(AEGfxVertexList* mesh) const
 {
     AEMtx33 rectmouse;
     AEMtx33Scale(&rectmouse, width, height);

@@ -243,23 +243,31 @@ void CoreEngine::Update()
             Wok.update(recipeSystem);
             
 
-            if (mouseDeviceCooldownTimer.completed())
+            // Only show device UI when player is colliding with the device.
+            if (players1.playerCheckCollison(collisionBoxes[3].x, collisionBoxes[3].y, collisionBoxes[3].width, collisionBoxes[3].height))
             {
-                // Device is ready to use.
-                if (players1.playerCheckCollison(collisionBoxes[3].x, collisionBoxes[3].y, collisionBoxes[3].width, collisionBoxes[3].height) &&
-                    AEInputCheckTriggered(AEVK_E))
+                if (!mouseDeviceCooldownTimer.completed())
                 {
-                    // Generate a random chase duration between 20 and 30 seconds.
-                    float chaseDuration = 20.0f + static_cast<float>(rand()) / RAND_MAX * 10.0f;
-                    // Activate chase-away for all mice.
-                    mouse1.chaseAway(chaseDuration);
-                    mouse2.chaseAway(chaseDuration);
-                    mouse3.chaseAway(chaseDuration);
-                    // Start the cooldown timer with 25 seconds.
-                    mouseDeviceCooldownTimer.start(25.0);
+                    float remaining = static_cast<float>(mouseDeviceCooldownTimer.getRemainingTime());
+                    std::string cooldownStr = "Device cooldown: " + std::to_string(static_cast<int>(remaining)) + " s";
+                    AEGfxPrint(FontID, cooldownStr.c_str(), 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+                }
+                else
+                {
+                    AEGfxPrint(FontID, "Press E to activate device", 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+                    if (AEInputCheckTriggered(AEVK_E))
+                    {
+                        // Generate a random chase duration between 20 and 30 seconds.
+                        float chaseDuration = 20.0f + static_cast<float>(rand()) / RAND_MAX * 10.0f;
+                        mouse1.chaseAway(chaseDuration);
+                        mouse2.chaseAway(chaseDuration);
+                        mouse3.chaseAway(chaseDuration);
+                        mouseDeviceCooldownTimer.start(25.0);
+                    }
                 }
             }
 
+            
             // Ingredient boxes (3 boxes at top?), Active recipes, etc.
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderIngredientbox(pMesh);
@@ -270,9 +278,9 @@ void CoreEngine::Update()
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh, Wok, players1,qteGauge);
             players1.playerdraw(pMesh, IngredientMesh);
-            mouse1.mousedraw(pMesh, IngredientMesh);
-            mouse2.mousedraw(pMesh, IngredientMesh);
-            mouse3.mousedraw(pMesh, IngredientMesh);
+            mouse1.mousedraw(pMesh);
+            mouse2.mousedraw(pMesh);
+            mouse3.mousedraw(pMesh);
             RenderQTEGauge(pMesh, qteGauge);
 
             // Collision boxes for ingredients or special objects

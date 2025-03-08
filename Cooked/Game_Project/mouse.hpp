@@ -22,7 +22,7 @@ public:
     {
     }
     // Draw function (renders the mouse on screen)
-    void mousedraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const;
+    void mousedraw(AEGfxVertexList* mesh) const;
 
     // Movement + pathfinding toward nearest ingredient
     void mouseMove(float speed);
