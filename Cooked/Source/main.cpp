@@ -341,9 +341,12 @@ void CoreEngine::Update()
 void CoreEngine::Exit()
 {
     // Cleanup main menu
+
     mainMenu.Cleanup();
     DestroyFront();
     // Free memory
+    if (backgroundTex) AEGfxTextureUnload(backgroundTex);
+
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
     if (pStoveMesh)   AEGfxMeshFree(pStoveMesh);
