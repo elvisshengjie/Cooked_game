@@ -342,7 +342,7 @@ void CoreEngine::Exit()
 {
     // Cleanup main menu
     mainMenu.Cleanup();
-
+    DestroyFront();
     // Free memory
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);

@@ -57,7 +57,7 @@ void displayTimer(double);
 void mouseDevicefun(AEGfxVertexList* mesh);
 //Font
 void InitFont();
-
+void DestroyFront();
 //void RenderIngredientsOnBoxes(AEGfxVertexList* mesh);
 void RenderIngredientsOnBoxes(
     AEGfxVertexList* mesh,

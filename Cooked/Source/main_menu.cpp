@@ -115,6 +115,7 @@ bool MainMenu::IsQuitSelected() const {
 void MainMenu::Cleanup() {
     AEGfxTextureUnload(background);
     AEGfxTextureUnload(DigipenLogo);
+    AEGfxDestroyFont(FontID);
 }
 
 

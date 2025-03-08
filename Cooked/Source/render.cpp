@@ -59,7 +59,9 @@ void InitFont()
     assert(FontID >= 0 && "Failed to load font!");
 }
 
-
+void DestroyFront() {
+    AEGfxDestroyFont(FontID);
+}
 std::vector<Rect> highingredientBoxes = {
     {90.0f, 90.0f,-200.0f ,175.0f},
     {90.0f,90.0f, -49.0f, 175.0f},
