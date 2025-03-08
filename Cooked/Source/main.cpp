@@ -41,6 +41,10 @@ class CoreEngine
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
     AEGfxTexture* backgroundTex{ nullptr };
+    AEGfxTexture* stoveTex{ nullptr };
+    AEGfxTexture* stoveDirtyTex{ nullptr };
+    AEGfxTexture* stoveCookTex{ nullptr };
+
 
     // Systems
     RecipeSystem recipeSystem;
@@ -78,7 +82,6 @@ void CoreEngine::Init()
     winScreen.Init();
 
     // Start the timer
-    gTimer.start(300);
 
     // Initialize fonts (used for both the menu and the game)
     InitFont();
@@ -122,6 +125,9 @@ void CoreEngine::Init()
     riceTex = AEGfxTextureLoad("Assets/rice.png");
     potatoTex = AEGfxTextureLoad("Assets/potato.png");
     backgroundTex = AEGfxTextureLoad("Assets/cafe.jpg");
+    stoveTex = AEGfxTextureLoad("Assets/Stove.png");
+    stoveDirtyTex = AEGfxTextureLoad("Assets/Stovedirty.png");
+    stoveCookTex = AEGfxTextureLoad("Assets/StoveCook.png");
 
     // 3. Create a mesh (IngredientMesh) for ingredient rectangles
     AEGfxMeshStart();
@@ -165,6 +171,7 @@ void CoreEngine::Update()
             // Check menu selection
             if (mainMenu.IsStartGameSelected())
             {
+                gTimer.start(300);
                 currentState = GameState::GAME;
             }
             else if (mainMenu.IsQuitSelected())
@@ -182,6 +189,7 @@ void CoreEngine::Update()
             // Check menu selection
             if (check == 1)
             {
+                gTimer.start(300);
                 currentState = GameState::GAME;
             }
             else if (check == 2)
@@ -237,7 +245,7 @@ void CoreEngine::Update()
 
             // Render Stove & Player
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-            RenderStove(pStoveMesh, Wok, players1,qteGauge);
+            RenderStove(pStoveMesh,Wok, players1,qteGauge,stoveTex,stoveDirtyTex,stoveCookTex);
             players1.playerdraw(pMesh, IngredientMesh);
             RenderQTEGauge(pMesh, qteGauge);
 
@@ -257,7 +265,7 @@ void CoreEngine::Update()
                 }
 
                 // Drop logic (stove or dustbin, etc.)
-                if (players1.playerCheckCollison(Wok.getX(), Wok.getY(), Wok.getW(), Wok.getH()) ||
+                if (players1.playerCheckCollison(Wok.x, Wok.y, Wok.width, Wok.height) ||
                     players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y,
                         objectcollision[0].width, objectcollision[0].height))
                 {
@@ -266,7 +274,6 @@ void CoreEngine::Update()
             }
 
             // Render ingredients on the boxes
-            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             RenderIngredientsOnBoxes(pMesh,
                 chickenTex, beefTex, cheeseTex,
                 eggTex, riceTex, potatoTex);
@@ -298,7 +305,7 @@ void CoreEngine::Exit()
     // Free memory
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
-    if (pStoveMesh)   AEGfxMeshFree(pStoveMesh);
+    if (pStoveMesh)       AEGfxMeshFree(pStoveMesh);
 
     if (bTex)             AEGfxTextureUnload(bTex);
     if (dTex)             AEGfxTextureUnload(dTex);
@@ -308,6 +315,11 @@ void CoreEngine::Exit()
     if (eggTex)           AEGfxTextureUnload(eggTex);
     if (riceTex)          AEGfxTextureUnload(riceTex);
     if (potatoTex)        AEGfxTextureUnload(potatoTex);
+    if (stoveTex)         AEGfxTextureUnload(stoveTex);
+    if (stoveDirtyTex)    AEGfxTextureUnload(stoveDirtyTex);
+    if (stoveCookTex)    AEGfxTextureUnload(stoveCookTex);
+
+
 
     AESysExit();
 }

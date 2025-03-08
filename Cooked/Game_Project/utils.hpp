@@ -10,20 +10,30 @@ class player;
 
 class Recipe;
 
+
 class Timer {
-private:
+
+public:
+
 
 	double countdownDuration; //Countdown in s
 
 	double startTime; //Start Time in s
 
-public:
+
+	double pausedTime{};
+
+	bool pauseTimer = false;
+
+
 
 	void start(double duration);
 
 	double getRemainingTime() const;
 
-	bool completed() const;
+	void pauseresume();
+
+	bool completed() const  ;
 };
 
 class Stove
@@ -31,19 +41,23 @@ class Stove
 private:
 	std::vector<std::string> stoveItems;
 
-	Timer cookingTimer{};
-
 	std::string cookingRecipeName;
 
+	bool recipeMatched;
+
+public:
+
+	Timer cookingTimer{};
 	bool isCooking;
 
 	float x{ -50.0f };
 	float y = { -200.0f };
-	float width = {200.0f};
+	float width = { 200.0f };
 	float height = { 100.0f };
 
-	bool recipeMatched;
-public:
+	bool isCleaning = false;
+
+	bool isDirty = false;;
 
 	bool putIngredient(const std::string& ingredient);
 
@@ -57,19 +71,11 @@ public:
 
 	double remainingCookingTime();
 
-	float getX() const;
-
-	float getY() const;
-
-	float getW() const;
-
-	float getH() const;
-	
-	bool isCurrentlyCooking()const;
-
 	std::string getCookingRecipeName()const;
 
 	std::vector<std::string> getStoveItems()const;
+
+
 };
 extern Stove Wok;
 

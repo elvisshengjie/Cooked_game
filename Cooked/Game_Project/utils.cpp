@@ -7,20 +7,31 @@
 
 int score{};
 void Timer::start(double duration) {
-	this->countdownDuration = duration;
+	countdownDuration = duration;
 	startTime = AEGetTime(nullptr);
+	pausedTime = 0.0;
 }
 
 double Timer::getRemainingTime() const {
-	double currTime = AEGetTime(nullptr);
-	double elapsedTime = currTime - startTime;
-	return (countdownDuration - elapsedTime) > 0.0 ? (countdownDuration - elapsedTime) : 0.0;
+	if (pauseTimer) { return pausedTime; }
+	double elapsedTime = AEGetTime(nullptr) - startTime;
+	return (countdownDuration - elapsedTime > 0.0) ? (countdownDuration - elapsedTime) : 0.0;
 }
 
 bool Timer::completed() const {
 	return getRemainingTime() <= 0.0;
 }
 
+void Timer::pauseresume() {
+	if (!pauseTimer) {
+		 pausedTime = getRemainingTime();
+		 pauseTimer = true;
+	}
+	else {
+		startTime = AEGetTime(nullptr) - (countdownDuration - pausedTime);
+		pauseTimer = false;
+	}
+}
 // Constructor initializes the Wok position
 
 bool Stove::putIngredient(const std::string& ingredient)
@@ -45,14 +56,12 @@ void Stove::clearWok() {
 
 bool Stove::canCook(player& player) const
 {
-	return !isCooking && stoveItems.size() >= 2 && player.playerCheckCollison(x, y, width, height);
+	return !isCooking && stoveItems.size() >= 2 && player.playerCheckCollison(x, y, width, height) && !isDirty;
 }
 
 void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 {
-	if (isCooking || stoveItems.size() < 2) {
-		return;
-	}
+	if (isCooking || stoveItems.size() < 2 || isDirty)return;
 	isCooking = true;
 
 	double cookingTime = 2.0 + (1 * stoveItems.size());
@@ -61,7 +70,7 @@ void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 
 	recipeMatched = false;
 
-	cookingRecipeName = "Unknown Dish";
+	cookingRecipeName = "Wrong Dish";
 
 	for (auto const recipe : activeRecipes) {
 		if (recipe.matchesWok(stoveItems)) {
@@ -84,7 +93,14 @@ double Stove::remainingCookingTime()
 	return remainTime;
 }
 void Stove::update(RecipeSystem& recipeSystem) {
-	if (isCooking && cookingTimer.completed()) {	
+	if (isCooking && cookingTimer.completed()) {
+		static std::random_device rd;
+		static std::mt19937 engine(rd());
+		std::uniform_int_distribution<int> distribution(1, 10); // valid indices: 1 to 10
+		if (distribution(engine) >1) {
+			isDirty = true;
+			std::cout << "Stove needs cleaning!\n";
+		}
 		for (const Recipe& recipe : recipeSystem.getActiveRecipes()) {
 			if (recipe.Name == cookingRecipeName) {
 				recipeSystem.replaceRecipe(recipe);
@@ -94,30 +110,13 @@ void Stove::update(RecipeSystem& recipeSystem) {
 		clearWok();
 		score = updateScore(recipeMatched);
 	}
+	if (isDirty) {
+		if (isCleaning && cookingTimer.getRemainingTime() <= 0) {
+			isDirty = false;
+		}
+	}
 }
-
-// Getter Functions
-float Stove::getX() const
-{
-	return x;
-}
-
-float Stove::getY() const
-{
-	return y;
-}
-
-float Stove::getW() const {
-	return width;
-}
-
-float Stove::getH() const {
-	return height;
-}
-
-bool Stove::isCurrentlyCooking() const {
-	return isCooking;
-}
+// Getter Functions -> actually i can just put everything public .. no client gonna have access to my source code... im dumb
 
 std::string Stove::getCookingRecipeName() const {
 	return cookingRecipeName;
@@ -195,7 +194,6 @@ void QTE::render(AEGfxVertexList* mesh) const{
 	AEGfxSetTransform(sliderTransform.m);
 	AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 1.0f);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
-
 }
 
 void QTE::reset() {

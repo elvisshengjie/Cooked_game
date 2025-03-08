@@ -139,7 +139,11 @@ void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box)
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox)
+
 {
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
     AEMtx33 highingredientboxTransform;
     AEMtx33Scale(&highingredientboxTransform, highlightBox.width, highlightBox.height);
     AEMtx33TransApply(&highingredientboxTransform, &highingredientboxTransform, highlightBox.x, highlightBox.y);
@@ -255,32 +259,61 @@ void RenderIngredientsOnBoxes(
 
 
 // Function to Render Stove with Red Color
-void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE& qteGauge) {
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE& qteGauge,
+    AEGfxTexture* stoveTex, AEGfxTexture*stoveDirty , AEGfxTexture* stoveCook) {
+        
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE); // Ensure it's using texture mode
 
+    // Transformation matrix setup
     AEMtx33 stoveTransform;
-
-    AEMtx33Scale(&stoveTransform, stove.getW(), stove.getH());
-    AEMtx33TransApply(&stoveTransform, &stoveTransform, stove.getX(), stove.getY());
+    AEMtx33Scale(&stoveTransform, stove.width, stove.height);
+    AEMtx33TransApply(&stoveTransform, &stoveTransform, stove.x, stove.y);
     AEGfxSetTransform(stoveTransform.m);
 
-    AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 1.0f);
+    // Set default texture
+    AEGfxTexture* selectedTexture = stoveTex;
 
+    if (stove.isCooking) {
+        selectedTexture = stoveCook;
+    }
+    else if (stove.isDirty) {
+        selectedTexture = stoveDirty;
+    }
+
+    if (selectedTexture) {
+        AEGfxTextureSet(selectedTexture, 0, 0); // Ensure texture is properly set
+    }
+
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    AEGfxSetBlendColor(1.0f, 0.0f, 0.0f, 1.0f);
     AEGfxSetTransparency(1.0f);
 
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
-    if (!stove.isCurrentlyCooking() && stove.canCook(Player) && !qteGauge.isActive ) {
+    // Debugging: If the texture still doesn't show, print an error
+    if (!selectedTexture) {
+        std::cerr << "Error: Stove texture is NULL!" << std::endl;
+    }
+
+
+    if (!stove.isCooking && stove.canCook(Player) && !qteGauge.isActive ) {
         AEGfxPrint(FontID, "Press Q to Cook!", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
-    if (stove.isCurrentlyCooking()) {
+    if (stove.isCooking) {
         std::string timerText = "Cooking: " + stove.getCookingRecipeName() +
             " (" + std::to_string((int)stove.remainingCookingTime()) + "s)";
-        AEGfxPrint(FontID, timerText.c_str(), -0.4f, -0.1f, 0.7f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, timerText.c_str(), -0.4f, -0.1f, 0.7f, 0.0f, 0.0f, 0.0f, 1.0f);        
     }
+    if (stove.isDirty && !stove.isCleaning) {
+        AEGfxPrint(FontID, "Stove is dirty! Press C to clean", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
+    if (stove.isDirty && stove.isCleaning) {
+        AEGfxPrint(FontID, "Cleaning Stove!", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+
 }
 
 void RenderRecipeBox(AEGfxVertexList* mesh, const Recipe& recipe, float x, float y)

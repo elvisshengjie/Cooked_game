@@ -5,6 +5,9 @@ player players1;
 
 void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 	// Draw the player (blue rectangle)
+
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
 	AEMtx33 rectplayer;
 	AEMtx33Scale(&rectplayer, width, height);
 	AEMtx33TransApply(&rectplayer, &rectplayer, x, y);
@@ -187,8 +190,8 @@ void player::playerPickUp(Ingredients& boxIngredient)
 void player::playerDrop(Stove& stove) {
 	//std::cout << "Attempted";
 	if (AEInputCheckTriggered(AEVK_E)) {
-		if (Hand != EMPTY) {
-			if (playerCheckCollison(stove.getX(), stove.getY(), stove.getW(), stove.getH()))
+		if (Hand != EMPTY && stove.isDirty==false) {
+			if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height))
 			{
 				std::cout << IngredientToString(Hand) << "\n";
 				if (stove.putIngredient(IngredientToString(Hand))) {
@@ -208,8 +211,17 @@ void player::playerDrop(Stove& stove) {
 			}
 		}
 	}
+	if (AEInputCheckTriggered(AEVK_C)) {
+		if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height)) {
+			if (stove.isDirty) {
+				stove.cookingTimer.start(4);
+				stove.isCleaning = true;
+				std::cout << "Cleaning Stove";
+			}
+		}
+	}
 }
-
+	
 void player::playerDash() {
 
 	
@@ -265,7 +277,7 @@ void player::playerDash() {
 }
 
 void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gauge) {
-	if (playerCheckCollison(stove.getX(), stove.getY(), stove.getW(), stove.getH()) &&
+	if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height) &&
 		stove.canCook(*this))
 	{
 		if (AEInputCheckTriggered(AEVK_Q) && !QTE_Gauge.isActive) {  // Press Q to Cook
