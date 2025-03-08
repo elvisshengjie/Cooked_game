@@ -1,8 +1,24 @@
 // render.cpp
 #include "render.hpp"
 
-////////////////////////////helper function cuz AE is dumb and doesnt know how to draw rects by themsleves//////////////////////
-//input color in HEX code format pls :>
+////////////////////////////helper functions :D////////////////////////////////////////////
+AEGfxVertexList* CreateMesh()
+{
+    AEGfxVertexList* pMesh{};
+    AEGfxMeshStart();
+    AEGfxTriAdd(
+        -0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+    AEGfxTriAdd(
+        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+    pMesh = AEGfxMeshEnd();
+    return pMesh;
+}
+
+//input color in HEX code format (RR GG BB AA) pls :>
 void DrawRect(Rect rect, unsigned int color, AEGfxVertexList* pMesh)
 {
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -11,7 +27,12 @@ void DrawRect(Rect rect, unsigned int color, AEGfxVertexList* pMesh)
     float r = ((color >> 24) & 0xFF) / 255.0f; // Red
     float g = ((color >> 16) & 0xFF) / 255.0f; // Green
     float b = ((color >> 8) & 0xFF) / 255.0f;  // Blue
-    float a = (color & 0xFF) / 255.0f;       // Alpha
+    float a = (color & 0xFF) / 255.0f;         // Alpha
+
+    //reset color
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+
 
     // Transform matrix for positioning the rectangle
     AEMtx33 transform;
@@ -20,12 +41,13 @@ void DrawRect(Rect rect, unsigned int color, AEGfxVertexList* pMesh)
     AEGfxSetTransform(transform.m);
 
     AEGfxSetColorToMultiply(r, g, b, a);
-    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    AEGfxSetTransparency(1.0f);
+    AEGfxSetTransparency(a);
+    AEGfxSetTransform(transform.m);
 
     // Draw the rectangle using a built-in mesh or custom vertex data
     AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+    printf("Current color: 0x%X\n", color);
 }
 
 //draw overload for texture :>
@@ -49,7 +71,6 @@ void DrawRect(Rect rect, AEGfxTexture* tex, AEGfxVertexList* pMesh)
     // Draw the rectangle using a built-in mesh
     AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 }
-
 
 s8 FontID = -1;
 

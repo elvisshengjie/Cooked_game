@@ -127,7 +127,7 @@ void WinScreen::Init()
 {
     // Define button positions and sizes.
     float centerX{ 0.0f };      // Center horizontally
-    float startY{};       // Starting y position for the top button
+    float startY{-0.2f};       // Starting y position for the top button
     float buttonWidth{ 1.0f };  // Width of each button
     float buttonHeight{ 0.15f };//Height of each button
     float spacing{ 0.2f };      // Vertical spacing between button centers
@@ -178,25 +178,22 @@ int WinScreen::Update()
     }
     return 0;
 }
-void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex)
+void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex, AEGfxTexture* tex2, const char* condition)
 {
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
     Rect background{ 1600.0f,900.0f,0.0f,0.0f };
     DrawRect(background, tex, mesh);
 
-    AEGfxVertexList* pMesh{};
-    AEGfxMeshStart();
-    AEGfxTriAdd(
-        -0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-    AEGfxTriAdd(
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-    pMesh = AEGfxMeshEnd();
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_NONE);
+    AEGfxSetTransparency(1.0f);
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 
-    Rect box{ 600.0f, 700.0f, 0.0f, 0.0f };
-    DrawRect(box, 0xFAF4E3ED, pMesh);
+    Rect box{ 900.0f, 1000.0f, 100.0f, -60.0f };
+    DrawRect(box, tex2, mesh);
+
 
     // Render each button. We assume AEGfxPrint centers the text.
     for (size_t i = 0; i < buttons.size(); i++) {
@@ -205,7 +202,7 @@ void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex)
         AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.1f, btn.y, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
-    AEGfxPrint(FontID, "You win!", -0.23f, 0.4f, 4.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    AEGfxPrint(FontID, condition, -0.23f, 0.2f, 4.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 bool WinScreen::IsRestartGameSelected()

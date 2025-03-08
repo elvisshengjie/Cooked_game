@@ -13,6 +13,7 @@ struct Button {
     std::string label;
     float x, y;
     float width, height;
+    Rect box;
 };
 
 // Helper: Check if a point is inside a button (using center coordinates)
@@ -74,7 +75,7 @@ public:
     ~WinScreen();
     void Init();
     int Update();
-    void Render(AEGfxVertexList*, AEGfxTexture*);
+    void Render(AEGfxVertexList*, AEGfxTexture*, AEGfxTexture*, const char* condition);
 
     bool IsRestartGameSelected();
     bool IsMenuSelected();

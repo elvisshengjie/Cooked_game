@@ -25,6 +25,7 @@ public:
 };
 
 ////////////////////////////helper functions//////////////////
+AEGfxVertexList* CreateMesh();
 void DrawRect(Rect, unsigned int, AEGfxVertexList*);
 void DrawRect(Rect, AEGfxTexture*, AEGfxVertexList*);
 // ... Other boxes ...

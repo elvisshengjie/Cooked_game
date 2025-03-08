@@ -28,10 +28,12 @@ class CoreEngine
     bool gGameRunning = true;
     GameState currentState = GameState::MAIN_MENU;
     Timer mouseDeviceCooldownTimer{};
+
     // Meshes
     AEGfxVertexList* pMesh = nullptr;          // Generic mesh (background, dustbin, etc.)
     AEGfxVertexList* IngredientMesh = nullptr; // Generic mesh for ingredients
     AEGfxVertexList* pStoveMesh = nullptr; // Generic mesh for Stove
+    AEGfxVertexList* uiMesh = nullptr;     //untextured rect for UI
 
     // Textures
     AEGfxTexture* bTex = nullptr; // Background/floor
@@ -46,7 +48,8 @@ class CoreEngine
     AEGfxTexture* stoveTex{ nullptr };
     AEGfxTexture* stoveDirtyTex{ nullptr };
     AEGfxTexture* stoveCookTex{ nullptr };
-
+    AEGfxTexture* paperTex{ nullptr };
+    
 
     // Systems
     RecipeSystem recipeSystem;
@@ -55,6 +58,7 @@ class CoreEngine
     QTE          qteGauge;
     Stove        Wok;
     WinScreen    winScreen;
+    WinScreen    loseScreen;
 
     Timer gTimer{};
 
@@ -68,9 +72,10 @@ public:
 // CoreEngine::Init
 void CoreEngine::Init()
 {
-
-
+    currentState = GameState::MAIN_MENU;
     // Changing the window title
+
+    gTimer.start(300);
     AESysSetWindowTitle("Cooked!");
 
     // AESysReset() re-initializes various engine systems
@@ -82,6 +87,7 @@ void CoreEngine::Init()
     // Initialize the main menu
     mainMenu.Init();
     winScreen.Init();
+    loseScreen.Init();
 
     // Start the timer
 
@@ -116,6 +122,7 @@ void CoreEngine::Init()
         0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
         -0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
     pStoveMesh = AEGfxMeshEnd();
+    uiMesh = CreateMesh();
 
     // 2. Load textures
    
@@ -131,6 +138,7 @@ void CoreEngine::Init()
     stoveTex = AEGfxTextureLoad("Assets/Stove.png");
     stoveDirtyTex = AEGfxTextureLoad("Assets/Stovedirty.png");
     stoveCookTex = AEGfxTextureLoad("Assets/StoveCook.png");
+    paperTex = AEGfxTextureLoad("Assets/paperUI.png");
 
     // 3. Create a mesh (IngredientMesh) for ingredient rectangles
     AEGfxMeshStart();
@@ -153,6 +161,7 @@ void CoreEngine::Update()
     {
         AESysFrameStart();
 
+
         // Global exit conditions (Esc key or window closed)
         if (AEInputCheckTriggered(AEVK_ESCAPE) || !AESysDoesWindowExist())
             gGameRunning = false;
@@ -166,6 +175,7 @@ void CoreEngine::Update()
             // ------------------------------
         case GameState::MAIN_MENU:
         {
+
             // Update & render Main Menu
             mainMenu.Update();
 
@@ -191,6 +201,7 @@ void CoreEngine::Update()
         case GameState::WIN_SCREEN:
         {
             // Update & render Main Menu
+
             int check = winScreen.Update();
 
             // Check menu selection
@@ -207,9 +218,33 @@ void CoreEngine::Update()
             {
                 gGameRunning = false;
             }
+            
+            winScreen.Render(pMesh, backgroundTex, paperTex, "You Win!");
+            
+        }
+        break;
 
-            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-            winScreen.Render(pMesh, backgroundTex);
+        case GameState::LOSE_SCREEN:
+        {
+            // Update & render Main Menu
+            int check = loseScreen.Update();
+
+            // Check menu selection
+            if (check == 1)
+            {
+                currentState = GameState::GAME;
+            }
+            else if (check == 2)
+            {
+                currentState = GameState::MAIN_MENU;
+            }
+            else if (check == 3)
+            {
+                gGameRunning = false;
+            }
+
+           // AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            loseScreen.Render(pMesh, backgroundTex, paperTex, "You Lose :(");
         }
         break;
 
@@ -321,6 +356,8 @@ void CoreEngine::Update()
 
                
             }
+
+
             // Render ingredients on the boxes
             RenderIngredientsOnBoxes(pMesh,
                 chickenTex, beefTex, cheeseTex,
@@ -330,9 +367,21 @@ void CoreEngine::Update()
             displayScore(score);
             displayTimer(gTimer.getRemainingTime());
 
-            if (score > 30)
+            if (score >= 2 && gTimer.getRemainingTime() > 0)
             {
+                /*AEGfxSetTransparency(1.0f);
+                AEGfxSetColorToMultiply(1.0f,1.0f,1.0f,1.0f);
+                AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+                AEGfxSetBlendMode(AE_GFX_BM_NONE);*/
                 currentState = GameState::WIN_SCREEN;
+            }
+            if (gTimer.getRemainingTime() <= 0)
+            {
+                /*AEGfxSetTransparency(1.0f);
+                AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+                AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+                AEGfxSetBlendMode(AE_GFX_BM_NONE);*/
+                currentState = GameState::LOSE_SCREEN;
             }
         }
         break;
@@ -357,7 +406,8 @@ void CoreEngine::Exit()
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
     if (pStoveMesh)       AEGfxMeshFree(pStoveMesh);
-
+    if (pStoveMesh)       AEGfxMeshFree(pStoveMesh);
+    if (uiMesh)           AEGfxMeshFree(uiMesh);
     if (bTex)             AEGfxTextureUnload(bTex);
     if (dTex)             AEGfxTextureUnload(dTex);
     if (chickenTex)       AEGfxTextureUnload(chickenTex);
@@ -369,7 +419,8 @@ void CoreEngine::Exit()
     if (stoveTex)         AEGfxTextureUnload(stoveTex);
     if (stoveDirtyTex)    AEGfxTextureUnload(stoveDirtyTex);
     if (stoveCookTex)     AEGfxTextureUnload(stoveCookTex);
-
+    if (backgroundTex)    AEGfxTextureUnload(backgroundTex);
+    if (paperTex)         AEGfxTextureUnload(paperTex);
 
     AESysExit();
 }
