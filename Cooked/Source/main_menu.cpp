@@ -178,25 +178,22 @@ int WinScreen::Update()
     }
     return 0;
 }
-void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex)
+void WinScreen::Render(AEGfxVertexList* mesh, AEGfxVertexList* mesh1, AEGfxTexture* tex, const char* condition)
 {
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
     Rect background{ 1600.0f,900.0f,0.0f,0.0f };
     DrawRect(background, tex, mesh);
 
-    AEGfxVertexList* pMesh{};
-    AEGfxMeshStart();
-    AEGfxTriAdd(
-        -0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-    AEGfxTriAdd(
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-        -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-    pMesh = AEGfxMeshEnd();
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0, 0.0f, 0.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_NONE);
+    AEGfxSetTransparency(1.0f);
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 
     Rect box{ 600.0f, 700.0f, 0.0f, 0.0f };
-    DrawRect(box, 0xFAF4E3ED, pMesh);
+    DrawRect(box, 0xFAF4E3ED, mesh1);
+
 
     // Render each button. We assume AEGfxPrint centers the text.
     for (size_t i = 0; i < buttons.size(); i++) {
@@ -205,7 +202,7 @@ void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex)
         AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.1f, btn.y, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
-    AEGfxPrint(FontID, "You win!", -0.23f, 0.4f, 4.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    AEGfxPrint(FontID, condition, -0.23f, 0.4, 4.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 bool WinScreen::IsRestartGameSelected()
