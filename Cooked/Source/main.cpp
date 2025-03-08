@@ -27,7 +27,7 @@ class CoreEngine
 {
     bool gGameRunning = true;
     GameState currentState = GameState::MAIN_MENU;
-
+    Timer mouseDeviceCooldownTimer{};
     // Meshes
     AEGfxVertexList* pMesh = nullptr;          // Generic mesh (background, dustbin, etc.)
     AEGfxVertexList* IngredientMesh = nullptr; // Generic mesh for ingredients
@@ -52,7 +52,7 @@ class CoreEngine
     Stove        Wok;
     WinScreen    winScreen;
 
-    Timer gTimer;
+    Timer gTimer{};
 
 public:
     void Init();
@@ -234,17 +234,38 @@ void CoreEngine::Update()
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             RenderDustbin(pMesh, dTex);
 
+
+
             // Player update logic (picking up, dropping, etc.)
             players1.playerUpdate(Wok, recipeSystem, qteGauge);
 
             // Stove / Wok logic (cooking)
             Wok.update(recipeSystem);
+            
+
+            if (mouseDeviceCooldownTimer.completed())
+            {
+                // Device is ready to use.
+                if (players1.playerCheckCollison(collisionBoxes[3].x, collisionBoxes[3].y, collisionBoxes[3].width, collisionBoxes[3].height) &&
+                    AEInputCheckTriggered(AEVK_E))
+                {
+                    // Generate a random chase duration between 20 and 30 seconds.
+                    float chaseDuration = 20.0f + static_cast<float>(rand()) / RAND_MAX * 10.0f;
+                    // Activate chase-away for all mice.
+                    mouse1.chaseAway(chaseDuration);
+                    mouse2.chaseAway(chaseDuration);
+                    mouse3.chaseAway(chaseDuration);
+                    // Start the cooldown timer with 25 seconds.
+                    mouseDeviceCooldownTimer.start(25.0);
+                }
+            }
 
             // Ingredient boxes (3 boxes at top?), Active recipes, etc.
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderIngredientbox(pMesh);
             RenderActiveRecipes(pMesh, recipeSystem);
-
+            //mouse Device
+            mouseDevicefun(pMesh);
             // Render Stove & Player
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh, Wok, players1,qteGauge);
@@ -255,7 +276,7 @@ void CoreEngine::Update()
             RenderQTEGauge(pMesh, qteGauge);
 
             // Collision boxes for ingredients or special objects
-            for (size_t i = 0; i < collisionBoxes.size(); i++)
+            for (size_t i = 0; i < g_currentBoxIngredients.size(); i++)
             {
                 const Rect& collBox = collisionBoxes[i];
                 const Rect& visualBox = highingredientBoxes[i];
@@ -277,7 +298,13 @@ void CoreEngine::Update()
                     players1.playerDrop(Wok);
                 }
             }
+            // Check collision with the mouse device
+            if (players1.playerCheckCollison(collisionBoxes[3].x, collisionBoxes[3].y, collisionBoxes[3].width, collisionBoxes[3].height)) {
+                // Render highlight for the mouse device.
+                RenderhighlightIngredientBox(pMesh, collisionBoxes[3]);
 
+               
+            }
             // Render ingredients on the boxes
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             RenderIngredientsOnBoxes(pMesh,

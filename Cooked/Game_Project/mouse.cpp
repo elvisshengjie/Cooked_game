@@ -43,6 +43,22 @@ void mouse::mouseMove(float speed)
 {
     dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
 
+    if (isChased)
+    {
+        if (chaseTimer.completed())
+        {
+            // Chase time over—end chase-away state.
+            isChased = false;
+        }
+        else
+        {
+            // Continue moving in the random direction.
+            x += randomDirX * speed * dt;
+            y += randomDirY * speed * dt;
+            return; // Skip normal behavior.
+        }
+    }
+
     // 1. If we do NOT already have a target, find the nearest ingredient box
     if (!hasTarget)
     {
@@ -107,6 +123,16 @@ void mouse::mouseMove(float speed)
 
     // Keep the mouse within screen boundaries
     /*ClampToScreen();*/
+}
+void mouse::chaseAway(float duration)
+{
+    isChased = true;
+    chaseTimer.start(duration);  // Start the timer with the desired duration.
+
+    // Generate a random angle between 0 and 2*PI.
+    float angle = static_cast<float>(rand()) / RAND_MAX * 2 * 3.14159f;
+    randomDirX = cos(angle);
+    randomDirY = sin(angle);
 }
 
 //-----------------------------------------------------------------

@@ -63,13 +63,18 @@ void InitFont()
 std::vector<Rect> highingredientBoxes = {
     {90.0f, 90.0f,-200.0f ,175.0f},
     {90.0f,90.0f, -49.0f, 175.0f},
-    {90.0f, 90.0f, 102.0f, 175.0f }
+    {90.0f, 90.0f, 102.0f, 175.0f },
+    { 210.0f, 210.0f,200.0f, -400.0f },
+    { 190.0f, 190.0f,200.0f, -350.0f }
     
 };
 std::vector<Rect> collisionBoxes = {
     {100.0f, 100.0f, -200.0f, 175.0f},
     {100.0f,100.0f, -49.0f, 175.0f},
-    { 100.0f, 100.0f, 102.0f, 175.0f }
+    { 100.0f, 100.0f, 102.0f, 175.0f },
+    { 180.0f, 180.0f,200.0f, -350.0f }
+
+   
 };
 std::vector<Rect> objectcollision = {
     { 150.0f, 200.0f,-750.0f , -300.0f },
@@ -79,7 +84,8 @@ std::vector<Rect> objectcollision = {
     { 80.0f, 80.0f,102.0f ,175.0f },
     { 330.0f, 200.0f, -350.0f, 340.0f },  // Recipe 1 Collision
     { 330.0f, 200.0f,   -0.0f, 340.0f },  // Recipe 2 Collision
-    { 330.0f, 200.0f,  350.0f, 340.0f }   // Recipe 3 Collision
+    { 330.0f, 200.0f,  350.0f, 340.0f },// Recipe 3 Collision
+    { 170.0f, 170.0f,200.0f, -350.0f }
 };
 
 std::vector<Rect> recipeBoxes = {
@@ -94,14 +100,13 @@ Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
 Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
 Rect digipen_logo{ 1000, 455 * 1000 / 1525,0.0f,0.0f };
-
+Rect mouseDevice{ 170.0f, 170.0f,200.0f, -350.0f };
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     AEMtx33 background;
     AEMtx33Scale(&background, background1.width, background1.height);
     AEMtx33TransApply(&background, &background, background1.x, background1.y);
     AEGfxSetTransform(background.m);
-    
     AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
     AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -169,7 +174,23 @@ void RenderIngredientbox(AEGfxVertexList* mesh) {
     }
 }
 
+void mouseDevicefun(AEGfxVertexList* mesh)
+{
+    AEMtx33 mousedev;
+    AEMtx33Scale(&mousedev, mouseDevice.width, mouseDevice.height);
+    AEMtx33TransApply(&mousedev, &mousedev, mouseDevice.x, mouseDevice.y);
+    AEGfxSetTransform(mousedev.m);
 
+    // Example color settings
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 1.0f, 1.0f, 0.0f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetBlendColor(1.0f, 0.0f, 1.0f, 1.0f);
+    AEGfxSetTransparency(1.0f);
+
+    // Draw the mesh for the mouse
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
 
 void RenderIngredientsOnBoxes(
     AEGfxVertexList* mesh,

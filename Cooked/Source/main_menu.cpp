@@ -168,12 +168,14 @@ int WinScreen::Update()
                         return 3;
                         break;
                     default:
+                        
                         break;
                 }
                 
             }
         }
     }
+    return 0;
 }
 void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex)
 {
@@ -202,7 +204,7 @@ void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex)
         AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.1f, btn.y, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
-    AEGfxPrint(FontID, "You win!", -0.23f, 0.4, 4.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    AEGfxPrint(FontID, "You win!", -0.23f, 0.4f, 4.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 bool WinScreen::IsRestartGameSelected()

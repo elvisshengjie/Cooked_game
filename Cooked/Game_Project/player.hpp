@@ -33,10 +33,10 @@ private:
 	// dash
 	float dy{}, dx{}, angle{}, normdy{}, normdx{};
 	float mangnituded{};
-	bool cannotdash;
-	float dashspeed{ 1000 };
-	float dashCooldown{0.5};
-	float dashDuration{0.2};
+	
+	float dashspeed{ 1000.0f };
+	float dashCooldown{0.5f};
+	float dashDuration{0.2f};
 	int rawX{};
 	int rawY{};
 	float mouseX{};

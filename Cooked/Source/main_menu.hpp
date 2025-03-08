@@ -49,7 +49,7 @@ public:
 private:
     double time = 0;
     std::vector<Button> buttons;          
-    size_t selectedOption;                   
+    size_t selectedOption{};
     s8 FontID_main_menu = -1;
     AEGfxTexture* background = nullptr;
     AEGfxTexture* DigipenLogo = nullptr;

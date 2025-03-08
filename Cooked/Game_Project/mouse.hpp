@@ -18,7 +18,7 @@ class mouse
 {
 public:
     mouse(float startX, float startY)
-        : x(startX), y(startY)
+        : x(startX), y(startY), chaseTimer{}
     {
     }
     // Draw function (renders the mouse on screen)
@@ -35,12 +35,14 @@ public:
     void ClampToScreen();
 
     // The mouse "eats" or steals the ingredient
-    void mouseEating(Ingredients& boxIngredient);
+    /*void mouseEating(Ingredients& boxIngredient);*/
 
     // OPTIONAL: Expose position if you need from outside
     // float getX() const { return x; }
     // float getY() const { return y; }
     // void  setPosition(float newX, float newY) { x = newX; y = newY; }
+
+    void chaseAway(float duration);
 
 private:
     // Position & size
@@ -57,23 +59,12 @@ private:
     float targetX = 0.0f;  // X coordinate of our current target
     float targetY = 0.0f;  // Y coordinate of our current target
 
-    // Example "dash" variables (if you need them)
-    float dashspeed{ 700.0f };
-    float dashCooldown{ 0.5f };
-    float dashDuration{ 0.2f };
-    int   rawX{};
-    int   rawY{};
-    float mouseX{};
-    float mouseY{};
-    bool  isDashing{ false };
-    float DirectX{};
-    float DirectY{};
-    float DirectionX{};
-    float DirectionY{};
-    float Magnitude{};
-    int   dashCounter{ 1 };
-    Timer cooldown;
-    Timer cooldown2;
+
+    //chasing
+    bool isChased = false;
+    Timer chaseTimer;
+    float randomDirX = 0.0f;
+    float randomDirY = 0.0f;
 
     // The mouse "Hand": what ingredient is it holding
     Ingredients Hand = EMPTY;
