@@ -347,6 +347,7 @@ void CoreEngine::Update()
                
             }
 
+
             // Render ingredients on the boxes
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             RenderIngredientsOnBoxes(pMesh,
