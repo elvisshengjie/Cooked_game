@@ -402,10 +402,8 @@ void CoreEngine::Exit()
     DestroyFront();
     // Free memory
     if (backgroundTex) AEGfxTextureUnload(backgroundTex);
-
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
-    if (pStoveMesh)       AEGfxMeshFree(pStoveMesh);
     if (pStoveMesh)       AEGfxMeshFree(pStoveMesh);
     if (uiMesh)           AEGfxMeshFree(uiMesh);
     if (bTex)             AEGfxTextureUnload(bTex);
@@ -419,7 +417,6 @@ void CoreEngine::Exit()
     if (stoveTex)         AEGfxTextureUnload(stoveTex);
     if (stoveDirtyTex)    AEGfxTextureUnload(stoveDirtyTex);
     if (stoveCookTex)     AEGfxTextureUnload(stoveCookTex);
-    if (backgroundTex)    AEGfxTextureUnload(backgroundTex);
     if (paperTex)         AEGfxTextureUnload(paperTex);
 
     AESysExit();
