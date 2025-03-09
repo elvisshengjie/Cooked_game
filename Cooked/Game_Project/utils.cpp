@@ -97,7 +97,7 @@ void Stove::update(RecipeSystem& recipeSystem) {
 		static std::random_device rd;
 		static std::mt19937 engine(rd());
 		std::uniform_int_distribution<int> distribution(1, 10); // valid indices: 1 to 10
-		if (distribution(engine) >1) {
+		if (distribution(engine) >7) {
 			isDirty = true;
 			std::cout << "Stove needs cleaning!\n";
 		}
@@ -113,6 +113,8 @@ void Stove::update(RecipeSystem& recipeSystem) {
 	if (isDirty) {
 		if (isCleaning && cookingTimer.getRemainingTime() <= 0) {
 			isDirty = false;
+			isCleaning = false;
+			std::cout << "|-just cleaned-|";
 		}
 	}
 }

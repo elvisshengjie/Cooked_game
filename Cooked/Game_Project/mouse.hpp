@@ -22,7 +22,7 @@ public:
     {
     }
     // Draw function (renders the mouse on screen)
-    void mousedraw(AEGfxVertexList* mesh) const;
+    void mousedraw(AEGfxVertexList* mesh, std::vector<AEGfxTexture*>up, std::vector<AEGfxTexture*>down, std::vector<AEGfxTexture*>left, std::vector<AEGfxTexture*>right);
 
     // Movement + pathfinding toward nearest ingredient
     void mouseMove(float speed);
@@ -43,6 +43,12 @@ public:
     // void  setPosition(float newX, float newY) { x = newX; y = newY; }
 
     void chaseAway(float duration);
+
+    bool isMoving = false;
+    int currentFrame = 0;
+    float frameTimer = 0.0f;
+    const float frameDuration = 0.1f;
+    int spriteDirection = 2; // 1-up , 2- down , 3-left , 4-right
 
 private:
     // Position & size

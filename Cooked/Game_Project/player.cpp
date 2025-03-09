@@ -1,24 +1,59 @@
 #include "player.hpp"
 
+void RenderAnimatedSprite(AEGfxVertexList* mesh, AEGfxTexture* texture, int frameIndex, int totalFrames) {
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
+	// Define frame size (each texture has multiple frames in 1 row)
+	const float frameWidth = 1.0f / totalFrames;
+
+	// Calculate UV coordinates
+	float uMin = frameIndex * frameWidth;
+	float uMax = uMin + frameWidth;
+	float vMin = 0.0f;
+	float vMax = 1.0f;
+
+	// Apply UV mapping
+	AEGfxTextureSet(texture, uMin, vMin);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
 player players1;
 
-void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
-	// Draw the player (blue rectangle)
 
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vector<AEGfxTexture*> idle, std::vector<AEGfxTexture*> up, std::vector<AEGfxTexture*> down, std::vector<AEGfxTexture*> left, std::vector<AEGfxTexture*> right) {
+	// Draw the player (blue rectangle)
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+	AEGfxTexture* selectedTexture = idle[currentFrame];
+
+	switch (spriteDirection)
+	{
+	case 0:
+		selectedTexture = idle[currentFrame];
+		break;
+	case 1:
+		selectedTexture = up[currentFrame];
+		break;
+	case 2:
+		selectedTexture = down[currentFrame];
+		break;
+	case 3:
+		selectedTexture = left[currentFrame];
+		break;
+	case 4:
+		selectedTexture = right[currentFrame];
+		break;
+	}
 
 	AEMtx33 rectplayer;
 	AEMtx33Scale(&rectplayer, width, height);
 	AEMtx33TransApply(&rectplayer, &rectplayer, x, y);
 	AEGfxSetTransform(rectplayer.m);
-	AEGfxSetColorToMultiply(0.0f, 0.0f, 1.0f, 1.0f);
-	AEGfxSetColorToAdd(0.0f, 0.0f, 1.0f, 0.0f);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetBlendColor(1.0f, 0.0f, 1.0f, 1.0f);
-	AEGfxSetTransparency(1.0f);
-	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
+	AEGfxTextureSet(selectedTexture, 0, 0);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+	//RenderAnimatedSprite(mesh, selectedTexture, currentFrame, 2);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	
 	if (Hand != EMPTY) {
 		float offsetX = width + 2.0f;
 		float offsetY = 0.0f;
@@ -81,22 +116,30 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const {
 void player::playerMove(float speed)
 
 {
+	isMoving = false;
 	if (dx == 0 && dy == 0) {
 		
 	}
 	if (AEInputCheckCurr(AEVK_W)) {
+		spriteDirection = 1;
+		isMoving = true;
 		dy += 1;
 		
 	}if (AEInputCheckCurr(AEVK_S)) {
+		spriteDirection = 2;
+		isMoving = true;
 		dy -= 1;
 		
 	}if (AEInputCheckCurr(AEVK_A)) {
+		spriteDirection = 3;
+		isMoving = true;
 		dx -= 1;
 		
 	}
 	if (AEInputCheckCurr(AEVK_D)) {
+		spriteDirection = 4;
+		isMoving = true;
 		dx += 1;
-		
 	}
 	
 
@@ -105,7 +148,7 @@ void player::playerMove(float speed)
 
 	}
 	dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
-
+	frameTimer += dt; // Accumulate time
 	
 	if (isDashing ) {
 		
@@ -161,6 +204,25 @@ void player::playerMove(float speed)
 	else if (AEInputCheckCurr(AEVK_A))
 	{
 		this->x -= speed * dt;
+	}
+
+	if (isMoving) {
+		if (frameTimer >= 0.1f) { // Change frame every 0.1s
+			currentFrame = (currentFrame + 1) % 4;
+			frameTimer = 0.0f;
+		}
+		idleTime = 0.0f; // Reset idle timer
+	}
+	else {
+		idleTime += dt;
+		spriteDirection = 0;
+		if (idleTime >= 0.2f) { // Change idle frame every 0.2s
+			spriteDirection = 0;
+			if (frameTimer >= 0.2f) {
+				currentFrame = (currentFrame + 1) % 4;
+				frameTimer = 0.0f;
+			}
+		}
 	}
 }
 }

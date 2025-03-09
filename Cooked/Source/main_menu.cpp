@@ -33,9 +33,6 @@ void MainMenu::Init() {
     buttons.push_back({ "Extras",     centerX, startY - 3 * spacing, buttonWidth, buttonHeight,{ 300.0f, 50.0f, (centerX * 800.0f) , (startY * 450.0f)- (0.6f * 450.0f)} });
     buttons.push_back({ "Quit Game",  centerX, startY - 4 * spacing, buttonWidth, buttonHeight,{ 300.0f, 50.0f, (centerX * 800.0f) , (startY * 450.0f)  - (0.8f * 450.0f)} });
 
- 
-
-
 }
 
 void MainMenu::Update() {

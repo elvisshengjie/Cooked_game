@@ -9,6 +9,7 @@
 #include "player.hpp"
 #include "mouse.hpp"
 #include <math.h>
+#include <vector>
 
 // ---------------------------------------------------------------------------
 // Define your game states
@@ -50,6 +51,23 @@ class CoreEngine
     AEGfxTexture* stoveDirtyTex{ nullptr };
     AEGfxTexture* stoveCookTex{ nullptr };
     AEGfxTexture* paperTex{ nullptr };
+
+    /*AEGfxTexture* playerIdle {nullptr };
+    AEGfxTexture* playerWalkUp{ nullptr  };
+    AEGfxTexture* playerWalkDown{ nullptr };
+    AEGfxTexture* playerWalkLeft{ nullptr  };
+    AEGfxTexture* playerWalkRight{ nullptr };*/
+
+    std::vector<AEGfxTexture*>playerIdle{nullptr, nullptr, nullptr, nullptr};
+    std::vector<AEGfxTexture*>playerWalkUp{ nullptr, nullptr, nullptr, nullptr };
+    std::vector<AEGfxTexture*>playerWalkDown{ nullptr, nullptr, nullptr, nullptr };
+    std::vector<AEGfxTexture*>playerWalkLeft{ nullptr, nullptr, nullptr, nullptr };
+    std::vector<AEGfxTexture*>playerWalkRight{ nullptr, nullptr, nullptr, nullptr };
+
+    std::vector<AEGfxTexture*>mouseUp{ nullptr, nullptr, nullptr, nullptr };
+    std::vector<AEGfxTexture*>mouseDown {nullptr, nullptr, nullptr, nullptr };
+    std::vector<AEGfxTexture*>mouseLeft{ nullptr, nullptr, nullptr, nullptr };
+    std::vector<AEGfxTexture*>mouseRight{ nullptr, nullptr, nullptr, nullptr };
     
 
     // Systems
@@ -141,6 +159,58 @@ void CoreEngine::Init()
     stoveDirtyTex = AEGfxTextureLoad("Assets/Stovedirty.png");
     stoveCookTex = AEGfxTextureLoad("Assets/StoveCook.png");
     paperTex = AEGfxTextureLoad("Assets/paperUI.png");
+    /*playerIdle = AEGfxTextureLoad("Assets/player_idle.png");
+    playerWalkUp = AEGfxTextureLoad("Assets/player_walk_up.png");
+    playerWalkDown = AEGfxTextureLoad("Assets/player_walk_down.png");
+    playerWalkLeft = AEGfxTextureLoad("Assets/player_walk_left.png");
+    playerWalkRight = AEGfxTextureLoad("Assets/player_walk_right.png");*/
+
+
+    mouseUp[0] = AEGfxTextureLoad("Assets/mouse_walk_up-1.png");
+    mouseUp[1] = AEGfxTextureLoad("Assets/mouse_walk_up-2.png");
+    mouseUp[2] = AEGfxTextureLoad("Assets/mouse_walk_up-3.png");
+    mouseUp[3] = AEGfxTextureLoad("Assets/mouse_walk_up-4.png");
+
+    mouseDown[0] = AEGfxTextureLoad("Assets/mouse_walk_down-1.png");
+    mouseDown[1] = AEGfxTextureLoad("Assets/mouse_walk_down-2.png");
+    mouseDown[2] = AEGfxTextureLoad("Assets/mouse_walk_down-3.png");
+    mouseDown[3] = AEGfxTextureLoad("Assets/mouse_walk_down-4.png");
+
+    mouseLeft[0] = AEGfxTextureLoad("Assets/mouse_walk_left-1.png");
+    mouseLeft[1] = AEGfxTextureLoad("Assets/mouse_walk_left-2.png");
+    mouseLeft[2] = AEGfxTextureLoad("Assets/mouse_walk_left-3.png");
+    mouseLeft[3] = AEGfxTextureLoad("Assets/mouse_walk_left-4.png");
+
+    mouseRight[0] = AEGfxTextureLoad("Assets/mouse_walk_right-1.png");
+    mouseRight[1] = AEGfxTextureLoad("Assets/mouse_walk_right-2.png");
+    mouseRight[2] = AEGfxTextureLoad("Assets/mouse_walk_right-3.png");
+    mouseRight[3] = AEGfxTextureLoad("Assets/mouse_walk_right-4.png");
+
+
+    playerIdle[0] = AEGfxTextureLoad("Assets/player_idle-1.png");
+    playerIdle[1] = AEGfxTextureLoad("Assets/player_idle-2.png");
+    playerIdle[2] = AEGfxTextureLoad("Assets/player_idle-3.png");
+    playerIdle[3] = AEGfxTextureLoad("Assets/player_idle-4.png");
+
+    playerWalkUp[0] = AEGfxTextureLoad("Assets/player_walk_up-1.png");
+    playerWalkUp[1] = AEGfxTextureLoad("Assets/player_walk_up-2.png");
+    playerWalkUp[2] = AEGfxTextureLoad("Assets/player_walk_up-3.png");
+    playerWalkUp[3] = AEGfxTextureLoad("Assets/player_walk_up-4.png");
+
+    playerWalkDown[0] = AEGfxTextureLoad("Assets/player_walk_down-1.png");
+    playerWalkDown[1] = AEGfxTextureLoad("Assets/player_walk_down-2.png");
+    playerWalkDown[2] = AEGfxTextureLoad("Assets/player_walk_down-3.png");
+    playerWalkDown[3] = AEGfxTextureLoad("Assets/player_walk_down-4.png");
+
+    playerWalkLeft[0] = AEGfxTextureLoad("Assets/player_walk_left-1.png");
+    playerWalkLeft[1] = AEGfxTextureLoad("Assets/player_walk_left-2.png");
+    playerWalkLeft[2] = AEGfxTextureLoad("Assets/player_walk_left-3.png");
+    playerWalkLeft[3] = AEGfxTextureLoad("Assets/player_walk_left-4.png");
+
+    playerWalkRight[0] = AEGfxTextureLoad("Assets/player_walk_right-1.png");
+    playerWalkRight[1] = AEGfxTextureLoad("Assets/player_walk_right-2.png");
+    playerWalkRight[2] = AEGfxTextureLoad("Assets/player_walk_right-3.png");
+    playerWalkRight[3] = AEGfxTextureLoad("Assets/player_walk_right-4.png");
 
     // 3. Create a mesh (IngredientMesh) for ingredient rectangles
     AEGfxMeshStart();
@@ -324,10 +394,10 @@ void CoreEngine::Update()
             // Render Stove & Player
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh,Wok, players1,qteGauge,stoveTex,stoveDirtyTex,stoveCookTex);
-            players1.playerdraw(pMesh, IngredientMesh);
-            mouse1.mousedraw(pMesh);
-            mouse2.mousedraw(pMesh);
-            mouse3.mousedraw(pMesh);
+            players1.playerdraw(pMesh, IngredientMesh, playerIdle,playerWalkUp , playerWalkDown , playerWalkLeft, playerWalkRight);
+            mouse1.mousedraw(pMesh,mouseUp, mouseDown , mouseLeft, mouseRight);
+            mouse2.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);
+            mouse3.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);
             RenderQTEGauge(pMesh, qteGauge);
 
             // Collision boxes for ingredients or special objects
@@ -414,6 +484,20 @@ void CoreEngine::Exit()
     if (stoveDirtyTex)    AEGfxTextureUnload(stoveDirtyTex);
     if (stoveCookTex)     AEGfxTextureUnload(stoveCookTex);
     if (paperTex)         AEGfxTextureUnload(paperTex);
+    for (size_t x{}; x < playerIdle.size(); ++x) {
+        if (playerIdle[x])       AEGfxTextureUnload(playerIdle[x]);
+        if (playerWalkUp[x])     AEGfxTextureUnload(playerWalkUp[x]);
+        if (playerWalkDown[x])   AEGfxTextureUnload(playerWalkDown[x]);
+        if (playerWalkLeft[x])   AEGfxTextureUnload(playerWalkLeft[x]);
+        if (playerWalkRight[x])  AEGfxTextureUnload(playerWalkRight[x]);
+    }
+    for (size_t x{}; x < mouseUp.size(); ++x) {
+        if (mouseUp[x])       AEGfxTextureUnload(mouseUp[x]);
+        if (mouseDown[x])     AEGfxTextureUnload(mouseDown[x]);
+        if (mouseLeft[x])   AEGfxTextureUnload(mouseLeft[x]);
+        if (mouseRight[x])   AEGfxTextureUnload(mouseRight[x]);
+    }
+
 
     AESysExit();
 }

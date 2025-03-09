@@ -18,20 +18,45 @@ mouse mouse3(3300.0f, 0.0f);
 //-----------------------------------------------------------------
 // mousedraw: Renders the mouse shape/texture
 //-----------------------------------------------------------------
-void mouse::mousedraw(AEGfxVertexList* mesh) const
+void mouse::mousedraw(AEGfxVertexList* mesh, std::vector<AEGfxTexture*>up, std::vector<AEGfxTexture*>down, std::vector<AEGfxTexture*>left, std::vector<AEGfxTexture*>right)
 {
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+    AEGfxTexture* selectedTexture = nullptr;
+
     AEMtx33 rectmouse;
     AEMtx33Scale(&rectmouse, width, height);
     AEMtx33TransApply(&rectmouse, &rectmouse, x, y);
     AEGfxSetTransform(rectmouse.m);
 
-    // Example color settings
-    AEGfxSetColorToMultiply(0.0f, 0.0f, 0.5f, 0.5f);
-    AEGfxSetColorToAdd(0.0f, 1.0f, 1.0f, 0.0f);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    AEGfxSetBlendColor(1.0f, 0.0f, 1.0f, 1.0f);
-    AEGfxSetTransparency(1.0f);
+    if (isMoving) {
+        switch(spriteDirection)
+        {
+            case 1:
+                selectedTexture = up[currentFrame];
+                break;
+            case 2:
+                selectedTexture = down[currentFrame];
+                break;
+            case 3:
+                selectedTexture = left[currentFrame];
+                break;
+            case 4:
+                selectedTexture = right[currentFrame];
+                break;
+        }
+    }
+    else {
+        selectedTexture = up[currentFrame];
+    }
+
+    //// Example color settings
+    //AEGfxSetColorToMultiply(0.0f, 0.0f, 0.5f, 0.5f);
+    //AEGfxSetColorToAdd(0.0f, 1.0f, 1.0f, 0.0f);
+    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    //AEGfxSetBlendColor(1.0f, 0.0f, 1.0f, 1.0f);
+    //AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(selectedTexture, 0, 0);
 
     // Draw the mesh for the mouse
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
@@ -43,6 +68,7 @@ void mouse::mousedraw(AEGfxVertexList* mesh) const
 void mouse::mouseMove(float speed)
 {
     dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
+    isMoving = false;
 
     if (isChased)
     {
@@ -56,6 +82,7 @@ void mouse::mouseMove(float speed)
             // Continue moving in the random direction.
             x += randomDirX * speed * dt;
             y += randomDirY * speed * dt;
+            isMoving = true;
             return; // Skip normal behavior.
         }
     }
@@ -119,11 +146,30 @@ void mouse::mouseMove(float speed)
             // Move the mouse
             x += dx * speed * dt;
             y += dy * speed * dt;
+            isMoving = true;
+
+            if (fabs(dx) > fabs(dy)) {
+                spriteDirection = (dx > 0) ? 4 : 3; // Right or Left
+            }
+            else {
+                spriteDirection = (dy > 0) ? 1 : 2; // Up or Down
+            }
         }
     }
 
     // Keep the mouse within screen boundaries
     /*ClampToScreen();*/
+
+    if (isMoving) {
+        frameTimer += dt;
+        if (frameTimer >= frameDuration) {
+            currentFrame = (currentFrame + 1) % 4; // Cycle through loaded textures
+            frameTimer = 0.0f;
+        }
+    }
+    else {
+        currentFrame = 0; // Reset to idle frame
+    }
 }
 void mouse::chaseAway(float duration)
 {

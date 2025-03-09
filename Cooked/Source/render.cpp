@@ -311,9 +311,8 @@ void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE
         selectedTexture = stoveDirty;
     }
 
-    if (selectedTexture) {
-        AEGfxTextureSet(selectedTexture, 0, 0); // Ensure texture is properly set
-    }
+    
+    AEGfxTextureSet(selectedTexture, 0, 0); // Ensure texture is properly set
 
     AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
     AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
