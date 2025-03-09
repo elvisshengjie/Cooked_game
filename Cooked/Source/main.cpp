@@ -44,6 +44,7 @@ class CoreEngine
     AEGfxTexture* eggTex = nullptr;
     AEGfxTexture* riceTex = nullptr;
     AEGfxTexture* potatoTex = nullptr;
+    AEGfxTexture* boxTex = nullptr;
     AEGfxTexture* backgroundTex{ nullptr };
     AEGfxTexture* stoveTex{ nullptr };
     AEGfxTexture* stoveDirtyTex{ nullptr };
@@ -134,6 +135,7 @@ void CoreEngine::Init()
     eggTex = AEGfxTextureLoad("Assets/egg.png");
     riceTex = AEGfxTextureLoad("Assets/rice.png");
     potatoTex = AEGfxTextureLoad("Assets/potato.png");
+    boxTex = AEGfxTextureLoad("Assets/box.png");
     backgroundTex = AEGfxTextureLoad("Assets/cafe.jpg");
     stoveTex = AEGfxTextureLoad("Assets/Stove.png");
     stoveDirtyTex = AEGfxTextureLoad("Assets/Stovedirty.png");
@@ -312,8 +314,9 @@ void CoreEngine::Update()
 
             
             // Ingredient boxes (3 boxes at top?), Active recipes, etc.
+            
+            RenderIngredientbox(pMesh, boxTex);
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-            RenderIngredientbox(pMesh);
             RenderActiveRecipes(pMesh, recipeSystem);
             //mouse Device
             mouseDevicefun(pMesh);
@@ -369,18 +372,10 @@ void CoreEngine::Update()
 
             if (score >= 2 && gTimer.getRemainingTime() > 0)
             {
-                /*AEGfxSetTransparency(1.0f);
-                AEGfxSetColorToMultiply(1.0f,1.0f,1.0f,1.0f);
-                AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-                AEGfxSetBlendMode(AE_GFX_BM_NONE);*/
                 currentState = GameState::WIN_SCREEN;
             }
             if (gTimer.getRemainingTime() <= 0)
             {
-                /*AEGfxSetTransparency(1.0f);
-                AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-                AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-                AEGfxSetBlendMode(AE_GFX_BM_NONE);*/
                 currentState = GameState::LOSE_SCREEN;
             }
         }
