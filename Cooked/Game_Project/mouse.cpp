@@ -20,6 +20,7 @@ mouse mouse3(3300.0f, 0.0f);
 //-----------------------------------------------------------------
 void mouse::mousedraw(AEGfxVertexList* mesh) const
 {
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEMtx33 rectmouse;
     AEMtx33Scale(&rectmouse, width, height);
     AEMtx33TransApply(&rectmouse, &rectmouse, x, y);

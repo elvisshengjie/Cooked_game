@@ -100,15 +100,15 @@ std::vector<Rect> collisionBoxes = {
    
 };
 std::vector<Rect> objectcollision = {
-    { 150.0f, 200.0f,-750.0f , -300.0f },
-    { 200.0f, 100.0f,-50.0f, -200.0f },
-    { 80.0f, 80.0f,-200.0f ,175.0f },
-    { 80.0f, 80.0f,-49.0f ,175.0f },
-    { 80.0f, 80.0f,102.0f ,175.0f },
+    { 100.0f, 100.0f,-720.0f , -300.0f }, //Dustbin
+    { 200.0f, 100.0f,-50.0f, -200.0f }, // ?what is this one?
+    { 80.0f, 80.0f,-200.0f ,175.0f }, //Ing Box 1
+    { 80.0f, 80.0f,-49.0f ,175.0f }, //Ing Box 2?
+    { 80.0f, 80.0f,102.0f ,175.0f }, //Ing Box 3?
     { 330.0f, 200.0f, -350.0f, 340.0f },  // Recipe 1 Collision
-    { 330.0f, 200.0f,   -0.0f, 340.0f },  // Recipe 2 Collision
-    { 330.0f, 200.0f,  350.0f, 340.0f },  // Recipe 3 Collision
-    { 170.0f, 170.0f,200.0f, -350.0f }
+    { 330.0f, 200.0f, -0.0f, 340.0f },  // Recipe 2 Collision
+    { 330.0f, 200.0f, 350.0f, 340.0f },  // Recipe 3 Collision
+    { 170.0f, 170.0f, 200.0f, -350.0f } //mouse?
 };
 
 std::vector<Rect> recipeBoxes = {
@@ -126,6 +126,7 @@ Rect digipen_logo{ 1000, 455 * 1000 / 1525,0.0f,0.0f };
 Rect mouseDevice{ 170.0f, 170.0f,200.0f, -350.0f };
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
     AEMtx33 background;
     AEMtx33Scale(&background, background1.width, background1.height);
     AEMtx33TransApply(&background, &background, background1.x, background1.y);
@@ -157,6 +158,7 @@ void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture * tex) {
 }
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box)
 {
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEMtx33 collisionTransform;
     AEMtx33Scale(&collisionTransform, box.width, box.height);
     AEMtx33TransApply(&collisionTransform, &collisionTransform, box.x, box.y);
@@ -171,7 +173,6 @@ void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box)
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox)
 
 {
-
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 
     AEMtx33 highingredientboxTransform;
@@ -206,6 +207,7 @@ void RenderIngredientbox(AEGfxVertexList* mesh, AEGfxTexture* tex) {
 
 void mouseDevicefun(AEGfxVertexList* mesh)
 {
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEMtx33 mousedev;
     AEMtx33Scale(&mousedev, mouseDevice.width, mouseDevice.height);
     AEMtx33TransApply(&mousedev, &mousedev, mouseDevice.x, mouseDevice.y);
@@ -363,6 +365,7 @@ void RenderRecipeBox(AEGfxVertexList* mesh, const Recipe& recipe, float x, float
     // Move Boxes Higher
     //y += 50.0f;
     // Render recipe box background
+    AEGfxRenderMode(AE_GFX_RM_COLOR);
     AEMtx33 recipeTransform;
     AEMtx33Scale(&recipeTransform, 330.0f, 200.0f);
     AEMtx33TransApply(&recipeTransform, &recipeTransform, x, y);
@@ -448,7 +451,7 @@ void RenderMain_menu_background(AEGfxVertexList* mesh, AEGfxTexture* tex)
 
 void RenderMain_digipenLogo(AEGfxVertexList* mesh, AEGfxTexture* tex)
 {
-  
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
     AEMtx33 digipen_logo1;
     AEMtx33Scale(&digipen_logo1, digipen_logo.width, digipen_logo.height);
     AEMtx33TransApply(&digipen_logo1, &digipen_logo1, digipen_logo.x, digipen_logo.y);
@@ -467,7 +470,7 @@ void RenderMain_digipenLogo(AEGfxVertexList* mesh, AEGfxTexture* tex)
 void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge) {
     if (!qteGauge.isActive) { return; }
     else {
-
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         qteGauge.render(mesh);
         AEGfxPrint(FontID, "Press R !", -0.1f, -0.2f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
     }

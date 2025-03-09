@@ -187,7 +187,7 @@ void CoreEngine::Update()
             // Check menu selection
             if (mainMenu.IsStartGameSelected())
             {
-                gTimer.start(3);
+                gTimer.start(300);
                 currentState = GameState::GAME;
             }
             else if (mainMenu.IsQuitSelected())
