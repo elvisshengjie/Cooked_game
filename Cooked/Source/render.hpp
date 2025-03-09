@@ -55,7 +55,7 @@ void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem
 
 void displayScore(int);
 void displayTimer(double);
-void mouseDevicefun(AEGfxVertexList* mesh);
+void mouseDevicefun(AEGfxVertexList* mesh, AEGfxTexture*);
 //Font
 void InitFont();
 void DestroyFront();

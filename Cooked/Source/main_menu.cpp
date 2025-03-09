@@ -105,7 +105,9 @@ void MainMenu::Render(AEGfxVertexList* mesh) {
             AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES)*/;   
             DrawRect(btn.box, 0xFF0000FF, mesh);
             AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.075f, btn.y, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-          
+            //AEGfxPrint(FontID, btn.label.c_str(), btn.x - 0.075f, btn.y, 1.0f,
+            //    1.0f, 1.0f, 1.0f, 1.0f); // White text
+
 
     
             //DrawRect(btn.box, 0xFFFF00FF, mesh);
@@ -237,4 +239,79 @@ bool WinScreen::IsMenuSelected()
 bool WinScreen::IsQuitSelected()
 {
     return true;
+}
+
+PauseMenu::~PauseMenu() {}
+
+void PauseMenu::Init() {
+    // Use the same style as MainMenu for background and button layout.
+    float centerX{ 0.0f };
+    float startY{ 0.5f };
+    float buttonWidth{ 1.0f };
+    float buttonHeight{ 0.15f };
+    float spacing{ 0.2f };
+
+    buttons.clear();
+    buttons.push_back({ "Resume Game", centerX, startY, buttonWidth, buttonHeight, { 300.0f, 60.0f, centerX * 800.0f, startY * 450.0f } });
+    buttons.push_back({ "Quit Game", centerX, startY - spacing, buttonWidth, buttonHeight, { 300.0f, 60.0f, centerX * 800.0f, (startY - spacing) * 450.0f } });
+}
+
+int PauseMenu::Update() {
+    time += AEFrameRateControllerGetFrameTime();
+
+    // Allow keyboard navigation (optional)
+    if (AEInputCheckTriggered(AEVK_DOWN)) {
+        selectedOption = (selectedOption + 1) % buttons.size();
+    }
+    if (AEInputCheckTriggered(AEVK_UP)) {
+        selectedOption = (selectedOption - 1 + buttons.size()) % buttons.size();
+    }
+
+    // Process mouse click
+    if (AEInputCheckTriggered(AEVK_LBUTTON))
+    {
+        int rawX, rawY;
+        AEInputGetCursorPosition(&rawX, &rawY);
+        for (size_t i = 0; i < buttons.size(); i++)
+        {
+            if (IsPointInsideButton((float)rawX, (float)rawY, buttons[i]))
+            {
+                selectedOption = i;
+                // Immediately return if you want the click itself to ¡°activate¡± the button:
+                if (i == 0) // Resume
+                    return 1;
+                if (i == 1) // Quit
+                    return 2;
+            }
+        }
+    }
+
+
+    // Check selection based on the current option:
+    // Option 0: Resume Game, Option 1: Quit Game.
+    if (selectedOption == 0 && AEInputCheckTriggered(AEVK_RETURN)) {
+        return 1; // Resume game
+    }
+    if (selectedOption == 1 && AEInputCheckTriggered(AEVK_RETURN)) {
+        return 2; // Quit game
+    }
+
+    return 0;
+}
+
+void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* logo) {
+    // Render background and logo similar to MainMenu
+    RenderMain_menu_background(mesh, background);
+   /* RenderMain_digipenLogo(mesh, logo);*/
+
+    // Render each button
+    for (size_t i = 0; i < buttons.size(); i++) {
+        const Button& btn = buttons[i];
+        // Draw button rectangle
+        DrawRect(btn.box, 0xFF0000FF, mesh);
+        // Print button label
+        AEGfxPrint(FontID, btn.label.c_str(), btn.x - 0.075f, btn.y, 1.0f,
+            1.0f, 1.0f, 1.0f, 1.0f); // White text
+
+    }
 }

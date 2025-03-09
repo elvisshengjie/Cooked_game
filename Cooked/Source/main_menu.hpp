@@ -41,6 +41,7 @@ public:
 
     
     void Cleanup();
+    AEGfxTexture* GetLogoTexture() const { return DigipenLogo; }
 
     double GetTime() {
         return time;
@@ -80,4 +81,27 @@ public:
     bool IsRestartGameSelected();
     bool IsMenuSelected();
     bool IsQuitSelected();
+};
+
+class PauseMenu {
+public:
+    PauseMenu() = default;
+    ~PauseMenu();
+
+    // Initializes the pause menu resources and button layout.
+    void Init();
+    // Update the pause menu input.
+    // Returns 1 if "Resume Game" is selected,
+    //         2 if "Quit Game" is selected,
+    //         0 otherwise.
+    int Update();
+    // Renders the pause menu background and buttons.
+    void Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* logo);
+
+private:
+    std::vector<Button> buttons;
+    size_t selectedOption = 0;
+    bool resumeActivated = false;
+    bool quitActivated = false;
+    double time = 0;
 };
