@@ -517,6 +517,8 @@ void CoreEngine::Exit()
     if (paperTex)         AEGfxTextureUnload(paperTex);
     if (buttonTex)        AEGfxTextureUnload(buttonTex);
     if (recipeTex)        AEGfxTextureUnload(recipeTex);
+    if (boxTex)           AEGfxTextureUnload(boxTex);
+    if (deviceTex)        AEGfxTextureUnload(deviceTex);
 
     for (size_t x{}; x < playerIdle.size(); ++x) {
         if (playerIdle[x])       AEGfxTextureUnload(playerIdle[x]);
