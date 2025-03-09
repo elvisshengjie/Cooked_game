@@ -97,7 +97,7 @@ public:
     //         0 otherwise.
     int Update();
     // Renders the pause menu background and buttons.
-    void Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* logo, AEGfxTexture* button);
+    void Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* button);
 
 private:
     std::vector<Button> buttons;
