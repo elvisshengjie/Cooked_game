@@ -56,6 +56,7 @@ class CoreEngine
     // Systems
     RecipeSystem recipeSystem;
    MainMenu     mainMenu;
+   PauseMenu    pauseMenu;
 
     QTE          qteGauge;
     Stove        Wok;
@@ -68,6 +69,7 @@ public:
     void Init();
     void Update();
     void Exit();
+
 };
 
 // ------------------------------------------------------------
@@ -90,6 +92,7 @@ void CoreEngine::Init()
     mainMenu.Init();
     winScreen.Init();
     loseScreen.Init();
+    pauseMenu.Init();
 
     // Start the timer
 
@@ -252,7 +255,25 @@ void CoreEngine::Update()
             loseScreen.Render(pMesh, backgroundTex, paperTex, "You Lose :(");
         }
         break;
+        case GameState::PAUSE_MENU:
+        {
+            // Update and render the pause menu
+            int result = pauseMenu.Update();
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            pauseMenu.Render(pMesh, backgroundTex, mainMenu.GetLogoTexture()); // Reuse MainMenu logo if desired
 
+            // If the user clicks "Resume Game", return to gameplay.
+            if (result == 1)
+            {
+                currentState = GameState::GAME;
+            }
+            // If "Quit Game" is selected, exit the application.
+            else if (result == 2)
+            {
+                gGameRunning = false;
+            }
+        }
+        break;
         // ------------------------------
         // GAME
         // ------------------------------
@@ -274,6 +295,12 @@ void CoreEngine::Update()
             mouse2.mouseMove(150.0f);
             mouse3.mouseMove(170.0f);
             // 2. Render the game world
+            // Check for pause input (R key)
+            if (AEInputCheckTriggered(AEVK_R))
+            {
+                currentState = GameState::PAUSE_MENU;
+                break; // exit GAME state update immediately
+            }
             // Background / Floor
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             Renderbackground(pMesh, bTex);
@@ -383,6 +410,8 @@ void CoreEngine::Update()
             }
         }
         break;
+
+
         } // End of switch
 
         // --------------------------------
