@@ -185,7 +185,7 @@ void CoreEngine::Update()
             // Check menu selection
             if (mainMenu.IsStartGameSelected())
             {
-                gTimer.start(300);
+                gTimer.start(3);
                 currentState = GameState::GAME;
             }
             else if (mainMenu.IsQuitSelected())
@@ -232,6 +232,7 @@ void CoreEngine::Update()
             // Check menu selection
             if (check == 1)
             {
+                gTimer.start(300);
                 currentState = GameState::GAME;
             }
             else if (check == 2)
@@ -401,7 +402,7 @@ void CoreEngine::Exit()
     mainMenu.Cleanup();
     DestroyFront();
     // Free memory
-    if (backgroundTex) AEGfxTextureUnload(backgroundTex);
+    if (backgroundTex)    AEGfxTextureUnload(backgroundTex);
     if (pMesh)            AEGfxMeshFree(pMesh);
     if (IngredientMesh)   AEGfxMeshFree(IngredientMesh);
     if (pStoveMesh)       AEGfxMeshFree(pStoveMesh);

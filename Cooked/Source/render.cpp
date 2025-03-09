@@ -29,9 +29,14 @@ void DrawRect(Rect rect, unsigned int color, AEGfxVertexList* pMesh)
     float b = ((color >> 8) & 0xFF) / 255.0f;  // Blue
     float a = (color & 0xFF) / 255.0f;         // Alpha
 
-    //reset color
-    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+    AEGfxSetColorToMultiply(1.0f,1.0f,1.0f, 1.0f);
+    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f,0.0f);
+
+    AEGfxSetColorToMultiply(r, g, b, a);
+
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+    AEGfxSetTransparency(a);
 
 
     // Transform matrix for positioning the rectangle
@@ -40,14 +45,9 @@ void DrawRect(Rect rect, unsigned int color, AEGfxVertexList* pMesh)
     AEMtx33TransApply(&transform, &transform, rect.x, rect.y);
     AEGfxSetTransform(transform.m);
 
-    AEGfxSetColorToMultiply(r, g, b, a);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    AEGfxSetTransparency(a);
-    AEGfxSetTransform(transform.m);
-
     // Draw the rectangle using a built-in mesh or custom vertex data
     AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
-    printf("Current color: 0x%X\n", color);
+    //printf("Current color: 0x%X\n", color);
 }
 
 //draw overload for texture :>
@@ -107,7 +107,7 @@ std::vector<Rect> objectcollision = {
     { 80.0f, 80.0f,102.0f ,175.0f },
     { 330.0f, 200.0f, -350.0f, 340.0f },  // Recipe 1 Collision
     { 330.0f, 200.0f,   -0.0f, 340.0f },  // Recipe 2 Collision
-    { 330.0f, 200.0f,  350.0f, 340.0f },// Recipe 3 Collision
+    { 330.0f, 200.0f,  350.0f, 340.0f },  // Recipe 3 Collision
     { 170.0f, 170.0f,200.0f, -350.0f }
 };
 
@@ -477,9 +477,9 @@ void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge) {
 }
 
 
-void displayScore(int score)
+void displayScore(int Score)
 {
-    std::string scoreStr = std::to_string(score);
+    std::string scoreStr = std::to_string(Score);
     AEGfxPrint(FontID, scoreStr.c_str(), 0.8f, 0.6f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 void displayTimer(double gTimer)

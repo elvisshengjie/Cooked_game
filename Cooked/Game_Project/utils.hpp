@@ -48,18 +48,20 @@ public:
 
 	Timer cookingTimer{};
 
-	bool isCooking;
+	bool isCooking=false;
+
+	bool isCleaning = false;
+
+	bool isDirty = false;
+
+	bool recipeMatched = false;
 
 	float x{ -50.0f };
 	float y = { -200.0f };
 	float width = { 200.0f };
 	float height = { 100.0f };
 
-	bool isCleaning = false;
 
-	bool isDirty = false;
-
-	bool recipeMatched{};
 public:
 
 	bool putIngredient(const std::string& ingredient);
