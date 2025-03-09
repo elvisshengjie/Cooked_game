@@ -265,8 +265,11 @@ void CoreEngine::Update()
             pauseMenu.Render(pMesh, backgroundTex, mainMenu.GetLogoTexture()); // Reuse MainMenu logo if desired
 
             // If the user clicks "Resume Game", return to gameplay.
-            if (result == 1)
+            if (result == 1) // "Resume Game"
             {
+                // Unpause the timer here
+                gTimer.pauseresume(); // This sets pauseTimer = false and recalculates startTime
+
                 currentState = GameState::GAME;
             }
             // If "Quit Game" is selected, exit the application.
@@ -300,6 +303,9 @@ void CoreEngine::Update()
             // Check for pause input (R key)
             if (AEInputCheckTriggered(AEVK_R))
             {
+                // Pause the timer here
+                gTimer.pauseresume(); // This sets pauseTimer = true internally
+
                 currentState = GameState::PAUSE_MENU;
                 break; // exit GAME state update immediately
             }
