@@ -95,8 +95,7 @@ std::vector<Rect> collisionBoxes = {
     {100.0f, 100.0f, -200.0f, 175.0f},
     {100.0f,100.0f, -49.0f, 175.0f},
     { 100.0f, 100.0f, 102.0f, 175.0f },
-    { 180.0f, 180.0f,200.0f, -350.0f }
-
+    { 100.0f, 140.0f, 200.0f, -365.0f }
    
 };
 std::vector<Rect> objectcollision = {
@@ -108,7 +107,7 @@ std::vector<Rect> objectcollision = {
     { 330.0f, 200.0f, -350.0f, 340.0f },  // Recipe 1 Collision
     { 330.0f, 200.0f, -0.0f, 340.0f },  // Recipe 2 Collision
     { 330.0f, 200.0f, 350.0f, 340.0f },  // Recipe 3 Collision
-    { 170.0f, 170.0f, 200.0f, -350.0f } //mouse?
+    { 90.0f, 110.0f, 200.0f, -350.0f } //mouse device
 };
 
 std::vector<Rect> recipeBoxes = {
@@ -193,23 +192,24 @@ void RenderIngredientbox(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     }
 }
 
-void mouseDevicefun(AEGfxVertexList* mesh)
+void mouseDevicefun(AEGfxVertexList* mesh, AEGfxTexture* tex)
 {
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEMtx33 mousedev;
-    AEMtx33Scale(&mousedev, mouseDevice.width, mouseDevice.height);
-    AEMtx33TransApply(&mousedev, &mousedev, mouseDevice.x, mouseDevice.y);
-    AEGfxSetTransform(mousedev.m);
+    DrawRect(mouseDevice, tex, mesh);
+    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    //AEMtx33 mousedev;
+    //AEMtx33Scale(&mousedev, mouseDevice.width, mouseDevice.height);
+    //AEMtx33TransApply(&mousedev, &mousedev, mouseDevice.x, mouseDevice.y);
+    //AEGfxSetTransform(mousedev.m);
 
-    // Example color settings
-    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-    AEGfxSetColorToAdd(0.0f, 1.0f, 1.0f, 0.0f);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    AEGfxSetBlendColor(1.0f, 0.0f, 1.0f, 1.0f);
-    AEGfxSetTransparency(1.0f);
+    //// Example color settings
+    //AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    //AEGfxSetColorToAdd(0.0f, 1.0f, 1.0f, 0.0f);
+    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    //AEGfxSetBlendColor(1.0f, 0.0f, 1.0f, 1.0f);
+    //AEGfxSetTransparency(1.0f);
 
-    // Draw the mesh for the mouse
-    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+    //// Draw the mesh for the mouse
+    //AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 
 void RenderIngredientsOnBoxes(
@@ -289,7 +289,7 @@ void RenderIngredientsOnBoxes(
 
 
 
-// Function to Render Stove with Red Color
+// Function to Render Stove
 void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE& qteGauge,
     AEGfxTexture* stoveTex, AEGfxTexture*stoveDirty , AEGfxTexture* stoveCook) {
         

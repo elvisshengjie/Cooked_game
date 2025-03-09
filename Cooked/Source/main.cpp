@@ -49,6 +49,7 @@ class CoreEngine
     AEGfxTexture* stoveTex{ nullptr };
     AEGfxTexture* stoveDirtyTex{ nullptr };
     AEGfxTexture* stoveCookTex{ nullptr };
+    AEGfxTexture* deviceTex{ nullptr };
     AEGfxTexture* paperTex{ nullptr };
     
 
@@ -140,6 +141,7 @@ void CoreEngine::Init()
     stoveTex = AEGfxTextureLoad("Assets/Stove.png");
     stoveDirtyTex = AEGfxTextureLoad("Assets/Stovedirty.png");
     stoveCookTex = AEGfxTextureLoad("Assets/StoveCook.png");
+    deviceTex = AEGfxTextureLoad("Assets/repellent.png");
     paperTex = AEGfxTextureLoad("Assets/paperUI.png");
 
     // 3. Create a mesh (IngredientMesh) for ingredient rectangles
@@ -320,7 +322,7 @@ void CoreEngine::Update()
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderActiveRecipes(pMesh, recipeSystem);
             //mouse Device
-            mouseDevicefun(pMesh);
+            mouseDevicefun(pMesh, deviceTex);
             // Render Stove & Player
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh,Wok, players1,qteGauge,stoveTex,stoveDirtyTex,stoveCookTex);
