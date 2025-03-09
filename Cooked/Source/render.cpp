@@ -119,7 +119,7 @@ std::vector<Rect> recipeBoxes = {
 
 
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
-Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
+Rect dustbin1{ 100.0f, 100.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
 Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
 Rect digipen_logo{ 1000, 455 * 1000 / 1525,0.0f,0.0f };
@@ -140,7 +140,7 @@ void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
 }
 
 void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture * tex) {
-    AEMtx33 dustbin;
+    /*AEMtx33 dustbin;
     AEMtx33Scale(&dustbin, dustbin1.width, dustbin1.height);
     AEMtx33TransApply(&dustbin, &dustbin, dustbin1.x, dustbin1.y);
     AEGfxSetTransform(dustbin.m);
@@ -151,7 +151,9 @@ void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture * tex) {
     AEGfxSetTransparency(1.0f);
     AEGfxTextureSet(tex, 0, 0);
     
-    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);*/
+
+    DrawRect(dustbin1, tex, mesh);
 }
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box)
 {
