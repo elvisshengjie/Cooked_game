@@ -53,6 +53,7 @@ class CoreEngine
     AEGfxTexture* deviceTex{ nullptr };
     AEGfxTexture* paperTex{ nullptr };
     AEGfxTexture* buttonTex{ nullptr };
+    AEGfxTexture* recipeTex{ nullptr };
 
     std::vector<AEGfxTexture*>playerIdle{nullptr, nullptr, nullptr, nullptr};
     std::vector<AEGfxTexture*>playerWalkUp{ nullptr, nullptr, nullptr, nullptr };
@@ -64,6 +65,8 @@ class CoreEngine
     std::vector<AEGfxTexture*>mouseDown {nullptr, nullptr, nullptr, nullptr };
     std::vector<AEGfxTexture*>mouseLeft{ nullptr, nullptr, nullptr, nullptr };
     std::vector<AEGfxTexture*>mouseRight{ nullptr, nullptr, nullptr, nullptr };
+
+    
     
 
     // Systems
@@ -160,6 +163,7 @@ void CoreEngine::Init()
     deviceTex = AEGfxTextureLoad("Assets/repellent.png");
     paperTex = AEGfxTextureLoad("Assets/paperUI.png");
     buttonTex = AEGfxTextureLoad("Assets/paperUIButton.png");
+    recipeTex = AEGfxTextureLoad("Assets/recipeUI.png");
 
     mouseUp[0] = AEGfxTextureLoad("Assets/mouse_walk_up-1.png");
     mouseUp[1] = AEGfxTextureLoad("Assets/mouse_walk_up-2.png");
@@ -206,6 +210,7 @@ void CoreEngine::Init()
     playerWalkRight[1] = AEGfxTextureLoad("Assets/player_walk_right-2.png");
     playerWalkRight[2] = AEGfxTextureLoad("Assets/player_walk_right-3.png");
     playerWalkRight[3] = AEGfxTextureLoad("Assets/player_walk_right-4.png");
+
 
     // 3. Create a mesh (IngredientMesh) for ingredient rectangles
     AEGfxMeshStart();
@@ -410,10 +415,9 @@ void CoreEngine::Update()
 
             
             // Ingredient boxes (3 boxes at top?), Active recipes, etc.
-            
             RenderIngredientbox(pMesh, boxTex);
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-            RenderActiveRecipes(pMesh, recipeSystem);
+            RenderActiveRecipes(pMesh, recipeTex, recipeSystem);
             //mouse Device
             mouseDevicefun(pMesh, deviceTex);
             // Render Stove & Player
@@ -512,6 +516,8 @@ void CoreEngine::Exit()
     if (stoveCookTex)     AEGfxTextureUnload(stoveCookTex);
     if (paperTex)         AEGfxTextureUnload(paperTex);
     if (buttonTex)        AEGfxTextureUnload(buttonTex);
+    if (recipeTex)        AEGfxTextureUnload(recipeTex);
+
     for (size_t x{}; x < playerIdle.size(); ++x) {
         if (playerIdle[x])       AEGfxTextureUnload(playerIdle[x]);
         if (playerWalkUp[x])     AEGfxTextureUnload(playerWalkUp[x]);
