@@ -12,7 +12,7 @@
 class player
 {
 public:
-	void playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2)const;
+	void playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2) const;
 	void playerMove(float speed);
 	bool playerCheckCollison(float x1, float y1, float width1, float height1)const;
 	void playerCheckCollisonobject(float x1, float y1, float width1, float height1);
@@ -49,6 +49,17 @@ private:
 	float Magnitude{};
 	int dashCounter{ 1 };
 	Ingredients Hand = EMPTY;
+
+	//animation
+	float frameTime = 0.1f;  // Time per frame
+	float frameTimer = 0.0f; // Tracks frame timing
+	int currentFrame = 0;    // Current animation frame
+	const int totalFrames = 4; // Number of frames in sprite sheet
+	bool isMoving = false;   // Flag for animation control
+
+public:
+	void playerdraw(AEGfxVertexList* mesh, AEGfxTexture* texture) const;
+	void updateAnimation(float dt);
 
 	Timer cooldown;
 	Timer cooldown2;

@@ -140,18 +140,6 @@ void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
 }
 
 void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture * tex) {
-    /*AEMtx33 dustbin;
-    AEMtx33Scale(&dustbin, dustbin1.width, dustbin1.height);
-    AEMtx33TransApply(&dustbin, &dustbin, dustbin1.x, dustbin1.y);
-    AEGfxSetTransform(dustbin.m);
-    
-    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-    AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    AEGfxSetTransparency(1.0f);
-    AEGfxTextureSet(tex, 0, 0);
-    
-    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);*/
 
     DrawRect(dustbin1, tex, mesh);
 }
@@ -242,11 +230,11 @@ void RenderIngredientsOnBoxes(
         if (ing == EMPTY)
             continue; // Skip rendering if no ingredient.
 
-        // Compute position & size for drawing.
+        // Compute position & size for drawing
         float posX = ingredient1_box.x + 151.0f * i;
-        float posY = ingredient1_box.y + 15.0f; // slight vertical offset.
-        float ingW = ingredient1_box.width + 20.0f;
-        float ingH = ingredient1_box.height + 20.0f;
+        float posY = ingredient1_box.y + 25.0f; // slight vertical offset.
+        float ingW = ingredient1_box.width - 40.0f;
+        float ingH = ingredient1_box.height - 40.0f;
 
         // Setup transformation matrix.
         AEMtx33 ingredientTransform;
