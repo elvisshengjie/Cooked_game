@@ -84,9 +84,9 @@ void DestroyFront() {
     AEGfxDestroyFont(FontID);
 }
 std::vector<Rect> highingredientBoxes = {
-    {90.0f, 90.0f,-200.0f ,175.0f},
-    {90.0f,90.0f, -49.0f, 175.0f},
-    {90.0f, 90.0f, 102.0f, 175.0f },
+    {100.0f, 100.0f,-200.0f ,175.0f},
+    {100.0f,100.0f, -49.0f, 175.0f},
+    {100.0f, 100.0f, 102.0f, 175.0f },
     { 210.0f, 210.0f,200.0f, -400.0f },
     { 190.0f, 190.0f,200.0f, -350.0f }
     
@@ -102,9 +102,9 @@ std::vector<Rect> collisionBoxes = {
 std::vector<Rect> objectcollision = {
     { 100.0f, 100.0f,-720.0f , -300.0f }, //Dustbin
     { 200.0f, 100.0f,-50.0f, -200.0f }, // ?what is this one?
-    { 80.0f, 80.0f,-200.0f ,175.0f }, //Ing Box 1
-    { 80.0f, 80.0f,-49.0f ,175.0f }, //Ing Box 2?
-    { 80.0f, 80.0f,102.0f ,175.0f }, //Ing Box 3?
+    { 100.0f, 100.0f,-200.0f ,175.0f }, //Ing Box 1
+    { 100.0f, 100.0f,-49.0f ,175.0f }, //Ing Box 2?
+    { 100.0f, 100.0f,102.0f ,175.0f }, //Ing Box 3?
     { 330.0f, 200.0f, -350.0f, 340.0f },  // Recipe 1 Collision
     { 330.0f, 200.0f, -0.0f, 340.0f },  // Recipe 2 Collision
     { 330.0f, 200.0f, 350.0f, 340.0f },  // Recipe 3 Collision
@@ -120,7 +120,7 @@ std::vector<Rect> recipeBoxes = {
 
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
 Rect dustbin1{ 100.0f, 100.0f,-720.0f , -300.0f };
-Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
+Rect ingredient1_box{ 100.0f, 100.0f,-200.0f ,175.0f };
 Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
 Rect digipen_logo{ 1000, 455 * 1000 / 1525,0.0f,0.0f };
 Rect mouseDevice{ 170.0f, 170.0f,200.0f, -350.0f };
