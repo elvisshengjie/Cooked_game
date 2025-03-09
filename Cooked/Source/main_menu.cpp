@@ -302,7 +302,7 @@ int PauseMenu::Update() {
     return 0;
 }
 
-void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* logo, AEGfxTexture* button) {
+void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* button) {
     // Render background and logo similar to MainMenu
     RenderMain_menu_background(mesh, background);
    /* RenderMain_digipenLogo(mesh, logo);*/
