@@ -325,7 +325,7 @@ void CoreEngine::Update()
             // Update and render the pause menu
             int result = pauseMenu.Update();
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-            pauseMenu.Render(pMesh, backgroundTex, mainMenu.GetLogoTexture()); // Reuse MainMenu logo if desired
+            pauseMenu.Render(pMesh, backgroundTex, mainMenu.GetLogoTexture(),buttonTex); // Reuse MainMenu logo if desired
 
             // If the user clicks "Resume Game", return to gameplay.
             if (result == 1) // "Resume Game"

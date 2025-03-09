@@ -302,7 +302,7 @@ int PauseMenu::Update() {
     return 0;
 }
 
-void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* logo) {
+void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* logo, AEGfxTexture* button) {
     // Render background and logo similar to MainMenu
     RenderMain_menu_background(mesh, background);
    /* RenderMain_digipenLogo(mesh, logo);*/
@@ -311,7 +311,7 @@ void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTex
     for (size_t i = 0; i < buttons.size(); i++) {
         const Button& btn = buttons[i];
         // Draw button rectangle
-        DrawRect(btn.box, 0xFF0000FF, mesh);
+        DrawRect(btn.box, button, mesh);
         // Print button label
         AEGfxPrint(FontID, btn.label.c_str(), btn.x - 0.075f, btn.y, 1.0f,
             1.0f, 1.0f, 1.0f, 1.0f); // White text
