@@ -195,21 +195,6 @@ void RenderIngredientbox(AEGfxVertexList* mesh, AEGfxTexture* tex) {
 void mouseDevicefun(AEGfxVertexList* mesh, AEGfxTexture* tex)
 {
     DrawRect(mouseDevice, tex, mesh);
-    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    //AEMtx33 mousedev;
-    //AEMtx33Scale(&mousedev, mouseDevice.width, mouseDevice.height);
-    //AEMtx33TransApply(&mousedev, &mousedev, mouseDevice.x, mouseDevice.y);
-    //AEGfxSetTransform(mousedev.m);
-
-    //// Example color settings
-    //AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-    //AEGfxSetColorToAdd(0.0f, 1.0f, 1.0f, 0.0f);
-    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    //AEGfxSetBlendColor(1.0f, 0.0f, 1.0f, 1.0f);
-    //AEGfxSetTransparency(1.0f);
-
-    //// Draw the mesh for the mouse
-    //AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 
 void RenderIngredientsOnBoxes(
@@ -234,7 +219,7 @@ void RenderIngredientsOnBoxes(
 
         // Compute position & size for drawing
         float posX = ingredient1_box.x + 151.0f * i;
-        float posY = ingredient1_box.y + 25.0f; // slight vertical offset.
+        float posY = ingredient1_box.y + 35.0f; // slight vertical offset.
         float ingW = ingredient1_box.width - 40.0f;
         float ingH = ingredient1_box.height - 40.0f;
 
@@ -347,29 +332,19 @@ void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE
 
 }
 
-void RenderRecipeBox(AEGfxVertexList* mesh, const Recipe& recipe, float x, float y)
+void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& recipe, float x, float y)
 {
 
-    // Move Boxes Higher
-    //y += 50.0f;
-    // Render recipe box background
-    AEGfxRenderMode(AE_GFX_RM_COLOR);
-    AEMtx33 recipeTransform;
-    AEMtx33Scale(&recipeTransform, 330.0f, 200.0f);
-    AEMtx33TransApply(&recipeTransform, &recipeTransform, x, y);
-    AEGfxSetTransform(recipeTransform.m);
-
-    AEGfxSetColorToMultiply(0.9f, 0.9f, 0.9f, 1.0f);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+    Rect recipeBox{ 330.0f, 200.0f, x, y };
+    DrawRect(recipeBox, tex, mesh);
 
     // Print Recipe Name
     if (FontID < 0) return;
 
     // Adjust text alignment for wider box
-    float textX = (x - 160.0f) / 800.0f;  // Left-align for wider box
-    float nameY = (y + 50.0f) / 450.0f;   // Position recipe name higher
-    float ingYStart = y / 450.0f; // Ingredients start slightly lower
+    float textX = (x - 110.0f) / 800.0f;  // Left-align for wider box
+    float nameY = (y + 30.0f) / 450.0f;   // Position recipe name higher
+    float ingYStart = (y-30.0f) / 450.0f; // Ingredients start slightly lower
 
     float nameScale = 0.85f;  // Slightly larger for better readability
     float ingScale = 0.75f;   // Maintain clarity for ingredients
@@ -409,14 +384,14 @@ void RenderRecipeBox(AEGfxVertexList* mesh, const Recipe& recipe, float x, float
     }
 }
 
-void RenderActiveRecipes(AEGfxVertexList* mesh,const RecipeSystem& recipeSystem)
+void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture* tex, const RecipeSystem& recipeSystem)
 {
     const std::vector<Recipe>& activeRecipes = recipeSystem.getActiveRecipes();
 
     for (size_t i = 0; i < activeRecipes.size(); i++)
     {
         if (i >= recipeBoxes.size()) break; // Prevent overflow
-        RenderRecipeBox(mesh, activeRecipes[i], recipeBoxes[i].x, recipeBoxes[i].y);
+        RenderRecipeBox(mesh, tex, activeRecipes[i], recipeBoxes[i].x, recipeBoxes[i].y);
     }
 }
 

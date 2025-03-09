@@ -49,9 +49,9 @@ void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box);
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox);
 void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge);
 
-void RenderRecipeBox(AEGfxVertexList* mesh , const Recipe& recipe, float x, float y);
+void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture*, const Recipe& recipe, float x, float y);
 
-void RenderActiveRecipes(AEGfxVertexList* mesh, const RecipeSystem& recipeSystem);
+void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture*, const RecipeSystem& recipeSystem);
 
 void displayScore(int);
 void displayTimer(double);
