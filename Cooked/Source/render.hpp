@@ -43,7 +43,7 @@ void RenderMain_digipenLogo(AEGfxVertexList* mesh, AEGfxTexture* tex);
 //void Renderegg(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex);
 void RenderDustbin(AEGfxVertexList* mesh, AEGfxTexture* tex);
-void RenderIngredientbox(AEGfxVertexList* mesh);
+void RenderIngredientbox(AEGfxVertexList* mesh, AEGfxTexture*);
 void RenderStove(AEGfxVertexList* mesh,Stove& stove, player& Player, const QTE& qteGauge, AEGfxTexture* stoveTex, AEGfxTexture* stoveDirty, AEGfxTexture* stoveCook);
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box);
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox);

@@ -119,7 +119,7 @@ std::vector<Rect> recipeBoxes = {
 
 
 Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
-Rect dustbin1{ 150.0f, 200.0f,-720.0f , -300.0f };
+Rect dustbin1{ 100.0f, 100.0f,-720.0f , -300.0f };
 Rect ingredient1_box{ 80.0f, 80.0f,-200.0f ,175.0f };
 Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
 Rect digipen_logo{ 1000, 455 * 1000 / 1525,0.0f,0.0f };
@@ -140,7 +140,7 @@ void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
 }
 
 void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture * tex) {
-    AEMtx33 dustbin;
+    /*AEMtx33 dustbin;
     AEMtx33Scale(&dustbin, dustbin1.width, dustbin1.height);
     AEMtx33TransApply(&dustbin, &dustbin, dustbin1.x, dustbin1.y);
     AEGfxSetTransform(dustbin.m);
@@ -151,7 +151,9 @@ void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture * tex) {
     AEGfxSetTransparency(1.0f);
     AEGfxTextureSet(tex, 0, 0);
     
-    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+    AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);*/
+
+    DrawRect(dustbin1, tex, mesh);
 }
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box)
 {
@@ -185,18 +187,19 @@ void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBo
 }
 
 // Function to Render Three Circles with White Boundaries
-void RenderIngredientbox(AEGfxVertexList* mesh) {
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+void RenderIngredientbox(AEGfxVertexList* mesh, AEGfxTexture* tex) {
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
     for (int i = 0; i < 3; i++) {
         AEMtx33 ingredientboxTransform;
         AEMtx33Scale(&ingredientboxTransform, ingredient1_box.width, ingredient1_box.height);
         AEMtx33TransApply(&ingredientboxTransform, &ingredientboxTransform, ingredient1_box.x + 151.0f * i, ingredient1_box.y);
         AEGfxSetTransform(ingredientboxTransform.m);
-        AEGfxSetColorToMultiply(1.0f, 0.0f, 0.0f, 1.0f);
-        AEGfxSetColorToAdd(1.0f, 0.0f + 1.0f * i,0.0f + 1.0f * (i-1), 1.0f);
+        AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+        AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
         AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-        AEGfxSetBlendColor(1.0f, 0.0f + 1.0f * i ,0.0f + 1.0f * (i-1), 1.0f);
         AEGfxSetTransparency(1.0f);
+        AEGfxTextureSet(tex, 0, 0);
+        AEGfxSetTransform(ingredientboxTransform.m);
         AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
     }
 }
@@ -241,9 +244,9 @@ void RenderIngredientsOnBoxes(
 
         // Compute position & size for drawing.
         float posX = ingredient1_box.x + 151.0f * i;
-        float posY = ingredient1_box.y + 10.0f; // slight vertical offset.
-        float ingW = ingredient1_box.width - 20.0f;
-        float ingH = ingredient1_box.height - 20.0f;
+        float posY = ingredient1_box.y + 15.0f; // slight vertical offset.
+        float ingW = ingredient1_box.width + 20.0f;
+        float ingH = ingredient1_box.height + 20.0f;
 
         // Setup transformation matrix.
         AEMtx33 ingredientTransform;
@@ -262,28 +265,22 @@ void RenderIngredientsOnBoxes(
         {
         case CHICKEN:
             AEGfxTextureSet(chickenTex, 0, 0);
-            // Optionally, you can tint it:
-            //AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
             
             break;
         case BEEF:
             AEGfxTextureSet(beefTex, 0, 0);
-            //AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
             
             break;
         case CHEESE:
             AEGfxTextureSet(cheeseTex, 0, 0);
-            //AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
             
             break;
         case EGG:
             AEGfxTextureSet(eggTex, 0, 0);
-            //AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
             
             break;
         case RICE:
             AEGfxTextureSet(riceTex, 0, 0);
-            //AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
            
             break;
         case POTATO:
