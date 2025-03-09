@@ -52,12 +52,7 @@ class CoreEngine
     AEGfxTexture* stoveCookTex{ nullptr };
     AEGfxTexture* deviceTex{ nullptr };
     AEGfxTexture* paperTex{ nullptr };
-
-    /*AEGfxTexture* playerIdle {nullptr };
-    AEGfxTexture* playerWalkUp{ nullptr  };
-    AEGfxTexture* playerWalkDown{ nullptr };
-    AEGfxTexture* playerWalkLeft{ nullptr  };
-    AEGfxTexture* playerWalkRight{ nullptr };*/
+    AEGfxTexture* buttonTex{ nullptr };
 
     std::vector<AEGfxTexture*>playerIdle{nullptr, nullptr, nullptr, nullptr};
     std::vector<AEGfxTexture*>playerWalkUp{ nullptr, nullptr, nullptr, nullptr };
@@ -164,12 +159,7 @@ void CoreEngine::Init()
     stoveCookTex = AEGfxTextureLoad("Assets/StoveCook.png");
     deviceTex = AEGfxTextureLoad("Assets/repellent.png");
     paperTex = AEGfxTextureLoad("Assets/paperUI.png");
-    /*playerIdle = AEGfxTextureLoad("Assets/player_idle.png");
-    playerWalkUp = AEGfxTextureLoad("Assets/player_walk_up.png");
-    playerWalkDown = AEGfxTextureLoad("Assets/player_walk_down.png");
-    playerWalkLeft = AEGfxTextureLoad("Assets/player_walk_left.png");
-    playerWalkRight = AEGfxTextureLoad("Assets/player_walk_right.png");*/
-
+    buttonTex = AEGfxTextureLoad("Assets/paperUIButton.png");
 
     mouseUp[0] = AEGfxTextureLoad("Assets/mouse_walk_up-1.png");
     mouseUp[1] = AEGfxTextureLoad("Assets/mouse_walk_up-2.png");
@@ -296,7 +286,7 @@ void CoreEngine::Update()
                 gGameRunning = false;
             }
             
-            winScreen.Render(pMesh, backgroundTex, paperTex, "You Win!");
+            winScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Win!");
             
         }
         break;
@@ -322,7 +312,7 @@ void CoreEngine::Update()
             }
 
            // AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-            loseScreen.Render(pMesh, backgroundTex, paperTex, "You Lose :(");
+            loseScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Lose :(");
         }
         break;
         case GameState::PAUSE_MENU:
@@ -476,7 +466,7 @@ void CoreEngine::Update()
             displayScore(score);
             displayTimer(gTimer.getRemainingTime());
 
-            if (score >= 2 && gTimer.getRemainingTime() > 0)
+            if (score >= 30 && gTimer.getRemainingTime() > 0)
             {
                 currentState = GameState::WIN_SCREEN;
             }
@@ -521,6 +511,7 @@ void CoreEngine::Exit()
     if (stoveDirtyTex)    AEGfxTextureUnload(stoveDirtyTex);
     if (stoveCookTex)     AEGfxTextureUnload(stoveCookTex);
     if (paperTex)         AEGfxTextureUnload(paperTex);
+    if (buttonTex)        AEGfxTextureUnload(buttonTex);
     for (size_t x{}; x < playerIdle.size(); ++x) {
         if (playerIdle[x])       AEGfxTextureUnload(playerIdle[x]);
         if (playerWalkUp[x])     AEGfxTextureUnload(playerWalkUp[x]);

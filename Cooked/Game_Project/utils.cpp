@@ -150,7 +150,7 @@ void QTE::update(float dt) {
 			movingRight = true;
 		}
 	}
-	if (AEInputCheckTriggered(AEVK_R)) {
+	if (AEInputCheckTriggered(AEVK_T)) {
 		isCompleted = true;
 
 		if (checkTarget()) {

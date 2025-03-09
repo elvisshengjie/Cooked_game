@@ -55,6 +55,7 @@ private:
     s8 FontID_main_menu = -1;
     AEGfxTexture* background = nullptr;
     AEGfxTexture* DigipenLogo = nullptr;
+    AEGfxTexture* button = nullptr;
     bool flag = false;
   
     // Flag set when the mouse click activates the "Start Game" button
@@ -76,7 +77,7 @@ public:
     ~WinScreen();
     void Init();
     int Update();
-    void Render(AEGfxVertexList*, AEGfxTexture*, AEGfxTexture*, const char* condition);
+    void Render(AEGfxVertexList*, AEGfxTexture*, AEGfxTexture*, AEGfxTexture*, const char* condition);
 
     bool IsRestartGameSelected();
     bool IsMenuSelected();

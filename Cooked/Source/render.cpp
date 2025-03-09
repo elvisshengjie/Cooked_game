@@ -459,7 +459,7 @@ void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge) {
     else {
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         qteGauge.render(mesh);
-        AEGfxPrint(FontID, "Press R !", -0.1f, -0.2f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, "Press T!", -0.1f, -0.2f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 }
 

@@ -16,6 +16,7 @@ MainMenu::~MainMenu() {}
 void MainMenu::Init() {
     background = AEGfxTextureLoad("Assets/cafe.jpg");
     DigipenLogo = AEGfxTextureLoad("Assets/DigiPen_Singapore_WEB_RED.png");
+    button = AEGfxTextureLoad("Assets/paperUIButton.png");
 
     assert(background && "Failed to load background texture!");
 
@@ -103,7 +104,7 @@ void MainMenu::Render(AEGfxVertexList* mesh) {
             AEGfxSetBlendColor(0.0f, 0.0f, 0.0f, 0.0f);
             AEGfxSetTransparency(1.0f);
             AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES)*/;   
-            DrawRect(btn.box, 0xFF0000FF, mesh);
+            DrawRect(btn.box, button, mesh);
             AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.075f, btn.y, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
             //AEGfxPrint(FontID, btn.label.c_str(), btn.x - 0.075f, btn.y, 1.0f,
             //    1.0f, 1.0f, 1.0f, 1.0f); // White text
@@ -136,7 +137,9 @@ bool MainMenu::IsQuitSelected() const {
 void MainMenu::Cleanup() {
     AEGfxTextureUnload(background);
     AEGfxTextureUnload(DigipenLogo);
+    AEGfxTextureUnload(button);
     AEGfxDestroyFont(FontID);
+
 }
 
 
@@ -199,7 +202,7 @@ int WinScreen::Update()
     }
     return 0;
 }
-void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex, AEGfxTexture* tex2, const char* condition)
+void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex, AEGfxTexture* tex2, AEGfxTexture* button, const char* condition)
 {
     AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
@@ -219,9 +222,9 @@ void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex, AEGfxTexture* t
     for (size_t i = 0; i < buttons.size(); i++) {
         const Button& btn = buttons[i];
         
-        DrawRect(btn.box, 0xFFFF00FF, mesh);
+        DrawRect(btn.box, button, mesh);
         //unsigned int color = (i == static_cast<size_t>(selected)) ? 0xFFFFFF00 : 0xFFFFFFFF;
-        AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.1f, btn.y, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.1f, btn.y-0.02f, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
 
     }
 
