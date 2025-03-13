@@ -292,7 +292,7 @@ void CoreEngine::Update()
             }
             
             winScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Win!");
-            
+            score = 0;
         }
         break;
 
@@ -318,6 +318,7 @@ void CoreEngine::Update()
 
            // AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             loseScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Lose :(");
+            score = 0;
         }
         break;
         case GameState::PAUSE_MENU:
