@@ -304,7 +304,7 @@ void player::playerDrop(Stove& stove) {
 				return;				
 				 // Player no longer holds the ingredient
 			}
-			else if (playerCheckCollison(-750.0f, -300.0f,150.0f, 200.0f))
+			else if (playerCheckCollison(-720.0f, -300.0f,100.0f, 100.0f))
 			{
 				std::cout << "Threw away ingredient: " << IngredientToString(Hand) << std::endl;
 				Hand = EMPTY;  // Ingredient is removed

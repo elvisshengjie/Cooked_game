@@ -313,13 +313,13 @@ void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE
 
 
     if (!stove.isCooking && stove.canCook(Player) && !qteGauge.isActive ) {
-        AEGfxPrint(FontID, "Press Q to Cook!", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, "Press Q to Cook!", -0.6f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     if (stove.isCooking) {
         std::string timerText = "Cooking: " + stove.getCookingRecipeName() +
             " (" + std::to_string((int)stove.remainingCookingTime()) + "s)";
-        AEGfxPrint(FontID, timerText.c_str(), -0.4f, -0.1f, 0.7f, 0.0f, 0.0f, 0.0f, 1.0f);        
+        AEGfxPrint(FontID, timerText.c_str(), -0.4f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);        
     }
     if (stove.isDirty && !stove.isCleaning) {
         AEGfxPrint(FontID, "Stove is dirty! Press C to clean", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
@@ -434,7 +434,7 @@ void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge) {
     else {
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         qteGauge.render(mesh);
-        AEGfxPrint(FontID, "Press T!", -0.1f, -0.2f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, "Press T!", -0.1f, 0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 }
 
