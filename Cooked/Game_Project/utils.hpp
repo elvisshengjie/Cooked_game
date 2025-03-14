@@ -109,7 +109,7 @@ private:
 
 		void reset();
 
-		void render(AEGfxVertexList* mesh)const;
+		void render(AEGfxVertexList* mesh , AEGfxTexture* BarTex , AEGfxTexture* targetTex , AEGfxTexture* sliderTex)const;
 
 		void start();
 

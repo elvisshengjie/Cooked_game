@@ -429,11 +429,11 @@ void RenderMain_digipenLogo(AEGfxVertexList* mesh, AEGfxTexture* tex)
 }
 
 
-void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge) {
+void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge , AEGfxTexture* barTex, AEGfxTexture* sliderTex, AEGfxTexture* targetTex) {
     if (!qteGauge.isActive) { return; }
     else {
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-        qteGauge.render(mesh);
+        qteGauge.render(mesh , barTex , sliderTex , targetTex);
         AEGfxPrint(FontID, "Press T!", -0.1f, 0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 }

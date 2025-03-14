@@ -94,6 +94,7 @@ double Stove::remainingCookingTime()
 }
 void Stove::update(RecipeSystem& recipeSystem) {
 	if (isCooking && cookingTimer.completed()) {
+		std::cout << "Cooking completed";
 		static std::random_device rd;
 		static std::mt19937 engine(rd());
 		std::uniform_int_distribution<int> distribution(1, 10); // valid indices: 1 to 10
@@ -165,19 +166,21 @@ bool QTE::checkTarget()const {
 	return (sliderPos >= targetZoneStart && sliderPos <= targetZoneEnd);
 }
 
-void QTE::render(AEGfxVertexList* mesh) const{
+void QTE::render(AEGfxVertexList* mesh , AEGfxTexture* barTex , AEGfxTexture* sliderTex , AEGfxTexture* targetTex) const{
 
 	if (!isActive) {
 		return;
 	}
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEMtx33 bgTransform, sliderTransform, targetTransform;
 
 	AEMtx33Scale(&bgTransform, w, h);
 	AEMtx33TransApply(&bgTransform, &bgTransform, x, y);
 	AEGfxSetTransform(bgTransform.m);
 	AEGfxSetColorToAdd(0.5f, 0.5f, 0.5f, 1.0f);
+	AEGfxTextureSet(barTex, 0, 0);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+	
 
 	float targetStartX = x - w / 2 + targetZoneStart * w;
 	float targetWidth = (targetZoneEnd - targetZoneStart) * w;
@@ -187,6 +190,7 @@ void QTE::render(AEGfxVertexList* mesh) const{
 	AEMtx33TransApply(&targetTransform, &targetTransform, targetStartX + targetWidth / 2, y);
 	AEGfxSetTransform(targetTransform.m);
 	AEGfxSetColorToAdd(0.0f, 1.0f, 0.0f, 1.0f);
+	AEGfxTextureSet(targetTex, 0, 0);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
 	float sliderX = x - w / 2 + sliderPos * w;
@@ -195,6 +199,7 @@ void QTE::render(AEGfxVertexList* mesh) const{
 	AEMtx33TransApply(&sliderTransform, &sliderTransform, sliderX, y);
 	AEGfxSetTransform(sliderTransform.m);
 	AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 1.0f);
+	AEGfxTextureSet(sliderTex, 0, 0);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 

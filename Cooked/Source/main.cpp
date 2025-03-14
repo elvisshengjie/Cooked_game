@@ -54,6 +54,11 @@ class CoreEngine
     AEGfxTexture* paperTex{ nullptr };
     AEGfxTexture* buttonTex{ nullptr };
     AEGfxTexture* recipeTex{ nullptr };
+    AEGfxTexture* barTex{ nullptr };
+    AEGfxTexture* sliderTex{ nullptr };
+    AEGfxTexture* targetTex{ nullptr };
+
+
 
     std::vector<AEGfxTexture*>playerIdle{nullptr, nullptr, nullptr, nullptr};
     std::vector<AEGfxTexture*>playerWalkUp{ nullptr, nullptr, nullptr, nullptr };
@@ -164,6 +169,10 @@ void CoreEngine::Init()
     paperTex = AEGfxTextureLoad("Assets/paperUI.png");
     buttonTex = AEGfxTextureLoad("Assets/paperUIButton.png");
     recipeTex = AEGfxTextureLoad("Assets/recipeUI.png");
+    barTex = AEGfxTextureLoad("Assets/paperUIButton.png");
+    sliderTex = AEGfxTextureLoad("Assets/red.png");
+    targetTex = AEGfxTextureLoad("Assets/red.png");
+
 
     mouseUp[0] = AEGfxTextureLoad("Assets/mouse_walk_up-1.png");
     mouseUp[1] = AEGfxTextureLoad("Assets/mouse_walk_up-2.png");
@@ -428,7 +437,7 @@ void CoreEngine::Update()
             mouse1.mousedraw(pMesh,mouseUp, mouseDown , mouseLeft, mouseRight);
             mouse2.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);
             mouse3.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);
-            RenderQTEGauge(pMesh, qteGauge);
+            RenderQTEGauge(pMesh, qteGauge , barTex, sliderTex ,targetTex);
 
             // Collision boxes for ingredients or special objects
             for (size_t i = 0; i < g_currentBoxIngredients.size(); i++)
@@ -520,6 +529,9 @@ void CoreEngine::Exit()
     if (recipeTex)        AEGfxTextureUnload(recipeTex);
     if (boxTex)           AEGfxTextureUnload(boxTex);
     if (deviceTex)        AEGfxTextureUnload(deviceTex);
+    if (barTex)           AEGfxTextureUnload(barTex);
+    if (sliderTex)        AEGfxTextureUnload(sliderTex);
+    if (targetTex)        AEGfxTextureUnload(targetTex);
 
     for (size_t x{}; x < playerIdle.size(); ++x) {
         if (playerIdle[x])       AEGfxTextureUnload(playerIdle[x]);
