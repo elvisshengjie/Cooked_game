@@ -301,6 +301,15 @@ void CoreEngine::Update()
             }
             
             winScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Win!");
+
+            //reinit
+            // reinitialize random box ingredients
+            for (int i = 0; i < 3; ++i)
+            {
+                g_currentBoxIngredients[i] = GetRandomIngredient();
+            }
+            //reinit player
+            players1.playerInit();
             score = 0;
         }
         break;
@@ -327,6 +336,14 @@ void CoreEngine::Update()
 
            // AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             loseScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Lose :(");
+            //reinit
+            // reinitialize random box ingredients
+            for (int i = 0; i < 3; ++i)
+            {
+                g_currentBoxIngredients[i] = GetRandomIngredient();
+            }
+            //reinit player
+            players1.playerInit();
             score = 0;
         }
         break;
