@@ -2,22 +2,46 @@
 #include <float.h>   // for FLT_MAX
 #include <cmath>     // for sqrtf
 
-#include "../Source/render.hpp"    // 
-
-
-
+#include "../Source/render.hpp"  // Adjust include paths if needed
 // #include "../Source/Ingredients.hpp"
 // #include "../Source/collison.hpp"
 
-// This is your global mouse object
+// Global mouse objects
 mouse mouse1(-2500.0f, 100.0f);
 mouse mouse2(2200.0f, 500.0f);
 mouse mouse3(3300.0f, 0.0f);
 
 //-----------------------------------------------------------------
+// init: Re-initializes the mouse’s position and internal states
+//-----------------------------------------------------------------
+void mouse::init(float startX, float startY)
+{
+    x = startX;
+    y = startY;
+
+    hasTarget = false;
+    isChased = false;
+    
+
+    randomDirX = 0.0f;
+    randomDirY = 0.0f;
+
+    isMoving = false;
+    currentFrame = 0;
+    frameTimer = 0.0f;
+
+    // The mouse is not holding anything
+    Hand = EMPTY;
+}
+
+//-----------------------------------------------------------------
 // mousedraw: Renders the mouse shape/texture
 //-----------------------------------------------------------------
-void mouse::mousedraw(AEGfxVertexList* mesh, std::vector<AEGfxTexture*>up, std::vector<AEGfxTexture*>down, std::vector<AEGfxTexture*>left, std::vector<AEGfxTexture*>right)
+void mouse::mousedraw(AEGfxVertexList* mesh,
+    std::vector<AEGfxTexture*> up,
+    std::vector<AEGfxTexture*> down,
+    std::vector<AEGfxTexture*> left,
+    std::vector<AEGfxTexture*> right)
 {
     AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
@@ -28,36 +52,33 @@ void mouse::mousedraw(AEGfxVertexList* mesh, std::vector<AEGfxTexture*>up, std::
     AEMtx33TransApply(&rectmouse, &rectmouse, x, y);
     AEGfxSetTransform(rectmouse.m);
 
-    if (isMoving) {
-        switch(spriteDirection)
+    // Choose the appropriate texture frame
+    if (isMoving)
+    {
+        switch (spriteDirection)
         {
-            case 1:
-                selectedTexture = up[currentFrame];
-                break;
-            case 2:
-                selectedTexture = down[currentFrame];
-                break;
-            case 3:
-                selectedTexture = left[currentFrame];
-                break;
-            case 4:
-                selectedTexture = right[currentFrame];
-                break;
+        case 1:
+            selectedTexture = up[currentFrame];
+            break;
+        case 2:
+            selectedTexture = down[currentFrame];
+            break;
+        case 3:
+            selectedTexture = left[currentFrame];
+            break;
+        case 4:
+            selectedTexture = right[currentFrame];
+            break;
         }
     }
-    else {
+    else
+    {
+        // Idle: pick the default frame from one direction 
         selectedTexture = up[currentFrame];
     }
 
-    //// Example color settings
-    //AEGfxSetColorToMultiply(0.0f, 0.0f, 0.5f, 0.5f);
-    //AEGfxSetColorToAdd(0.0f, 1.0f, 1.0f, 0.0f);
-    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    //AEGfxSetBlendColor(1.0f, 0.0f, 1.0f, 1.0f);
-    //AEGfxSetTransparency(1.0f);
+    // Apply the texture
     AEGfxTextureSet(selectedTexture, 0, 0);
-
-    // Draw the mesh for the mouse
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 
@@ -73,16 +94,16 @@ void mouse::mouseMove(float speed)
     {
         if (chaseTimer.completed())
         {
-            // Chase time over�end chase-away state.
+            // Chase time over; end chase-away state
             isChased = false;
         }
         else
         {
-            // Continue moving in the random direction.
+            // Continue moving in the random direction
             x += randomDirX * speed * dt;
             y += randomDirY * speed * dt;
             isMoving = true;
-            return; // Skip normal behavior.
+            return; // Skip normal behavior
         }
     }
 
@@ -93,9 +114,7 @@ void mouse::mouseMove(float speed)
         float chosenX = 0.0f;
         float chosenY = 0.0f;
 
-        // We assume there are 3 ingredient boxes, each offset by 151.0f from the first
-        // e.g. ingredientBoxRect at (ingredientBoxRect.x, ingredientBoxRect.y)
-        // The next 2 are at x + 151, x + 302, etc.
+        // We assume there are 3 ingredient boxes spaced out horizontally
         for (int i = 0; i < 3; ++i)
         {
             float ix = ingredientBoxRect.x + 151.0f * i;
@@ -128,57 +147,67 @@ void mouse::mouseMove(float speed)
         float dy = targetY - y;
         float distSqr = dx * dx + dy * dy;
 
-        // Check if we arrived (or are "close enough") to the target
-        float arriveRadius = 2.0f; // You can tweak this threshold
+        // Check if we're close enough to consider "arrived"
+        float arriveRadius = 2.0f;
         if (distSqr < arriveRadius * arriveRadius)
         {
-            // We consider we're at the ingredient, so drop the target
+            // We consider we're at the ingredient
             hasTarget = false;
         }
         else
         {
-            // Otherwise, normalize the direction and move
+            // Otherwise, normalize and move
             float dist = sqrtf(distSqr);
             dx /= dist;
             dy /= dist;
 
-            // Move the mouse
             x += dx * speed * dt;
             y += dy * speed * dt;
             isMoving = true;
 
-            if (fabs(dx) > fabs(dy)) {
+            // Update direction for sprite
+            if (fabs(dx) > fabs(dy))
+            {
                 spriteDirection = (dx > 0) ? 4 : 3; // Right or Left
             }
-            else {
+            else
+            {
                 spriteDirection = (dy > 0) ? 1 : 2; // Up or Down
             }
         }
     }
 
-    // Keep the mouse within screen boundaries
-    /*ClampToScreen();*/
+    // Keep the mouse within screen boundaries (optional)
+    // ClampToScreen();
 
-    if (isMoving) {
+    // Handle animation frames if moving
+    if (isMoving)
+    {
         frameTimer += dt;
-        if (frameTimer >= frameDuration) {
-            currentFrame = (currentFrame + 1) % 4; // Cycle through loaded textures
+        if (frameTimer >= frameDuration)
+        {
+            currentFrame = (currentFrame + 1) % 4; // Cycle 0..3
             frameTimer = 0.0f;
         }
     }
-    else {
-        currentFrame = 0; // Reset to idle frame
+    else
+    {
+        currentFrame = 0; // Idle frame
     }
 }
+
+//-----------------------------------------------------------------
+// chaseAway: Sets the mouse to run away randomly for 'duration' seconds
+//-----------------------------------------------------------------
 void mouse::chaseAway(float duration)
 {
     isChased = true;
-    chaseTimer.start(duration);  // Start the timer with the desired duration.
+    chaseTimer.start(duration);  // Start the timer
 
-    // Generate a random angle between 0 and 2*PI.
-    float angle = static_cast<float>(rand()) / RAND_MAX * 2 * 3.14159f;
-    randomDirX = cos(angle);
-    randomDirY = sin(angle);
+    // Generate a random angle between 0 and 2*PI
+    float angle = static_cast<float>(rand()) / RAND_MAX * 2.0f * 3.14159f;
+    randomDirX = cosf(angle);
+    randomDirY = sinf(angle);
 }
 
 //-----------------------------------------------------------------
@@ -186,6 +215,7 @@ void mouse::chaseAway(float duration)
 //-----------------------------------------------------------------
 bool mouse::mouseCheckCollison(float x1, float y1, float width1, float height1) const
 {
+    // This uses some collision-detect helper. Adjust as needed.
     return Colingredientbox1.collisonRect(x, y, width, height,
         x1, y1, width1, height1);
 }
@@ -200,13 +230,14 @@ void mouse::mouseCheckCollisonobject(float x1, float y1, float width1, float hei
 }
 
 //-----------------------------------------------------------------
-// ClampToScreen: ensures the mouse stays within boundaries
+// ClampToScreen: ensures the mouse stays within certain boundaries
 //-----------------------------------------------------------------
 void mouse::ClampToScreen()
 {
     const float halfWidth = width * 0.5f;
     const float halfHeight = height * 0.5f;
 
+    // Example screen boundaries
     const float screenLeft = -800.0f;
     const float screenRight = 800.0f;
     const float screenBottom = -450.0f;
@@ -214,18 +245,16 @@ void mouse::ClampToScreen()
 
     float mouseLeft = x - halfWidth;
     float mouseRight = x + halfWidth;
+    float mouseBottom = y - halfHeight;
+    float mouseTop = y + halfHeight;
 
     if (mouseLeft < screenLeft)
         x = screenLeft + halfWidth;
     else if (mouseRight >= screenRight)
         x = screenRight - halfWidth - 1.0f;
 
-    float mouseBottom = y - halfHeight;
-    float mouseTop = y + halfHeight;
-
     if (mouseBottom < screenBottom)
         y = screenBottom + halfHeight;
     else if (mouseTop >= screenTop)
         y = screenTop - halfHeight - 1.0f;
 }
-
