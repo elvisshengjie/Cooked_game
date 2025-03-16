@@ -318,6 +318,7 @@ void CoreEngine::Update()
             //reinit player
             players1.playerInit();
             score = 0;
+            Wok.clearWok();
             mouse1.init(-2500.0f, 100.0f);
             mouse2.init(2200.0f, 500.0f);
             mouse3.init(3300.0f, 0.0f);
@@ -355,6 +356,7 @@ void CoreEngine::Update()
             //reinit player
             players1.playerInit();
             score = 0;
+            Wok.clearWok();
             mouse1.init(-2500.0f, 100.0f);
             mouse2.init(2200.0f, 500.0f);
             mouse3.init(3300.0f, 0.0f);
