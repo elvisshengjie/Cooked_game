@@ -360,7 +360,7 @@ Credits::Credits() {
     // Get the window height in pixels (for example, 900) and use half of it (450)
     // if your main menu converts y by dividing by 450.
     screenHeight = static_cast<float>(AEGfxGetWindowHeight());
-    scrollPosition = 0.0f; // start at top (in pixel space)
+    scrollPosition = 200.0f; // start at top (in pixel space)
 }
 
 void Credits::Init() {
@@ -389,10 +389,12 @@ void Credits::Update() {
     // Update the scroll position in pixel space
     scrollPosition += static_cast<float>(delta) * sensitivity;
     // Clamp to prevent scrolling above the start (optional)
-    if (scrollPosition < 0.0f) {
-        scrollPosition = 0.0f;
+    if (scrollPosition > -200.0f) {
+        scrollPosition = -200.0f;
     }
-
+    if (scrollPosition < -400.0f) {
+        scrollPosition = -400.0f;
+    }
     // Add automatic scrolling for a better credits experience
     scrollPosition += 0.5f; // Adjust speed as needed
 }
@@ -402,24 +404,20 @@ void Credits::Render() {
     AEGfxTextureSet(NULL, 0.0f, 0.0f);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxSetBackgroundColor(0, 0, 0);
-   
 
-    float windowWidth = static_cast<float>(AEGfxGetWindowWidth());
-    // Convert scrollPosition (in pixels) to normalized space
-    float normY = scrollPosition / 450.0f;
 
     // IMPORTANT: Set blend mode for text rendering
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    float textX = -0.5f; 
+    // Convert scrollPosition (in pixels) to normalized space
+    float normY = -scrollPosition / 450.0f;
 
-    // Draw each line of credits without using auto
     for (std::vector<CreditLine>::const_iterator it = lines.begin(); it != lines.end(); ++it) {
         // Only draw if in the visible normalized range (-1.0 to 1.0)
         if (normY > -1.0f && normY < 1.0f) {
-            // Center text horizontally (windowWidth/2 converted to normalized coordinates)
-            float centerX = (windowWidth / 2.0f) / (windowWidth / 2.0f) - 1.0f;
-
+            // Since 0,0 is the center, we can directly use 0.0f for centered text
             // Text color white (1,1,1,1)
-            AEGfxPrint(FontID, it->text.c_str(), centerX, -normY, it->scale, 1, 1, 1, 1.0f);
+            AEGfxPrint(FontID, it->text.c_str(), textX, normY, it->scale, 1, 1, 1, 1.0f);
         }
         normY -= it->spacing / 450.0f;
     }
