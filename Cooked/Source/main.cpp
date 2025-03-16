@@ -17,6 +17,7 @@ enum class GameState {
     
     MAIN_MENU,
     GAME,
+    CREDITS,
     PAUSE_MENU,
     WIN_SCREEN,
     LOSE_SCREEN
@@ -269,6 +270,10 @@ void CoreEngine::Update()
                 gTimer.start(300);
                 currentState = GameState::GAME;
             }
+            else if (mainMenu.isCreditsSelected())
+            {
+                currentState = GameState::CREDITS;
+            }
             else if (mainMenu.IsQuitSelected())
             {
                 std::cout << "Out";
@@ -313,6 +318,10 @@ void CoreEngine::Update()
             score = 0;
         }
         break;
+        case GameState::CREDITS:
+        {
+            break;
+        }
 
         case GameState::LOSE_SCREEN:
         {

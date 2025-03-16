@@ -16,6 +16,20 @@ struct Button {
     Rect box;
 };
 
+
+class Credits {
+
+    void Init();
+
+    void Update();
+
+    void Render();
+
+   
+
+
+};
+
 // Helper: Check if a point is inside a button (using center coordinates)
 bool IsPointInsideButton(float px, float py, const Button& btn);
 
@@ -35,6 +49,8 @@ public:
 
    
     bool IsStartGameSelected() const;
+
+    bool isCreditsSelected() const;
 
    
     bool IsQuitSelected() const;
@@ -60,6 +76,7 @@ private:
   
     // Flag set when the mouse click activates the "Start Game" button
     bool m_StartGameActivated{ false };
+    bool m_StartGameActivated2{ false };
     bool m_StartGameActivated4 {false};
 };
 

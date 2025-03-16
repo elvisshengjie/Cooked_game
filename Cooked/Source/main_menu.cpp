@@ -73,6 +73,9 @@ void MainMenu::Update() {
                     if (i == 0) {
                         m_StartGameActivated = true;
                     }
+                    else if (i == 2) {
+                        m_StartGameActivated2 = true;
+                    }
                     else if (i == 4) {
                         m_StartGameActivated4 = true;
                     }
@@ -126,6 +129,11 @@ void MainMenu::Render(AEGfxVertexList* mesh) {
 
 bool MainMenu::IsStartGameSelected() const {
     return ((m_StartGameActivated ) );
+}
+
+bool MainMenu::isCreditsSelected() const
+{
+    return((m_StartGameActivated2));
 }
 
 
@@ -317,4 +325,19 @@ void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTex
             1.0f, 1.0f, 1.0f, 1.0f); // White text
 
     }
+}
+
+void Credits::Init()
+{
+
+}
+
+void Credits::Update()
+{
+
+    //All Content Copyright 2025 DigiPen Institute of Technology Singapore. All Rights Reserved
+}
+
+void Credits::Render()
+{
 }
