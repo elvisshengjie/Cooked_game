@@ -56,6 +56,8 @@ public:
 
 	bool recipeMatched = false;
 
+	bool isPaused = false;
+
 	float x{ -50.0f };
 	float y = { -200.0f };
 	float width = { 200.0f };
@@ -121,4 +123,4 @@ private:
 
 };
 extern int score;
-int updateScore(bool);
+int updateScore(bool, size_t);

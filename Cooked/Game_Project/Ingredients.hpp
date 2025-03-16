@@ -56,21 +56,31 @@ public:
 	Recipe(std::string recipeName, std::vector<std::string> ingredientsList);
 
 	bool matchesWok(const std::vector<std::string>& wokIngredients) const;
+
+	Timer recipeTimer;  // Timer to refresh recipes
+
+
 };
 
 class RecipeSystem {
 private:
 	std::vector<Recipe> allRecipes;  // Store all possible recipes
 	std::vector<Recipe> activeRecipes; // Store 3 currently active recipes
-	Timer recipeTimer;  // Timer to refresh recipes
 
 public:
+
+	bool isPaused = false;
+
 	RecipeSystem();
 
 	void update();
-	const std::vector<Recipe>& getActiveRecipes() const;
+
+	const std::vector<Recipe>& getActiveRecipes()const ;
+
 	Recipe generateRandomRecipe();
+
 	void replaceRecipe(const Recipe& completedRecipe);
 
+	void pauseRecipeTimers();
 };
 

@@ -1,7 +1,7 @@
 #include "mouse.hpp"
 #include <float.h>   // for FLT_MAX
 #include <cmath>     // for sqrtf
-#include "../Source/render.hpp"    // if you have a render header with ingredient1_box
+#include "../Source/render.hpp"    // if you have a render header with ingredientBoxRect
 // #include "../Source/Ingredients.hpp"
 // #include "../Source/collison.hpp"
 
@@ -69,7 +69,7 @@ void mouse::mouseMove(float speed)
     {
         if (chaseTimer.completed())
         {
-            // Chase time over—end chase-away state.
+            // Chase time overï¿½end chase-away state.
             isChased = false;
         }
         else
@@ -90,12 +90,12 @@ void mouse::mouseMove(float speed)
         float chosenY = 0.0f;
 
         // We assume there are 3 ingredient boxes, each offset by 151.0f from the first
-        // e.g. ingredient1_box at (ingredient1_box.x, ingredient1_box.y)
+        // e.g. ingredientBoxRect at (ingredientBoxRect.x, ingredientBoxRect.y)
         // The next 2 are at x + 151, x + 302, etc.
         for (int i = 0; i < 3; ++i)
         {
-            float ix = ingredient1_box.x + 151.0f * i;
-            float iy = ingredient1_box.y;
+            float ix = ingredientBoxRect.x + 151.0f * i;
+            float iy = ingredientBoxRect.y;
 
             // Distance from the mouse to this ingredient
             float dx = ix - x;

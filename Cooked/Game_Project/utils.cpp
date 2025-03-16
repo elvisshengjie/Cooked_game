@@ -6,6 +6,7 @@
 #include <iostream>
 
 int score{};
+double baseTime{ 2.0 };
 void Timer::start(double duration) {
 	countdownDuration = duration;
 	startTime = AEGetTime(nullptr);
@@ -61,10 +62,10 @@ bool Stove::canCook(player& player) const
 
 void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 {
-	if (isCooking || stoveItems.size() < 2 || isDirty)return;
-	isCooking = true;
+	if (isCooking || stoveItems.size() < 2 || isDirty) return;
 
-	double cookingTime = 2.0 + (1 * stoveItems.size());
+	isCooking = true;
+	double cookingTime = baseTime + stoveItems.size();
 
 	cookingTimer.start(cookingTime);
 
@@ -108,8 +109,9 @@ void Stove::update(RecipeSystem& recipeSystem) {
 				break;	
 			}
 		}
+		
+		score = updateScore(recipeMatched, stoveItems.size());
 		clearWok();
-		score = updateScore(recipeMatched);
 	}
 	if (isDirty) {
 		if (isCleaning && cookingTimer.getRemainingTime() <= 0) {
@@ -151,7 +153,7 @@ void QTE::update(float dt) {
 			movingRight = true;
 		}
 	}
-	if (AEInputCheckTriggered(AEVK_T)) {
+	if (AEInputCheckTriggered(AEVK_R)) {
 		isCompleted = true;
 
 		if (checkTarget()) {
@@ -228,15 +230,16 @@ void QTE::start() {
 	targetZoneEnd = targetZoneStart + zoneWidth;
 }
 
-int updateScore(bool recipeMatched)
+int updateScore(bool recipeMatched, size_t stoveItems)
 {
+	int multiplier{ 2 };
 	if (recipeMatched)
 	{
-		score += 5;
+		score += static_cast<int>(stoveItems) * multiplier;
 	}
 	else
 	{
-		score -= 2;
+		score -= 3;
 	}
 	return score;
 }

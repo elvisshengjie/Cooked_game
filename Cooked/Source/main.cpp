@@ -58,6 +58,10 @@ class CoreEngine
     AEGfxTexture* barTex{ nullptr };
     AEGfxTexture* sliderTex{ nullptr };
     AEGfxTexture* targetTex{ nullptr };
+    AEGfxTexture* htpTex{ nullptr };
+    AEGfxTexture* htpButtonTex{ nullptr };
+
+
 
 
 
@@ -173,6 +177,8 @@ void CoreEngine::Init()
     barTex = AEGfxTextureLoad("Assets/paperUIButton.png");
     sliderTex = AEGfxTextureLoad("Assets/red.png");
     targetTex = AEGfxTextureLoad("Assets/red.png");
+    htpTex = AEGfxTextureLoad("Assets/howtoplay.png");
+    htpButtonTex = AEGfxTextureLoad("Assets/X.png");
 
 
     mouseUp[0] = AEGfxTextureLoad("Assets/mouse_walk_up-1.png");
@@ -278,8 +284,6 @@ void CoreEngine::Update()
             {
                 std::cout << "Out";
                 gGameRunning = false;
-                
-
             }
         }
         break;
@@ -361,18 +365,19 @@ void CoreEngine::Update()
             // Update and render the pause menu
             int result = pauseMenu.Update();
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-            pauseMenu.Render(pMesh, backgroundTex,buttonTex); // Reuse MainMenu logo if desired
+            pauseMenu.Render(pMesh, backgroundTex,buttonTex ,htpTex ,htpButtonTex); // Reuse MainMenu logo if desired
 
             // If the user clicks "Resume Game", return to gameplay.
             if (result == 1) // "Resume Game"
             {
                 // Unpause the timer here
                 gTimer.pauseresume(); // This sets pauseTimer = false and recalculates startTime
-
+                Wok.cookingTimer.pauseresume();
+                recipeSystem.pauseRecipeTimers();
                 currentState = GameState::GAME;
             }
             // If "Quit Game" is selected, exit the application.
-            else if (result == 2)
+            else if (result == 3)
             {
                 gGameRunning = false;
             }
@@ -400,12 +405,15 @@ void CoreEngine::Update()
             mouse3.mouseMove(170.0f);
             // 2. Render the game world
             // Check for pause input (R key)
-            if (AEInputCheckTriggered(AEVK_R))
+            if (AEInputCheckTriggered(AEVK_T))
             {
                 // Pause the timer here
                 gTimer.pauseresume(); // This sets pauseTimer = true internally
 
                 currentState = GameState::PAUSE_MENU;
+
+                recipeSystem.pauseRecipeTimers();
+                Wok.cookingTimer.pauseresume(); // Resume stove timer
                 break; // exit GAME state update immediately
             }
             // Background / Floor
@@ -423,6 +431,8 @@ void CoreEngine::Update()
 
             // Stove / Wok logic (cooking)
             Wok.update(recipeSystem);
+
+            recipeSystem.update();
             
 
             // Only show device UI when player is colliding with the device.
@@ -459,7 +469,7 @@ void CoreEngine::Update()
             // Render Stove & Player
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh,Wok, players1,qteGauge,stoveTex,stoveDirtyTex,stoveCookTex);
-            players1.playerdraw(pMesh, IngredientMesh, playerIdle,playerWalkUp , playerWalkDown , playerWalkLeft, playerWalkRight);
+            players1.playerdraw(pMesh, IngredientMesh, playerIdle,playerWalkUp , playerWalkDown , playerWalkLeft, playerWalkRight ,chickenTex , beefTex , riceTex, eggTex , cheeseTex , potatoTex  );
             mouse1.mousedraw(pMesh,mouseUp, mouseDown , mouseLeft, mouseRight);
             mouse2.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);
             mouse3.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);
@@ -558,6 +568,8 @@ void CoreEngine::Exit()
     if (barTex)           AEGfxTextureUnload(barTex);
     if (sliderTex)        AEGfxTextureUnload(sliderTex);
     if (targetTex)        AEGfxTextureUnload(targetTex);
+    if (htpTex)           AEGfxTextureUnload(htpTex);
+    if (htpButtonTex)     AEGfxTextureUnload(htpButtonTex);
 
     for (size_t x{}; x < playerIdle.size(); ++x) {
         if (playerIdle[x])       AEGfxTextureUnload(playerIdle[x]);
