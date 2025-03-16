@@ -47,7 +47,7 @@ void RenderIngredientbox(AEGfxVertexList* mesh, AEGfxTexture*);
 void RenderStove(AEGfxVertexList* mesh,Stove& stove, player& Player, const QTE& qteGauge, AEGfxTexture* stoveTex, AEGfxTexture* stoveDirty, AEGfxTexture* stoveCook);
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box);
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox);
-void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge);
+void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge, AEGfxTexture* barTex, AEGfxTexture* sliderTex,  AEGfxTexture* targetTex);
 
 void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture*, const Recipe& recipe, float x, float y);
 
@@ -70,9 +70,9 @@ void RenderIngredientsOnBoxes(
     AEGfxTexture* potatoTex);
 
 // Extern declarations for global variables
-extern Rect background1;
-extern Rect dustbin1;
-extern Rect ingredient1_box;
+extern Rect backgroundRect;
+extern Rect dustbinRect;
+extern Rect ingredientBoxRect;
 extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;

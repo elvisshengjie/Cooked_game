@@ -12,7 +12,8 @@
 class player
 {
 public:
-	void playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vector<AEGfxTexture*> idle, std::vector<AEGfxTexture*> up, std::vector<AEGfxTexture*> down, std::vector<AEGfxTexture*> left, std::vector<AEGfxTexture*> right) ;
+	void playerInit();
+	void playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vector<AEGfxTexture*> idle, std::vector<AEGfxTexture*> up, std::vector<AEGfxTexture*> down, std::vector<AEGfxTexture*> left, std::vector<AEGfxTexture*> right ,AEGfxTexture* chickenTex, AEGfxTexture* beefTex, AEGfxTexture* riceTex, AEGfxTexture* eggTex, AEGfxTexture* cheeseTex, AEGfxTexture* potatoTex) ;
 	void playerMove(float speed);
 	bool playerCheckCollison(float x1, float y1, float width1, float height1)const;
 	void playerCheckCollisonobject(float x1, float y1, float width1, float height1);

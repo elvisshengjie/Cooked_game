@@ -56,6 +56,8 @@ public:
 
 	bool recipeMatched = false;
 
+	bool isPaused = false;
+
 	float x{ -50.0f };
 	float y = { -200.0f };
 	float width = { 200.0f };
@@ -109,7 +111,7 @@ private:
 
 		void reset();
 
-		void render(AEGfxVertexList* mesh)const;
+		void render(AEGfxVertexList* mesh , AEGfxTexture* BarTex , AEGfxTexture* targetTex , AEGfxTexture* sliderTex)const;
 
 		void start();
 
@@ -121,4 +123,4 @@ private:
 
 };
 extern int score;
-int updateScore(bool);
+int updateScore(bool, size_t);

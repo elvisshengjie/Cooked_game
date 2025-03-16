@@ -7,6 +7,7 @@ bool IsPointInsideButton(float px, float py, const Button& btn) {
     float top = 450.0f -btn.box.y + btn.box.height / 2.0f;
     float bottom = 450.0f -btn.box.y - btn.box.height / 2.0f;
 
+
     return (px >= left && px <= right && py <= top && py >= bottom);
 }
 
@@ -17,23 +18,29 @@ void MainMenu::Init() {
     background = AEGfxTextureLoad("Assets/cafe.jpg");
     DigipenLogo = AEGfxTextureLoad("Assets/DigiPen_Singapore_WEB_RED.png");
     button = AEGfxTextureLoad("Assets/paperUIButton.png");
+    htpTexture = AEGfxTextureLoad("Assets/howtoplay.png");
+    htpButtonTexture = AEGfxTextureLoad("Assets/X.png");
+    titleTexture = AEGfxTextureLoad("Assets/title.png");
+
+    
 
     assert(background && "Failed to load background texture!");
 
     // Define button positions and sizes.
     float centerX{ 0.0f };      // Center horizontally
-    float startY{ 0.5f };       // Starting y position for the top button
-    float buttonWidth{ 1.0f };  // Width of each button
-    float buttonHeight{ 0.15f };//Height of each button
+    float startY{ 0.25f };       // Starting y position for the top button
+    float buttonWidth{ 300.0f };  // Width of each button
+    float buttonHeight{ 50.0f };//Height of each button
     float spacing{ 0.2f };      // Vertical spacing between button centers
 
-    buttons.clear();
-    buttons.push_back({ "Start Game", centerX, startY, buttonWidth, buttonHeight , { 300.0f, 50.0f, centerX * 800.0f , (startY * 450.0f) }});
-    buttons.push_back({ "Credits",    centerX, startY - spacing, buttonWidth, buttonHeight ,{ 300.0f, 50.0f, (centerX * 800.0f) , (startY * 450.0f)  - (0.2f*450.0f)}});
-    buttons.push_back({ "Options",    centerX, startY - 2 * spacing, buttonWidth, buttonHeight,{ 300.0f, 50.0f, (centerX * 800.0f) , (startY * 450.0f) - (0.4f * 450.0f)} });
-    buttons.push_back({ "Extras",     centerX, startY - 3 * spacing, buttonWidth, buttonHeight,{ 300.0f, 50.0f, (centerX * 800.0f) , (startY * 450.0f)- (0.6f * 450.0f)} });
-    buttons.push_back({ "Quit Game",  centerX, startY - 4 * spacing, buttonWidth, buttonHeight,{ 300.0f, 50.0f, (centerX * 800.0f) , (startY * 450.0f)  - (0.8f * 450.0f)} });
 
+    buttons.clear();
+    buttons.push_back({ "Start Game", { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) } });
+    buttons.push_back({ "Credits",    { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 450.0f)}});
+    buttons.push_back({ "Options",    { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 2 * 450.0f)}});
+    buttons.push_back({ "Extras",     { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f)- (spacing * 3 * 450.0f)}});
+    buttons.push_back({ "How To Play",{ buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f)  - (spacing * 4 * 450.0f)}});
+    buttons.push_back({ "Quit Game",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 5 * 450.0f)}});
 }
 
 void MainMenu::Update() {
@@ -68,15 +75,22 @@ void MainMenu::Update() {
             for (size_t i = 0; i < buttons.size(); i++) {
                 if (IsPointInsideButton(static_cast<float>(rawX), static_cast<float>(rawY), buttons[i])) {
                     selectedOption = static_cast<int>(i);
-                    std::cout << "yes";
+                   // std::cout << "yes";
                     // If "Start Game" (button 0) is clicked, set activation flag.
                     if (i == 0) {
                         m_StartGameActivated = true;
                     }
                     else if (i == 4) {
+                        m_howToPlayActivated = true;
+                    }
+                    else if (i == 5) {
                         m_StartGameActivated4 = true;
                     }
-
+                }
+            }
+            if (m_howToPlayActivated) {
+                if (IsPointInsideButton(static_cast<float>(rawX), static_cast<float>(rawY), HTPbutton_button)) {
+                    m_howToPlayActivated = false;
                 }
             }
  
@@ -89,30 +103,23 @@ void MainMenu::Render(AEGfxVertexList* mesh) {
     if (flag){
         RenderMain_menu_background(mesh, background);
         
+        DrawRect(titleRect, titleTexture, mesh);
+
         // Render each button. We assume AEGfxPrint centers the text.
         for (size_t i = 0; i < buttons.size(); i++) {
             const Button& btn = buttons[i];
 
- /*         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-            AEMtx33 collisionTransform;
-            AEMtx33Scale(&collisionTransform, btn.box.width, btn.box.height);
-            AEMtx33TransApply(&collisionTransform, &collisionTransform, btn.box.x, 0);
-            AEGfxSetTransform(collisionTransform.m);
-            AEGfxSetColorToMultiply(0.0f, 0.0f, 0.0f, 1.0f);
-            AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-            AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-            AEGfxSetBlendColor(0.0f, 0.0f, 0.0f, 0.0f);
-            AEGfxSetTransparency(1.0f);
-            AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES)*/;   
             DrawRect(btn.box, button, mesh);
-            AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.075f, btn.y, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-            //AEGfxPrint(FontID, btn.label.c_str(), btn.x - 0.075f, btn.y, 1.0f,
-            //    1.0f, 1.0f, 1.0f, 1.0f); // White text
+            AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f , btn.box.y/450.0f -0.02f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
 
     
             //DrawRect(btn.box, 0xFFFF00FF, mesh);
 
+        }
+        if (m_howToPlayActivated) {
+            DrawRect(HTP_rect, htpTexture, mesh);
+            DrawRect(HTPbutton_button.box, htpButtonTexture, mesh);
         }
         
     }
@@ -138,7 +145,12 @@ void MainMenu::Cleanup() {
     AEGfxTextureUnload(background);
     AEGfxTextureUnload(DigipenLogo);
     AEGfxTextureUnload(button);
+    AEGfxTextureUnload(htpTexture);
+    AEGfxTextureUnload(htpButtonTexture);
+    AEGfxTextureUnload(titleTexture);
     AEGfxDestroyFont(FontID);
+
+
 
 }
 
@@ -152,14 +164,14 @@ void WinScreen::Init()
     // Define button positions and sizes.
     float centerX{ 0.0f };      // Center horizontally
     float startY{-0.2f};       // Starting y position for the top button
-    float buttonWidth{ 1.0f };  // Width of each button
-    float buttonHeight{ 0.15f };//Height of each button
+    float buttonWidth{ 300.0f };  // Width of each button
+    float buttonHeight{ 60.0f };//Height of each button
     float spacing{ 0.2f };      // Vertical spacing between button centers
 
     buttons.clear();
-    buttons.push_back({ "Restart", centerX, startY, buttonWidth, buttonHeight , { 300.0f, 60.0f, centerX * 800.0f , (startY * 450.0f) } } );
-    buttons.push_back({ "Main Menu",    centerX, startY - spacing, buttonWidth, buttonHeight ,{ 300.0f, 60.0f, (centerX * 800.0f) , (startY * 450.0f) - (0.2f * 450.0f)} });
-    buttons.push_back({ "Quit Game",    centerX, startY - 2 * spacing, buttonWidth, buttonHeight ,{ 300.0f, 60.0f, (centerX * 800.0f) , (startY * 450.0f) - (0.4f * 450.0f)} });
+    buttons.push_back({ "Restart",    { buttonWidth, buttonHeight, centerX * 800.0f , (startY * 450.0f) } } );
+    buttons.push_back({ "Main Menu",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 450.0f)} });
+    buttons.push_back({ "Quit Game",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 2 * 450.0f)} });
 }
 int WinScreen::Update()
 {
@@ -224,7 +236,7 @@ void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex, AEGfxTexture* t
         
         DrawRect(btn.box, button, mesh);
         //unsigned int color = (i == static_cast<size_t>(selected)) ? 0xFFFFFF00 : 0xFFFFFFFF;
-        AEGfxPrint(FontID, btn.label.c_str(), btn.x-0.1f, btn.y-0.02f, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f, btn.box.y/450.f-0.01f, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
 
     }
 
@@ -250,13 +262,14 @@ void PauseMenu::Init() {
     // Use the same style as MainMenu for background and button layout.
     float centerX{ 0.0f };
     float startY{ 0.5f };
-    float buttonWidth{ 1.0f };
-    float buttonHeight{ 0.15f };
+    float buttonWidth{ 300.0f };
+    float buttonHeight{ 60.0f };
     float spacing{ 0.2f };
 
     buttons.clear();
-    buttons.push_back({ "Resume Game", centerX, startY, buttonWidth, buttonHeight, { 300.0f, 60.0f, centerX * 800.0f, startY * 450.0f } });
-    buttons.push_back({ "Quit Game", centerX, startY - spacing, buttonWidth, buttonHeight, { 300.0f, 60.0f, centerX * 800.0f, (startY - spacing) * 450.0f } });
+    buttons.push_back({ "Resume Game", { buttonWidth, buttonHeight, centerX * 800.0f, startY * 450.0f } });
+    buttons.push_back({ "How To Play", { buttonWidth, buttonHeight, centerX * 800.0f, (startY * 450.0f) - spacing * 450.0f } });
+    buttons.push_back({ "Quit Game", { buttonWidth, buttonHeight, centerX * 800.0f, (startY * 450.0f) - (spacing * 2 * 450.0f )} });
 }
 
 int PauseMenu::Update() {
@@ -283,8 +296,17 @@ int PauseMenu::Update() {
                 // Immediately return if you want the click itself to ¡°activate¡± the button:
                 if (i == 0) // Resume
                     return 1;
-                if (i == 1) // Quit
+                if (i == 1) {
+                    m_howToPlayActivated = true;
                     return 2;
+                }
+                if (i == 2)
+                    return 3;
+            }
+        }
+        if (m_howToPlayActivated) {
+            if (IsPointInsideButton((float)rawX, (float)rawY, HTPbutton_button)) {
+                m_howToPlayActivated = false;
             }
         }
     }
@@ -295,14 +317,14 @@ int PauseMenu::Update() {
     if (selectedOption == 0 && AEInputCheckTriggered(AEVK_RETURN)) {
         return 1; // Resume game
     }
-    if (selectedOption == 1 && AEInputCheckTriggered(AEVK_RETURN)) {
-        return 2; // Quit game
+    if (selectedOption == 2 && AEInputCheckTriggered(AEVK_RETURN)) {
+        return 3; // Quit game
     }
 
     return 0;
 }
 
-void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* button) {
+void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* button, AEGfxTexture* htp , AEGfxTexture* htpbutton) {
     // Render background and logo similar to MainMenu
     RenderMain_menu_background(mesh, background);
    /* RenderMain_digipenLogo(mesh, logo);*/
@@ -313,8 +335,11 @@ void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTex
         // Draw button rectangle
         DrawRect(btn.box, button, mesh);
         // Print button label
-        AEGfxPrint(FontID, btn.label.c_str(), btn.x - 0.075f, btn.y, 1.0f,
-            1.0f, 1.0f, 1.0f, 1.0f); // White text
+        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f, btn.box.y/450.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f); // black text
 
+    }
+    if (m_howToPlayActivated) {
+        DrawRect(HTP_rect, htp, mesh);
+        DrawRect(HTPbutton_button.box, htpbutton, mesh);
     }
 }

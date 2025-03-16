@@ -6,6 +6,7 @@
 #include <iostream>
 
 int score{};
+double baseTime{ 2.0 };
 void Timer::start(double duration) {
 	countdownDuration = duration;
 	startTime = AEGetTime(nullptr);
@@ -61,10 +62,10 @@ bool Stove::canCook(player& player) const
 
 void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 {
-	if (isCooking || stoveItems.size() < 2 || isDirty)return;
-	isCooking = true;
+	if (isCooking || stoveItems.size() < 2 || isDirty) return;
 
-	double cookingTime = 2.0 + (1 * stoveItems.size());
+	isCooking = true;
+	double cookingTime = baseTime + stoveItems.size();
 
 	cookingTimer.start(cookingTime);
 
@@ -94,6 +95,7 @@ double Stove::remainingCookingTime()
 }
 void Stove::update(RecipeSystem& recipeSystem) {
 	if (isCooking && cookingTimer.completed()) {
+		std::cout << "Cooking completed";
 		static std::random_device rd;
 		static std::mt19937 engine(rd());
 		std::uniform_int_distribution<int> distribution(1, 10); // valid indices: 1 to 10
@@ -107,8 +109,9 @@ void Stove::update(RecipeSystem& recipeSystem) {
 				break;	
 			}
 		}
+		
+		score = updateScore(recipeMatched, stoveItems.size());
 		clearWok();
-		score = updateScore(recipeMatched);
 	}
 	if (isDirty) {
 		if (isCleaning && cookingTimer.getRemainingTime() <= 0) {
@@ -150,7 +153,7 @@ void QTE::update(float dt) {
 			movingRight = true;
 		}
 	}
-	if (AEInputCheckTriggered(AEVK_T)) {
+	if (AEInputCheckTriggered(AEVK_R)) {
 		isCompleted = true;
 
 		if (checkTarget()) {
@@ -165,19 +168,21 @@ bool QTE::checkTarget()const {
 	return (sliderPos >= targetZoneStart && sliderPos <= targetZoneEnd);
 }
 
-void QTE::render(AEGfxVertexList* mesh) const{
+void QTE::render(AEGfxVertexList* mesh , AEGfxTexture* barTex , AEGfxTexture* sliderTex , AEGfxTexture* targetTex) const{
 
 	if (!isActive) {
 		return;
 	}
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEMtx33 bgTransform, sliderTransform, targetTransform;
 
 	AEMtx33Scale(&bgTransform, w, h);
 	AEMtx33TransApply(&bgTransform, &bgTransform, x, y);
 	AEGfxSetTransform(bgTransform.m);
 	AEGfxSetColorToAdd(0.5f, 0.5f, 0.5f, 1.0f);
+	AEGfxTextureSet(barTex, 0, 0);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+	
 
 	float targetStartX = x - w / 2 + targetZoneStart * w;
 	float targetWidth = (targetZoneEnd - targetZoneStart) * w;
@@ -187,6 +192,7 @@ void QTE::render(AEGfxVertexList* mesh) const{
 	AEMtx33TransApply(&targetTransform, &targetTransform, targetStartX + targetWidth / 2, y);
 	AEGfxSetTransform(targetTransform.m);
 	AEGfxSetColorToAdd(0.0f, 1.0f, 0.0f, 1.0f);
+	AEGfxTextureSet(targetTex, 0, 0);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
 	float sliderX = x - w / 2 + sliderPos * w;
@@ -195,6 +201,7 @@ void QTE::render(AEGfxVertexList* mesh) const{
 	AEMtx33TransApply(&sliderTransform, &sliderTransform, sliderX, y);
 	AEGfxSetTransform(sliderTransform.m);
 	AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 1.0f);
+	AEGfxTextureSet(sliderTex, 0, 0);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 
@@ -223,15 +230,16 @@ void QTE::start() {
 	targetZoneEnd = targetZoneStart + zoneWidth;
 }
 
-int updateScore(bool recipeMatched)
+int updateScore(bool recipeMatched, size_t stoveItems)
 {
+	int multiplier{ 2 };
 	if (recipeMatched)
 	{
-		score += 5;
+		score += static_cast<int>(stoveItems) * multiplier;
 	}
 	else
 	{
-		score -= 2;
+		score -= 3;
 	}
 	return score;
 }

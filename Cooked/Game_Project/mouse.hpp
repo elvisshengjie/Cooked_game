@@ -11,8 +11,8 @@
 class Rect;
 
 // Forward declarations if needed:
-// extern Ingredients ingredient1_box; 
-// (Often you keep `ingredient1_box` in another .cpp/.h, with "extern" in a header.)
+// extern Ingredients ingredientBoxRect; 
+// (Often you keep `ingredientBoxRect` in another .cpp/.h, with "extern" in a header.)
 
 class mouse
 {
