@@ -365,7 +365,8 @@ void CoreEngine::Update()
             {
                 // Unpause the timer here
                 gTimer.pauseresume(); // This sets pauseTimer = false and recalculates startTime
-
+                Wok.cookingTimer.pauseresume();
+                recipeSystem.pauseRecipeTimers();
                 currentState = GameState::GAME;
             }
             // If "Quit Game" is selected, exit the application.
@@ -403,6 +404,9 @@ void CoreEngine::Update()
                 gTimer.pauseresume(); // This sets pauseTimer = true internally
 
                 currentState = GameState::PAUSE_MENU;
+
+                recipeSystem.pauseRecipeTimers();
+                Wok.cookingTimer.pauseresume(); // Resume stove timer
                 break; // exit GAME state update immediately
             }
             // Background / Floor
@@ -458,7 +462,7 @@ void CoreEngine::Update()
             // Render Stove & Player
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh,Wok, players1,qteGauge,stoveTex,stoveDirtyTex,stoveCookTex);
-            players1.playerdraw(pMesh, IngredientMesh, playerIdle,playerWalkUp , playerWalkDown , playerWalkLeft, playerWalkRight);
+            players1.playerdraw(pMesh, IngredientMesh, playerIdle,playerWalkUp , playerWalkDown , playerWalkLeft, playerWalkRight ,chickenTex , beefTex , riceTex, eggTex , cheeseTex , potatoTex  );
             mouse1.mousedraw(pMesh,mouseUp, mouseDown , mouseLeft, mouseRight);
             mouse2.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);
             mouse3.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);

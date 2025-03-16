@@ -68,12 +68,19 @@ private:
 	std::vector<Recipe> activeRecipes; // Store 3 currently active recipes
 
 public:
+
+	bool isPaused = false;
+
 	RecipeSystem();
 
 	void update();
-	const std::vector<Recipe>& getActiveRecipes() const;
+
+	const std::vector<Recipe>& getActiveRecipes()const ;
+
 	Recipe generateRandomRecipe();
+
 	void replaceRecipe(const Recipe& completedRecipe);
 
+	void pauseRecipeTimers();
 };
 

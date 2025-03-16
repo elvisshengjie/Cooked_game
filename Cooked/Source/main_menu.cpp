@@ -7,6 +7,7 @@ bool IsPointInsideButton(float px, float py, const Button& btn) {
     float top = 450.0f -btn.box.y + btn.box.height / 2.0f;
     float bottom = 450.0f -btn.box.y - btn.box.height / 2.0f;
 
+
     return (px >= left && px <= right && py <= top && py >= bottom);
 }
 
@@ -169,8 +170,8 @@ void WinScreen::Init()
 
     buttons.clear();
     buttons.push_back({ "Restart",    { buttonWidth, buttonHeight, centerX * 800.0f , (startY * 450.0f) } } );
-    buttons.push_back({ "Main Menu",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 2 * 450.0f)} });
-    buttons.push_back({ "Quit Game",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 3 * 450.0f)} });
+    buttons.push_back({ "Main Menu",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 450.0f)} });
+    buttons.push_back({ "Quit Game",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 2 * 450.0f)} });
 }
 int WinScreen::Update()
 {
@@ -235,7 +236,7 @@ void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex, AEGfxTexture* t
         
         DrawRect(btn.box, button, mesh);
         //unsigned int color = (i == static_cast<size_t>(selected)) ? 0xFFFFFF00 : 0xFFFFFFFF;
-        AEGfxPrint(FontID, btn.label.c_str(), (btn.box.x/800.0f-1.0f )-0.1f, btn.box.y-0.02f, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f, btn.box.y/450.f-0.01f, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
 
     }
 
@@ -295,9 +296,10 @@ int PauseMenu::Update() {
                 // Immediately return if you want the click itself to ¡°activate¡± the button:
                 if (i == 0) // Resume
                     return 1;
-                if (i == 1)
+                if (i == 1) {
                     m_howToPlayActivated = true;
                     return 2;
+                }
                 if (i == 2)
                     return 3;
             }
@@ -315,8 +317,8 @@ int PauseMenu::Update() {
     if (selectedOption == 0 && AEInputCheckTriggered(AEVK_RETURN)) {
         return 1; // Resume game
     }
-    if (selectedOption == 1 && AEInputCheckTriggered(AEVK_RETURN)) {
-        return 2; // Quit game
+    if (selectedOption == 2 && AEInputCheckTriggered(AEVK_RETURN)) {
+        return 3; // Quit game
     }
 
     return 0;
@@ -333,8 +335,7 @@ void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTex
         // Draw button rectangle
         DrawRect(btn.box, button, mesh);
         // Print button label
-        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f, btn.box.y/450.0f, 1.0f,
-            1.0f, 1.0f, 1.0f, 1.0f); // White text
+        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f, btn.box.y/450.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f); // black text
 
     }
     if (m_howToPlayActivated) {

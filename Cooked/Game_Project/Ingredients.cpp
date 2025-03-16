@@ -50,22 +50,22 @@ RecipeSystem::RecipeSystem() {
 	// Start with 3 random recipes
 	for (int i = 0; i < 3; i++) {
 		activeRecipes.push_back(allRecipes[std::rand() % allRecipes.size()]);
-		activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size()*8.0f);
+		activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size()*15.0f);
 	}
 
 }
 void RecipeSystem::update() {
 	for (int i = 0; i < 3; ++i) {
 		if (activeRecipes[i].recipeTimer.getRemainingTime() <= 0.0f) {
-			std::cout << "REPLACED";
+			//std::cout << "REPLACED";
 			activeRecipes[i] = generateRandomRecipe();
-			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * 8.0f); // Restart timer
-			std::cout << "restarted";
+			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * 15.0f); // Restart timer
+			//std::cout << "restarted";
 		}
 	}
 }
 
-const std::vector<Recipe>& RecipeSystem::getActiveRecipes() const {
+const std::vector<Recipe>& RecipeSystem::getActiveRecipes() const{
 	return activeRecipes;
 }
 
@@ -83,8 +83,16 @@ void RecipeSystem::replaceRecipe(const Recipe& completedRecipe) {
 	for (size_t i = 0; i < activeRecipes.size(); ++i) {
 		if (activeRecipes[i].Name == completedRecipe.Name) {
 			activeRecipes[i] = generateRandomRecipe();
-			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * 5.0f);
+			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * 15.0f);
 			return;
+		}
+	}
+}
+
+void RecipeSystem::pauseRecipeTimers() {
+	for (auto& recipe : activeRecipes) {
+		if (!recipe.recipeTimer.completed()) {
+			recipe.recipeTimer.pauseresume(); // Toggle pause/resume
 		}
 	}
 }

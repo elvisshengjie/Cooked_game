@@ -19,7 +19,8 @@ void RenderAnimatedSprite(AEGfxVertexList* mesh, AEGfxTexture* texture, int fram
 player players1;
 
 
-void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vector<AEGfxTexture*> idle, std::vector<AEGfxTexture*> up, std::vector<AEGfxTexture*> down, std::vector<AEGfxTexture*> left, std::vector<AEGfxTexture*> right) {
+void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vector<AEGfxTexture*> idle, std::vector<AEGfxTexture*> up, std::vector<AEGfxTexture*> down, std::vector<AEGfxTexture*> left, std::vector<AEGfxTexture*> right,
+	AEGfxTexture* chickenTex , AEGfxTexture* beefTex , AEGfxTexture* riceTex , AEGfxTexture* eggTex , AEGfxTexture* cheeseTex , AEGfxTexture* potatoTex) {
 	// Draw the player (blue rectangle)
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
@@ -52,14 +53,14 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vect
 	AEGfxTextureSet(selectedTexture, 0, 0);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 	//RenderAnimatedSprite(mesh, selectedTexture, currentFrame, 2);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	
 	if (Hand != EMPTY) {
-		float offsetX = width + 2.0f;
-		float offsetY = 0.0f;
+		float offsetX = 0.0f;
+		float offsetY = height +0.2f;
 
 		AEMtx33 ingredientTransform;
-		AEMtx33Scale(&ingredientTransform, width * 0.5f, height * 0.5f);
+		AEMtx33Scale(&ingredientTransform, width * 1.0f, height * 1.0f);
 		AEMtx33TransApply(&ingredientTransform, &ingredientTransform, x + offsetX, y + offsetY);
 		AEGfxSetTransform(ingredientTransform.m);
 
@@ -67,40 +68,46 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vect
 		switch (Hand)
 		{
 		case CHICKEN:
-			AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
+			/*AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
 			AEGfxSetColorToAdd(1.0f, 0.9f, 0.8f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(1.0f, 0.9f, 0.8f, 1.0f);
+			AEGfxSetBlendColor(1.0f, 0.9f, 0.8f, 1.0f);*/
+			AEGfxTextureSet(chickenTex, 0, 0);
 			break;
 		case RICE:
-			AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+			/*AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 			AEGfxSetColorToAdd(1.0f, 1.0f, 1.0f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(1.0f, 1.0f, 1.0f, 1.0f);
+			AEGfxSetBlendColor(1.0f, 1.0f, 1.0f, 1.0f);*/
+			AEGfxTextureSet(riceTex, 0, 0);
 			break;
 		case EGG:
-			AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
+			/*AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
 			AEGfxSetColorToAdd(1.0f, 1.0f, 0.5f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(1.0f, 1.0f, 0.5f, 1.0f);
+			AEGfxSetBlendColor(1.0f, 1.0f, 0.5f, 1.0f);*/
+			AEGfxTextureSet(eggTex, 0, 0);
 			break;
 		case CHEESE:
-			AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
+			/*AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
 			AEGfxSetColorToAdd(1.0f, 0.9f, 0.2f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(1.0f, 0.9f, 0.2f, 1.0f);
+			AEGfxSetBlendColor(1.0f, 0.9f, 0.2f, 1.0f);*/
+			AEGfxTextureSet(cheeseTex, 0, 0);
 			break;
 		case POTATO:
-			AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
+			/*AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
 			AEGfxSetColorToAdd(0.6f, 0.4f, 0.2f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(0.6f, 0.4f, 0.2f, 1.0f);
+			AEGfxSetBlendColor(0.6f, 0.4f, 0.2f, 1.0f);*/
+			AEGfxTextureSet(potatoTex, 0, 0);
 			break;
 		case BEEF:
-			AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
+			/*AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
 			AEGfxSetColorToAdd(0.5f, 0.1f, 0.1f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(0.5f, 0.1f, 0.1f, 1.0f);
+			AEGfxSetBlendColor(0.5f, 0.1f, 0.1f, 1.0f);*/
+			AEGfxTextureSet(beefTex, 0, 0);
 			break;
 		default:
 			AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
@@ -381,11 +388,11 @@ void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gaug
 		QTE_Gauge.update(static_cast<float>(AEFrameRateControllerGetFrameTime()));
 		if (QTE_Gauge.isCompleted) {
 			if (QTE_Gauge.isSuccess) {
-				std::cout << "QTE Successful! Cooking started." << std::endl;
+				//std::cout << "QTE Successful! Cooking started." << std::endl;
 				stove.startCooking(recipeSystem.getActiveRecipes());
 			}
 			else {
-				std::cout << "QTE Failed! Ingredients thrown away." << std::endl;
+				//std::cout << "QTE Failed! Ingredients thrown away." << std::endl;
 				stove.clearWok(); // Clear the wok if QTE fails
 			}
 			QTE_Gauge.reset(); // Reset QTE state
@@ -395,24 +402,24 @@ void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gaug
 
 void player::playerInit()
 {
-	float x{};
-	float y{};
-	float normalize_speed{};
-	float dt{};
+	x={};
+	y={};
+	normalize_speed={};
+	dt={};
 
 	// dash
-	float dy{}, dx{}, angle{}, normdy{}, normdx{};
-	float mangnituded{};
+	dy={}, dx={}, angle={}, normdy={}, normdx={};
+	mangnituded={};
 
-	float dashCooldown{ 0.5f };
+    dashCooldown={ 0.5f };
 	/*int	  rawX{};
 	int   rawY{};*/
-	bool  isDashing{ false };
-	float DirectX{};
-	float DirectY{};
-	float DirectionX{};
-	float DirectionY{};
-	float Magnitude{};
-	int  dashCounter{ 1 };
-	Ingredients Hand = EMPTY;
+	isDashing={ false };
+	DirectX={};
+	DirectY={};
+	DirectionX={};
+	DirectionY={};
+	Magnitude={};
+	dashCounter={ 1 };
+	Hand = EMPTY;
 }
