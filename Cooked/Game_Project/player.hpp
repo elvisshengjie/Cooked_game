@@ -43,7 +43,7 @@ private:
 	float mangnituded{};
 	
 	float dashspeed{ 1000.0f };
-	float dashCooldown{0.5f};
+	float dashCooldown{0.3f};
 	float dashDuration{0.2f};
 	int	  rawX{};
 	int   rawY{};

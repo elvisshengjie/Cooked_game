@@ -117,7 +117,7 @@ void player::playerMove(float speed)
 
 {
 	isMoving = false;
-	if (dx == 0 && dy == 0) {
+	if (AEIsF32Zero(dx) && AEIsF32Zero(dy) ) {
 		
 	}
 	if (AEInputCheckCurr(AEVK_W)) {
@@ -143,7 +143,7 @@ void player::playerMove(float speed)
 	}
 	
 
-	if (dx != 0.0f || dy != 0.0f) {
+	if (!AEIsF32Zero(dx) || !AEIsF32Zero(dy)) {
 		angle = atan2(dy, dx);
 
 	}
@@ -333,7 +333,7 @@ void player::playerDash() {
 		if (AEInputCheckTriggered(AEVK_SPACE)) {
 			
 				// Prevent dashing if the player is not moving
-			if (dx == 0 && dy == 0) {
+			if (AEIsF32Zero(dx) && AEIsF32Zero(dy) ) {
 				return;  // Stop execution if no movement direction
 			}
 		
@@ -356,7 +356,7 @@ void player::playerDash() {
 	}
 
 	 
-	if (dashCounter == 0 && !isDashing)
+	if (AEIsF32Zero(dashCounter)  && !isDashing)
 	{
 		float remainTimedash = static_cast<float>(cooldown2.getRemainingTime());
 		if (remainTimedash <= 0) {
