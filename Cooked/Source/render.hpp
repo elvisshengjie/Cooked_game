@@ -70,9 +70,9 @@ void RenderIngredientsOnBoxes(
     AEGfxTexture* potatoTex);
 
 // Extern declarations for global variables
-extern Rect background1;
-extern Rect dustbin1;
-extern Rect ingredient1_box;
+extern Rect backgroundRect;
+extern Rect dustbinRect;
+extern Rect ingredientBoxRect;
 extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;

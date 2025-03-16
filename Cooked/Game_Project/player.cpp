@@ -330,7 +330,7 @@ void player::playerDash() {
 	
 
 	if (dashCounter == 1) {
-		if (AEInputCheckTriggered(AEVK_SPACE)) {
+		if (AEInputCheckTriggered(AEVK_LSHIFT)) {
 			
 				// Prevent dashing if the player is not moving
 			if (dx == 0 && dy == 0) {

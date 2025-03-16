@@ -50,15 +50,18 @@ RecipeSystem::RecipeSystem() {
 	// Start with 3 random recipes
 	for (int i = 0; i < 3; i++) {
 		activeRecipes.push_back(allRecipes[std::rand() % allRecipes.size()]);
+		activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size()*8.0f);
 	}
 
-	recipeTimer.start(10.0); // Timer for refreshing recipes
 }
 void RecipeSystem::update() {
-	if (recipeTimer.completed()) {
-		activeRecipes.erase(activeRecipes.begin()); // Remove the oldest recipe
-		activeRecipes.push_back(allRecipes[std::rand() % allRecipes.size()]); // Add a new random recipe
-		recipeTimer.start(10.0); // Restart timer
+	for (int i = 0; i < 3; ++i) {
+		if (activeRecipes[i].recipeTimer.getRemainingTime() <= 0.0f) {
+			std::cout << "REPLACED";
+			activeRecipes[i] = generateRandomRecipe();
+			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * 8.0f); // Restart timer
+			std::cout << "restarted";
+		}
 	}
 }
 
@@ -80,41 +83,8 @@ void RecipeSystem::replaceRecipe(const Recipe& completedRecipe) {
 	for (size_t i = 0; i < activeRecipes.size(); ++i) {
 		if (activeRecipes[i].Name == completedRecipe.Name) {
 			activeRecipes[i] = generateRandomRecipe();
+			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * 5.0f);
 			return;
 		}
 	}
 }
-
-
-//void randomizenIngredient()
-//
-//
-//void print_c(const std::vector < std::string > & x) {
-//	for (std::string element : x) {
-//>>>>>>> main
-//
-//		std::cout << element << " ";
-//	}
-//	std::cout << '\n';
-//}
-//
-//int main()
-//{
-//	std::random_device rd;
-//	std::mt19937 g(rd());
-//	std::vector<std::string> v{ "apple","cake","egg","juice"};
-//	std::vector < std::string > original_v;
-//	
-//	std::copy(v.begin(), v.end(), std::back_inserter(original_v));
-//	print_c(original_v);
-//	
-//print_c(v);
-//
-//std::swap(v[0], v.back());
-//std::shuffle(v.begin(), v.end() - 1, g);
-//print_c(v);
-//
-//
-//
-//}
-//*/

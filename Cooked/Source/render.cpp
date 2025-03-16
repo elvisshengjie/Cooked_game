@@ -117,9 +117,9 @@ std::vector<Rect> recipeBoxes = {
 };
 
 
-Rect background1{ 1600.0f,900.0f,0.0f,0.0f };
-Rect dustbin1{ 100.0f, 100.0f,-720.0f , -300.0f };
-Rect ingredient1_box{ 100.0f, 100.0f,-200.0f ,175.0f };
+Rect backgroundRect{ 1600.0f,900.0f,0.0f,0.0f };
+Rect dustbinRect{ 100.0f, 100.0f,-720.0f , -300.0f };
+Rect ingredientBoxRect{ 100.0f, 100.0f,-200.0f ,175.0f };
 Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
 Rect digipen_logo{ 1000, 455 * 1000 / 1525,0.0f,0.0f };
 Rect mouseDevice{ 170.0f, 170.0f,200.0f, -350.0f };
@@ -127,8 +127,8 @@ Rect mouseDevice{ 170.0f, 170.0f,200.0f, -350.0f };
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
     AEMtx33 background;
-    AEMtx33Scale(&background, background1.width, background1.height);
-    AEMtx33TransApply(&background, &background, background1.x, background1.y);
+    AEMtx33Scale(&background, backgroundRect.width, backgroundRect.height);
+    AEMtx33TransApply(&background, &background, backgroundRect.x, backgroundRect.y);
     AEGfxSetTransform(background.m);
     AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
     AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
@@ -141,7 +141,7 @@ void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
 
 void RenderDustbin(AEGfxVertexList * mesh, AEGfxTexture * tex) {
 
-    DrawRect(dustbin1, tex, mesh);
+    DrawRect(dustbinRect, tex, mesh);
 }
 void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box)
 {
@@ -179,8 +179,8 @@ void RenderIngredientbox(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
     for (int i = 0; i < 3; i++) {
         AEMtx33 ingredientboxTransform;
-        AEMtx33Scale(&ingredientboxTransform, ingredient1_box.width, ingredient1_box.height);
-        AEMtx33TransApply(&ingredientboxTransform, &ingredientboxTransform, ingredient1_box.x + 151.0f * i, ingredient1_box.y);
+        AEMtx33Scale(&ingredientboxTransform, ingredientBoxRect.width, ingredientBoxRect.height);
+        AEMtx33TransApply(&ingredientboxTransform, &ingredientboxTransform, ingredientBoxRect.x + 151.0f * i, ingredientBoxRect.y);
         AEGfxSetTransform(ingredientboxTransform.m);
         AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
         AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
@@ -218,10 +218,10 @@ void RenderIngredientsOnBoxes(
             continue; // Skip rendering if no ingredient.
 
         // Compute position & size for drawing
-        float posX = ingredient1_box.x + 151.0f * i;
-        float posY = ingredient1_box.y + 35.0f; // slight vertical offset.
-        float ingW = ingredient1_box.width - 40.0f;
-        float ingH = ingredient1_box.height - 40.0f;
+        float posX = ingredientBoxRect.x + 151.0f * i;
+        float posY = ingredientBoxRect.y + 35.0f; // slight vertical offset.
+        float ingW = ingredientBoxRect.width - 40.0f;
+        float ingH = ingredientBoxRect.height - 40.0f;
 
         // Setup transformation matrix.
         AEMtx33 ingredientTransform;
@@ -381,7 +381,7 @@ void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& rec
             ingColumnX += 0.20f;  // **Added extra space for clearer separation**
         }
     }
-}
+ }
 
 void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture* tex, const RecipeSystem& recipeSystem)
 {
@@ -391,6 +391,8 @@ void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture* tex, const RecipeS
     {
         if (i >= recipeBoxes.size()) break; // Prevent overflow
         RenderRecipeBox(mesh, tex, activeRecipes[i], recipeBoxes[i].x, recipeBoxes[i].y);
+        std::string remainTime = std::to_string(static_cast<int>(activeRecipes[i].recipeTimer.getRemainingTime()));
+        AEGfxPrint(FontID, remainTime.c_str(), -0.3f + i * 0.45f , 0.58f, 1.0, 0.0f, 0.0f, 0.0f, 1.0f); // Blue text
     }
 }
 
@@ -434,7 +436,7 @@ void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge , AEGfxTexture* b
     else {
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         qteGauge.render(mesh , barTex , sliderTex , targetTex);
-        AEGfxPrint(FontID, "Press T!", -0.1f, 0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, "Press R!", -0.1f, 0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 }
 
