@@ -279,6 +279,7 @@ void CoreEngine::Update()
             else if (mainMenu.isCreditsSelected())
             {
                 currentState = GameState::CREDITS;
+            std::cout << "credits";
             }
             else if (mainMenu.IsQuitSelected())
             {

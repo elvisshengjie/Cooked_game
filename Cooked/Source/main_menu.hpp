@@ -16,18 +16,28 @@ struct Button {
 
 
 class Credits {
+private:
+    struct CreditLine {
+        std::string text;
+        float scale;
+        float spacing;
+    };
 
+    std::vector<CreditLine> lines;
+    float scrollPosition;
+    float scrollSpeed;
+    float screenHeight;
+    bool doneScrolling;
+    int FontID;
+
+public:
+    Credits();
     void Init();
-
     void Update();
-
     void Render();
-
-   
-
+    bool IsDoneScrolling();
 
 };
-
 // Helper: Check if a point is inside a button (using center coordinates)
 bool IsPointInsideButton(float px, float py, const Button& btn);
 
@@ -83,7 +93,7 @@ private:
 
     // Flag set when the mouse click activates the "Start Game" button
     bool m_StartGameActivated{ false };
-    bool m_creditsActivated{ false };
+    bool m_CreditsActivated{ false };
  
     bool m_StartGameActivated4{ false };
     bool m_howToPlayActivated{ false };

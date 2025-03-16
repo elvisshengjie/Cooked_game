@@ -51,6 +51,7 @@ void MainMenu::Update() {
     }
     if (flag) {
         m_StartGameActivated = false;
+        m_CreditsActivated = false;
         m_StartGameActivated4 = false;
         
         
@@ -80,8 +81,8 @@ void MainMenu::Update() {
                     if (i == 0) {
                         m_StartGameActivated = true;
                     }
-                    else if (i == 2) {
-                        m_StartGameActivated2 = true;
+                    else if (i == 1) {
+                        m_CreditsActivated = true;
                     }
                     else if (i == 4) {
                         m_howToPlayActivated = true;
@@ -140,7 +141,7 @@ bool MainMenu::IsStartGameSelected() const {
 
 bool MainMenu::isCreditsSelected() const
 {
-    return((m_StartGameActivated2));
+    return((m_CreditsActivated));
 }
 
 
@@ -354,17 +355,66 @@ void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTex
         DrawRect(HTPbutton_button.box, htpbutton, mesh);
     }
 }
-void Credits::Init()
+Credits::Credits()
+    : scrollPosition(0), scrollSpeed(30.0f), doneScrolling(false)
 {
-
+    screenHeight = static_cast<float>(AEGfxGetWindowHeight());
 }
 
-void Credits::Update()
-{
+void Credits::Init() {
+    scrollPosition = -screenHeight;
+    doneScrolling = false;
 
-    //All Content Copyright 2025 DigiPen Institute of Technology Singapore. All Rights Reserved
+    lines = {
+        {"Cooked!", 2.0f, 60.0f},
+        {"created at DigiPen Institute of Technology Singapore", 1.0f, 80.0f},
+        {"PRESIDENT", 1.5f, 40.0f},
+        {"CLAUDE COMAIR", 1.2f, 60.0f},
+        {"PROGRAMMERS INCLUDE", 1.5f, 40.0f},
+        {"ELVIS", 1.2f, 30.0f},
+        {"KERRIN", 1.2f, 30.0f},
+        {"NORMAN", 1.2f, 30.0f},
+        {"JUSTIN", 1.2f, 60.0f},
+        {"DIGIPEN INSTRUCTORS & ADVISORS", 1.5f, 40.0f},
+        {"DING XIANG", 1.2f, 30.0f},
+        {"SOROOR", 1.2f, 30.0f},
+        {"GERALD WONG", 1.2f, 60.0f},
+        {"All Content Copyright 2025 DigiPen Institute of Technology Singapore. All Rights Reserved",
+            0.8f, 80.0f},
+    };
 }
 
-void Credits::Render()
-{
+void Credits::Update() {
+    float deltaTime = AEFrameRateControllerGetFrameTime();
+    scrollPosition += scrollSpeed * deltaTime;
+
+    if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_RETURN) || AEInputCheckTriggered(AEVK_SPACE))
+        doneScrolling = true;
+
+    if (scrollPosition > lines.size() * 100.0f)
+        doneScrolling = true;
+}
+
+void Credits::Render() {
+    AEGfxSetBackgroundColor(1, 1, 1);
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxStart();
+
+    float y = scrollPosition;
+    float windowWidth = (float)AEGfxGetWindowWidth();
+
+    for (const auto& line : lines) {
+        if (y > -50.0f && y < screenHeight + 50.0f) {
+            AEGfxPrint(FontID, line.text.c_str(),
+                windowWidth / 2.0f, y,
+                line.scale, 0, 0, 0, 1.0f);
+        }
+        y += line.spacing;
+    }
+
+    AEGfxEnd();
+}
+
+bool Credits::IsDoneScrolling() {
+    return doneScrolling || (scrollPosition > lines.size() * 100.0f);
 }
