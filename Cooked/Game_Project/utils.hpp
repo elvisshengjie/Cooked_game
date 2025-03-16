@@ -121,4 +121,4 @@ private:
 
 };
 extern int score;
-int updateScore(bool);
+int updateScore(bool, size_t);
