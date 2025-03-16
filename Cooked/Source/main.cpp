@@ -279,8 +279,6 @@ void CoreEngine::Update()
             {
                 std::cout << "Out";
                 gGameRunning = false;
-                
-
             }
         }
         break;
