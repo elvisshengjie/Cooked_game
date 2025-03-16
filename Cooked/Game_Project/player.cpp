@@ -393,12 +393,26 @@ void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gaug
 	}
 }
 
-//float player::getX() const 
-//{
-//	return x;
-//}
-//
-//float player::getY() const
-//{
-//	return y;
-//}
+void player::playerInit()
+{
+	float x{};
+	float y{};
+	float normalize_speed{};
+	float dt{};
+
+	// dash
+	float dy{}, dx{}, angle{}, normdy{}, normdx{};
+	float mangnituded{};
+
+	float dashCooldown{ 0.5f };
+	/*int	  rawX{};
+	int   rawY{};*/
+	bool  isDashing{ false };
+	float DirectX{};
+	float DirectY{};
+	float DirectionX{};
+	float DirectionY{};
+	float Magnitude{};
+	int  dashCounter{ 1 };
+	Ingredients Hand = EMPTY;
+}
