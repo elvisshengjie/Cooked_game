@@ -355,66 +355,72 @@ void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTex
         DrawRect(HTPbutton_button.box, htpbutton, mesh);
     }
 }
-Credits::Credits()
-    : scrollPosition(0), scrollSpeed(30.0f), doneScrolling(false)
-{
+
+Credits::Credits() {
+    // Get the window height in pixels (for example, 900) and use half of it (450)
+    // if your main menu converts y by dividing by 450.
     screenHeight = static_cast<float>(AEGfxGetWindowHeight());
+    scrollPosition = 0.0f; // start at top (in pixel space)
 }
 
 void Credits::Init() {
-    scrollPosition = -screenHeight;
-    doneScrolling = false;
-
-    lines = {
-        {"Cooked!", 2.0f, 60.0f},
-        {"created at DigiPen Institute of Technology Singapore", 1.0f, 80.0f},
-        {"PRESIDENT", 1.5f, 40.0f},
-        {"CLAUDE COMAIR", 1.2f, 60.0f},
-        {"PROGRAMMERS INCLUDE", 1.5f, 40.0f},
-        {"ELVIS", 1.2f, 30.0f},
-        {"KERRIN", 1.2f, 30.0f},
-        {"NORMAN", 1.2f, 30.0f},
-        {"JUSTIN", 1.2f, 60.0f},
-        {"DIGIPEN INSTRUCTORS & ADVISORS", 1.5f, 40.0f},
-        {"DING XIANG", 1.2f, 30.0f},
-        {"SOROOR", 1.2f, 30.0f},
-        {"GERALD WONG", 1.2f, 60.0f},
-        {"All Content Copyright 2025 DigiPen Institute of Technology Singapore. All Rights Reserved",
-            0.8f, 80.0f},
-    };
+    lines.clear();
+    // Populate the credits list.
+    lines.push_back({ "Cooked!", 2.0f, 60.0f });
+    lines.push_back({ "created at DigiPen Institute of Technology Singapore", 1.0f, 80.0f });
+    lines.push_back({ "PRESIDENT", 1.5f, 40.0f });
+    lines.push_back({ "CLAUDE COMAIR", 1.2f, 60.0f });
+    lines.push_back({ "PROGRAMMERS INCLUDE", 1.5f, 40.0f });
+    lines.push_back({ "ELVIS", 1.2f, 30.0f });
+    lines.push_back({ "KERRIN", 1.2f, 30.0f });
+    lines.push_back({ "NORMAN", 1.2f, 30.0f });
+    lines.push_back({ "JUSTIN", 1.2f, 60.0f });
+    lines.push_back({ "DIGIPEN INSTRUCTORS & ADVISORS", 1.5f, 40.0f });
+    lines.push_back({ "DING XIANG", 1.2f, 30.0f });
+    lines.push_back({ "SOROOR", 1.2f, 30.0f });
+    lines.push_back({ "GERALD WONG", 1.2f, 60.0f });
+    lines.push_back({ "All Content Copyright 2025 DigiPen Institute of Technology Singapore. All Rights Reserved", 0.8f, 80.0f });
 }
 
 void Credits::Update() {
-    float deltaTime = AEFrameRateControllerGetFrameTime();
-    scrollPosition += scrollSpeed * deltaTime;
+    s32 delta = 0;
+    AEInputMouseWheelDelta(&delta);  // Get how much the wheel moved
+    float sensitivity = 20.0f;  // Adjust sensitivity as needed.
+    // Update the scroll position in pixel space
+    scrollPosition += static_cast<float>(delta) * sensitivity;
+    // Clamp to prevent scrolling above the start (optional)
+    if (scrollPosition < 0.0f) {
+        scrollPosition = 0.0f;
+    }
 
-    if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_RETURN) || AEInputCheckTriggered(AEVK_SPACE))
-        doneScrolling = true;
-
-    if (scrollPosition > lines.size() * 100.0f)
-        doneScrolling = true;
+    // Add automatic scrolling for a better credits experience
+    scrollPosition += 0.5f; // Adjust speed as needed
 }
 
 void Credits::Render() {
-    AEGfxSetBackgroundColor(1, 1, 1);
+    // Set texture to NULL to ensure no previous textures are used
+    AEGfxTextureSet(NULL, 0.0f, 0.0f);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxStart();
+    AEGfxSetBackgroundColor(0, 0, 0);
+   
 
-    float y = scrollPosition;
-    float windowWidth = (float)AEGfxGetWindowWidth();
+    float windowWidth = static_cast<float>(AEGfxGetWindowWidth());
+    // Convert scrollPosition (in pixels) to normalized space
+    float normY = scrollPosition / 450.0f;
 
-    for (const auto& line : lines) {
-        if (y > -50.0f && y < screenHeight + 50.0f) {
-            AEGfxPrint(FontID, line.text.c_str(),
-                windowWidth / 2.0f, y,
-                line.scale, 0, 0, 0, 1.0f);
+    // IMPORTANT: Set blend mode for text rendering
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+    // Draw each line of credits without using auto
+    for (std::vector<CreditLine>::const_iterator it = lines.begin(); it != lines.end(); ++it) {
+        // Only draw if in the visible normalized range (-1.0 to 1.0)
+        if (normY > -1.0f && normY < 1.0f) {
+            // Center text horizontally (windowWidth/2 converted to normalized coordinates)
+            float centerX = (windowWidth / 2.0f) / (windowWidth / 2.0f) - 1.0f;
+
+            // Text color white (1,1,1,1)
+            AEGfxPrint(FontID, it->text.c_str(), centerX, -normY, it->scale, 1, 1, 1, 1.0f);
         }
-        y += line.spacing;
+        normY -= it->spacing / 450.0f;
     }
-
-    AEGfxEnd();
-}
-
-bool Credits::IsDoneScrolling() {
-    return doneScrolling || (scrollPosition > lines.size() * 100.0f);
 }

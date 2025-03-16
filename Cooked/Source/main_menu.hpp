@@ -24,20 +24,16 @@ private:
     };
 
     std::vector<CreditLine> lines;
-    float scrollPosition;
-    float scrollSpeed;
     float screenHeight;
-    bool doneScrolling;
-    int FontID;
+    float scrollPosition;  // <-- Add this line
 
 public:
     Credits();
     void Init();
     void Update();
     void Render();
-    bool IsDoneScrolling();
-
 };
+
 // Helper: Check if a point is inside a button (using center coordinates)
 bool IsPointInsideButton(float px, float py, const Button& btn);
 

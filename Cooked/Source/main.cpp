@@ -83,7 +83,7 @@ class CoreEngine
     RecipeSystem recipeSystem;
    MainMenu     mainMenu;
    PauseMenu    pauseMenu;
-
+   Credits     creditMenu;
     QTE          qteGauge;
     Stove        Wok;
     WinScreen    winScreen;
@@ -119,6 +119,7 @@ void CoreEngine::Init()
     winScreen.Init();
     loseScreen.Init();
     pauseMenu.Init();
+    creditMenu.Init();
 
     // Start the timer
 
@@ -288,7 +289,22 @@ void CoreEngine::Update()
             }
         }
         break;
+        case GameState::CREDITS:
+        {
 
+            creditMenu.Update();
+            if (AEInputCheckTriggered(AEVK_Q))  // Use Q or another key to exit credits
+            {
+                // Before returning to main menu, reinitialize its textures.
+                mainMenu.Init();
+
+                currentState = GameState::MAIN_MENU;
+            }
+            AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+            creditMenu.Render();
+           
+        }
+        break;
         case GameState::WIN_SCREEN:
         {
             // Update & render Main Menu
@@ -323,10 +339,7 @@ void CoreEngine::Update()
             score = 0;
         }
         break;
-        case GameState::CREDITS:
-        {
-            break;
-        }
+        
 
         case GameState::LOSE_SCREEN:
         {
