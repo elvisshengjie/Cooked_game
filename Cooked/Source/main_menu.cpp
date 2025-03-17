@@ -415,8 +415,7 @@ void Credits::Render() {
     for (std::vector<CreditLine>::const_iterator it = lines.begin(); it != lines.end(); ++it) {
         // Only draw if in the visible normalized range (-1.0 to 1.0)
         if (normY > -1.0f && normY < 1.0f) {
-            // Since 0,0 is the center, we can directly use 0.0f for centered text
-            // Text color white (1,1,1,1)
+      
             AEGfxPrint(FontID, it->text.c_str(), textX, normY, it->scale, 1, 1, 1, 1.0f);
         }
         normY -= it->spacing / 450.0f;
