@@ -360,7 +360,7 @@ Credits::Credits() {
     // Get the window height in pixels (for example, 900) and use half of it (450)
     // if your main menu converts y by dividing by 450.
     screenHeight = static_cast<float>(AEGfxGetWindowHeight());
-    scrollPosition = 200.0f; // start at top (in pixel space)
+    scrollPosition = -200.0f; // start at top (in pixel space)
 }
 
 void Credits::Init() {
@@ -388,9 +388,9 @@ void Credits::Update() {
     float sensitivity = 20.0f;  // Adjust sensitivity as needed.
     // Update the scroll position in pixel space
     scrollPosition += static_cast<float>(delta) * sensitivity;
-    // Clamp to prevent scrolling above the start (optional)
-    if (scrollPosition > -200.0f) {
-        scrollPosition = -200.0f;
+    // Clamp to prevent scrolling above the start 
+    if (scrollPosition > -300.0f) {
+        scrollPosition = -300.0f;
     }
     if (scrollPosition < -400.0f) {
         scrollPosition = -400.0f;
@@ -400,10 +400,10 @@ void Credits::Update() {
 }
 
 void Credits::Render() {
-    // Set texture to NULL to ensure no previous textures are used
+  /*   Set texture to NULL to ensure no previous textures are used*/
     AEGfxTextureSet(NULL, 0.0f, 0.0f);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxSetBackgroundColor(0, 0, 0);
+    AEGfxSetBackgroundColor(0.87f, 0.72f, 0.53f);
 
 
     // IMPORTANT: Set blend mode for text rendering
