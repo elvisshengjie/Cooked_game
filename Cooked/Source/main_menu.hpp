@@ -22,16 +22,23 @@ private:
         float scale;
         float spacing;
     };
-
+    AEGfxTexture* texture = nullptr;
     std::vector<CreditLine> lines;
     float screenHeight;
     float scrollPosition;  // <-- Add this line
-
+   
+    Button HTPbutton_buttonX{ "X",{50.0f , 50.0f , 625.0f, 300.0f} };
+    bool exitToMain = false;
 public:
     Credits();
     void Init();
     void Update();
-    void Render();
+    void Render(AEGfxVertexList* mesh);
+    void setTexture(AEGfxTexture * tex) {
+        texture = tex;
+    }
+    bool shouldExitToMain() const { return exitToMain; }
+    void ResetExitFlag() { exitToMain = false; }
 };
 
 // Helper: Check if a point is inside a button (using center coordinates)
@@ -64,6 +71,9 @@ public:
     
     void Cleanup();
     AEGfxTexture* GetLogoTexture() const { return DigipenLogo; }
+    AEGfxTexture* GetHtpButtonTexture() const {
+        return htpButtonTexture;
+    }
 
     double GetTime() {
         return time;

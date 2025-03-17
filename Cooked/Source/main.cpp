@@ -119,6 +119,7 @@ void CoreEngine::Init()
     winScreen.Init();
     loseScreen.Init();
     pauseMenu.Init();
+    creditMenu.setTexture(mainMenu.GetHtpButtonTexture());
     creditMenu.Init();
 
     // Start the timer
@@ -279,6 +280,7 @@ void CoreEngine::Update()
             }
             else if (mainMenu.isCreditsSelected())
             {
+                
                 currentState = GameState::CREDITS;
             std::cout << "credits";
             }
@@ -293,15 +295,15 @@ void CoreEngine::Update()
         {
 
             creditMenu.Update();
-            if (AEInputCheckTriggered(AEVK_Q))  // Use Q or another key to exit credits
+            if (AEInputCheckTriggered(AEVK_Q)|| creditMenu.shouldExitToMain())  // Use Q or X to exit credits
             {
-                // Before returning to main menu, reinitialize its textures.
-                mainMenu.Init();
-
+                
+                
+                creditMenu.ResetExitFlag();
                 currentState = GameState::MAIN_MENU;
             }
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-            creditMenu.Render();
+            creditMenu.Render(pMesh);
            
         }
         break;

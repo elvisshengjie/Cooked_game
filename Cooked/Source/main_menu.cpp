@@ -366,7 +366,7 @@ Credits::Credits() {
 void Credits::Init() {
     lines.clear();
     // Populate the credits list.
-    lines.push_back({ "Cooked!", 2.0f, 60.0f });
+    lines.push_back({ "Cooked!", 1.8f, 60.0f });
     lines.push_back({ "created at DigiPen Institute of Technology Singapore", 1.0f, 80.0f });
     lines.push_back({ "PRESIDENT", 1.5f, 40.0f });
     lines.push_back({ "CLAUDE COMAIR", 1.2f, 60.0f });
@@ -380,6 +380,9 @@ void Credits::Init() {
     lines.push_back({ "SOROOR", 1.2f, 30.0f });
     lines.push_back({ "GERALD WONG", 1.2f, 60.0f });
     lines.push_back({ "All Content Copyright 2025 DigiPen Institute of Technology Singapore. All Rights Reserved", 0.8f, 80.0f });
+
+    lines.push_back({ "PRESS Q TO GO BACK MAIN MENU", 1.5f, 80.0f });
+
 }
 
 void Credits::Update() {
@@ -399,12 +402,13 @@ void Credits::Update() {
     scrollPosition += 0.5f; // Adjust speed as needed
 }
 
-void Credits::Render() {
+void Credits::Render(AEGfxVertexList* mesh) {
   /*   Set texture to NULL to ensure no previous textures are used*/
+    DrawRect(HTPbutton_buttonX.box, texture, mesh);
     AEGfxTextureSet(NULL, 0.0f, 0.0f);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxSetBackgroundColor(0.87f, 0.72f, 0.53f);
-
+   
 
     // IMPORTANT: Set blend mode for text rendering
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -419,5 +423,14 @@ void Credits::Render() {
             AEGfxPrint(FontID, it->text.c_str(), textX, normY, it->scale, 1, 1, 1, 1.0f);
         }
         normY -= it->spacing / 450.0f;
+    }
+
+    // Check if the left mouse button is pressed on the HTP button:
+    if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+        int mouseX, mouseY;
+        AEInputGetCursorPosition(&mouseX, &mouseY);
+        if (IsPointInsideButton(static_cast<float>(mouseX), static_cast<float>(mouseY), HTPbutton_buttonX)) {
+            exitToMain = true;  // Set the flag if the button is clicked
+        }
     }
 }
