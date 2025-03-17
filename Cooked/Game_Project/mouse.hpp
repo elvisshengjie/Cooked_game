@@ -21,8 +21,11 @@ public:
         : x(startX), y(startY), chaseTimer{}
     {
     }
+
     // Draw function (renders the mouse on screen)
-    void mousedraw(AEGfxVertexList* mesh, std::vector<AEGfxTexture*>up, std::vector<AEGfxTexture*>down, std::vector<AEGfxTexture*>left, std::vector<AEGfxTexture*>right);
+    void mousedraw(AEGfxVertexList* mesh, std::vector<AEGfxTexture*> up,
+        std::vector<AEGfxTexture*> down, std::vector<AEGfxTexture*> left,
+        std::vector<AEGfxTexture*> right);
 
     // Movement + pathfinding toward nearest ingredient
     void mouseMove(float speed);
@@ -37,15 +40,15 @@ public:
     // The mouse "eats" or steals the ingredient
     /*void mouseEating(Ingredients& boxIngredient);*/
 
-    // OPTIONAL: Expose position if you need from outside
-    // float getX() const { return x; }
-    // float getY() const { return y; }
-    // void  setPosition(float newX, float newY) { x = newX; y = newY; }
+    // Call this if you want to reset the mouse¡¯s state (like a re-init)
+    void init(float startX, float startY);
 
+    // The mouse is chased away for a certain duration
     void chaseAway(float duration);
 
+    // Public flags you may need for anim logic
     bool isMoving = false;
-    int currentFrame = 0;
+    int  currentFrame = 0;
     float frameTimer = 0.0f;
     const float frameDuration = 0.1f;
     int spriteDirection = 2; // 1-up , 2- down , 3-left , 4-right
@@ -62,12 +65,11 @@ private:
 
     // For pathfinding / nearest-target logic
     bool  hasTarget = false;  // Do we have a current ingredient target?
-    float targetX = 0.0f;  // X coordinate of our current target
-    float targetY = 0.0f;  // Y coordinate of our current target
+    float targetX = 0.0f;     // X coordinate of our current target
+    float targetY = 0.0f;     // Y coordinate of our current target
 
-
-    //chasing
-    bool isChased = false;
+    // Chasing (being scared away)
+    bool  isChased = false;
     Timer chaseTimer;
     float randomDirX = 0.0f;
     float randomDirY = 0.0f;
@@ -76,7 +78,8 @@ private:
     Ingredients Hand = EMPTY;
 };
 
-// We declare an extern mouse object if it¡¯s used globally
+// If you want global mouse objects accessible everywhere:
 extern mouse mouse1;
 extern mouse mouse2;
 extern mouse mouse3;
+
