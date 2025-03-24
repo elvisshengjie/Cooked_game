@@ -1,6 +1,35 @@
 #include "Main_Menu.hpp"
 
+void Digipen::Init(){
 
+    time.start(5);
+    DigipenLogo = AEGfxTextureLoad("Assets/DigiPen_Singapore_WEB_RED.png");
+}
+
+void Digipen::Update() {
+   
+    if (time.completed() || AEInputCheckTriggered(AEVK_LBUTTON) || AEInputCheckTriggered(AEVK_RBUTTON) || AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_RETURN) || AEInputCheckTriggered(AEVK_ESCAPE)) {
+        // Reset the activation flag each frame.
+        flag = true;
+    }
+    
+}
+
+void Digipen::Render(AEGfxVertexList* mesh) {
+
+    
+    
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+        AEGfxSetBackgroundColor(0, 0, 0);
+        RenderMain_digipenLogo(mesh, DigipenLogo);
+
+        assert(DigipenLogo && "DigiPen logo texture failed to load!");
+    
+}
+
+void Digipen::Cleanup() {
+    AEGfxTextureUnload(DigipenLogo);
+}
 bool IsPointInsideButton(float px, float py, const Button& btn) {
     float left = btn.box.x+800.0f - btn.box.width / 2.0f;
     float right = btn.box.x+800.0f + btn.box.width / 2.0f;
@@ -16,7 +45,7 @@ MainMenu::~MainMenu() {}
 
 void MainMenu::Init() {
     background = AEGfxTextureLoad("Assets/cafe.jpg");
-    DigipenLogo = AEGfxTextureLoad("Assets/DigiPen_Singapore_WEB_RED.png");
+  
     button = AEGfxTextureLoad("Assets/paperUIButton.png");
     htpTexture = AEGfxTextureLoad("Assets/howtoplay.png");
     htpButtonTexture = AEGfxTextureLoad("Assets/X.png");
@@ -44,12 +73,7 @@ void MainMenu::Init() {
 }
 
 void MainMenu::Update() {
-    time += AEFrameRateControllerGetFrameTime();
-    if (time > 5 || AEInputCheckTriggered(AEVK_LBUTTON) || AEInputCheckTriggered(AEVK_RBUTTON) || AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_RETURN) || AEInputCheckTriggered(AEVK_ESCAPE)) {
-        // Reset the activation flag each frame.
-        flag = true;
-    }
-    if (flag) {
+    
         m_StartGameActivated = false;
         m_CreditsActivated = false;
         m_StartGameActivated4 = false;
@@ -99,12 +123,12 @@ void MainMenu::Update() {
             }
  
         }
-    }
+    
 }
 
 void MainMenu::Render(AEGfxVertexList* mesh) {
 
-    if (flag){
+    
         RenderMain_menu_background(mesh, background);
         
         DrawRect(titleRect, titleTexture, mesh);
@@ -126,12 +150,8 @@ void MainMenu::Render(AEGfxVertexList* mesh) {
             DrawRect(HTPbutton_button.box, htpButtonTexture, mesh);
         }
         
-    }
-    else {
-        AEGfxSetBackgroundColor(0, 0, 0);
-        RenderMain_digipenLogo(mesh, DigipenLogo);
-        
-    }
+    
+
 }
 
 
@@ -152,7 +172,7 @@ bool MainMenu::IsQuitSelected() const {
 
 void MainMenu::Cleanup() {
     AEGfxTextureUnload(background);
-    AEGfxTextureUnload(DigipenLogo);
+    
     AEGfxTextureUnload(button);
     AEGfxTextureUnload(htpTexture);
     AEGfxTextureUnload(htpButtonTexture);

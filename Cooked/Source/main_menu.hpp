@@ -14,6 +14,29 @@ struct Button {
     Rect box;
 };
 
+class Digipen {
+public:
+
+    // Initializes menu resources (fonts, background texture, buttons)
+    void Init();
+
+    // Handles input for menu navigation (keyboard and mouse)
+    void Update();
+
+    // Renders the menu background and buttons
+    void Render(AEGfxVertexList* mesh);
+    void Cleanup();
+    AEGfxTexture* GetLogoTexture() const { return DigipenLogo; }
+ 
+    double GetFlag() {
+        return flag;
+    }
+    Timer time;
+private:
+    bool flag{ false };
+    AEGfxTexture* DigipenLogo = nullptr;
+    
+};
 
 class Credits {
 private:
@@ -70,31 +93,29 @@ public:
 
     
     void Cleanup();
-    AEGfxTexture* GetLogoTexture() const { return DigipenLogo; }
+ 
     AEGfxTexture* GetHtpButtonTexture() const {
         return htpButtonTexture;
     }
 
-    double GetTime() {
-        return time;
-    }
+    
 
     Rect titleRect{ 600.0f , 200.0f , 0.0f , 300.0f };
     Rect HTP_rect{ 1400.0f, 700.0f ,0.0f, 0.0f };
     Button HTPbutton_button { "X",{50.0f , 50.0f , 625.0f, 300.0f} };
 
 private:
-    double time = 0;
+   
     std::vector<Button> buttons;         
     size_t selectedOption{};
     s8 FontID_main_menu = -1;
     AEGfxTexture* background = nullptr;
-    AEGfxTexture* DigipenLogo = nullptr;
+
     AEGfxTexture* button = nullptr;
     AEGfxTexture* htpTexture = nullptr;
     AEGfxTexture* htpButtonTexture = nullptr;
     AEGfxTexture* titleTexture = nullptr;
-    bool flag = false;
+  
   
 
     // Flag set when the mouse click activates the "Start Game" button
