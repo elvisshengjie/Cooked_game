@@ -41,7 +41,7 @@ bool Stove::putIngredient(const std::string& ingredient)
 		return false;
 	}
 	//Add return codes for edge cases, testing.
-	if (!isCooking && stoveItems.size() < 7) {
+	if (!isCooking && stoveItems.size() < 6) {
 		stoveItems.push_back(ingredient);
 		return true;
 	}

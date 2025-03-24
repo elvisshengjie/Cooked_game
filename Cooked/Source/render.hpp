@@ -53,6 +53,8 @@ void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture*, const Recipe& recipe,
 
 void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture*, const RecipeSystem& recipeSystem);
 
+void renderStoveIngredient(AEGfxVertexList* mesh, AEGfxTexture* chickenTex, AEGfxTexture* eggTex, AEGfxTexture* cheeseTex, AEGfxTexture* riceTex, AEGfxTexture* beefTex, AEGfxTexture* potatoTex, Stove& stove);
+
 void displayScore(int);
 void displayTimer(double);
 void mouseDevicefun(AEGfxVertexList* mesh, AEGfxTexture*);
