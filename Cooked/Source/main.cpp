@@ -628,14 +628,14 @@ void CoreEngine::Update()
 void CoreEngine::Exit()
 {
     // Cleanup main menu
-<<<<<<< HEAD
+
     AEAudioUnloadAudio(bouken);
    
     AEAudioUnloadAudioGroup(bgm);
     
-=======
+
     digi.Cleanup();
->>>>>>> 951a0240f4cdc14f5821c48918b179ac8650eaeb
+
     mainMenu.Cleanup();
     DestroyFront();
     // Free memory
