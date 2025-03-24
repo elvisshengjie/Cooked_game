@@ -14,7 +14,8 @@
 // ---------------------------------------------------------------------------
 // Define your game states
 enum class GameState {
-    
+
+    DIGIPEN_LOGO,
     MAIN_MENU,
     GAME,
     CREDITS,
@@ -28,7 +29,8 @@ enum class GameState {
 class CoreEngine
 {
     bool gGameRunning = true;
-    GameState currentState = GameState::MAIN_MENU;
+    GameState currentState = GameState::DIGIPEN_LOGO
+        ;
     Timer mouseDeviceCooldownTimer{};
 
     // Meshes
@@ -81,6 +83,7 @@ class CoreEngine
 
     // Systems
     RecipeSystem recipeSystem;
+    Digipen digi;
    MainMenu     mainMenu;
    PauseMenu    pauseMenu;
    Credits     creditMenu;
@@ -102,7 +105,7 @@ public:
 // CoreEngine::Init
 void CoreEngine::Init()
 {
-    currentState = GameState::MAIN_MENU;
+    currentState = GameState::DIGIPEN_LOGO;
     // Changing the window title
 
     gTimer.start(300);
@@ -115,6 +118,7 @@ void CoreEngine::Init()
     srand(static_cast<unsigned>(time(nullptr)));
 
     // Initialize the main menu
+    digi.Init();
     mainMenu.Init();
     winScreen.Init();
     loseScreen.Init();
@@ -260,6 +264,16 @@ void CoreEngine::Update()
         switch (currentState)
         {
 
+        case GameState::DIGIPEN_LOGO:
+         {
+            
+            digi.Update();
+            digi.Render(pMesh);
+            if (digi.GetFlag()) {
+                currentState = GameState::MAIN_MENU;
+            }
+          }
+         break;
             // ------------------------------
             // MAIN MENU
             // ------------------------------
@@ -567,7 +581,7 @@ void CoreEngine::Update()
 void CoreEngine::Exit()
 {
     // Cleanup main menu
-
+    digi.Cleanup();
     mainMenu.Cleanup();
     DestroyFront();
     // Free memory
