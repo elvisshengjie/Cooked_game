@@ -19,6 +19,7 @@ enum class GameState {
     GAME,
     CREDITS,
     PAUSE_MENU,
+	OPTIONS_MENU,
     WIN_SCREEN,
     LOSE_SCREEN
 };
@@ -97,6 +98,11 @@ public:
     void Exit();
 
 };
+
+//AEAudio ratSound;
+//AEAudioGroup seGroup;
+AEAudio bouken;
+AEAudioGroup bgm; // short for 'background music'
 
 // ------------------------------------------------------------
 // CoreEngine::Init
@@ -241,6 +247,24 @@ void CoreEngine::Init()
         0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
         -0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
     IngredientMesh = AEGfxMeshEnd();
+
+    // 4. Create sound and music
+    //
+    // Audio variables
+    //
+    f32 bgm_volume = 1.f;
+    f32 bgm_pitch = 1.f;
+
+    // Configure audio group
+    bouken = AEAudioLoadMusic("Assets/bm.mp3");
+    bgm = AEAudioCreateGroup(); // short for 'background music'
+
+    AEAudioPlay(bouken, bgm, 0.2f, 1.f, -1); // we can start playing here.
+
+    /*ratSound = AEAudioLoadMusic("Assets/rat.mp3");
+    seGroup = AEAudioCreateGroup();*/
+
+    
 }
 
 // ------------------------------------------------------------
@@ -415,6 +439,9 @@ void CoreEngine::Update()
         // ------------------------------
         case GameState::GAME:
         {
+            static bool ratSoundTriggered = false;
+
+            bool playRatSound = false;
             // 1. Update Player & Collisions
             players1.playerDash();
             players1.playerMove(400.0);
@@ -482,6 +509,7 @@ void CoreEngine::Update()
                         mouse2.chaseAway(chaseDuration);
                         mouse3.chaseAway(chaseDuration);
                         mouseDeviceCooldownTimer.start(25.0);
+                        
                     }
                 }
             }
@@ -502,6 +530,7 @@ void CoreEngine::Update()
             mouse3.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);
             RenderQTEGauge(pMesh, qteGauge , barTex, sliderTex ,targetTex);
 
+            
             // Collision boxes for ingredients or special objects
             for (size_t i = 0; i < g_currentBoxIngredients.size(); i++)
             {
@@ -517,6 +546,13 @@ void CoreEngine::Update()
                     players1.playerPickUp(g_currentBoxIngredients[i]);
                 }
 
+                /*if (mouse1.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)|| mouse2.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)||mouse3.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height))
+                {
+                    	playRatSound = true;
+                }
+                */
+
+
                 // Drop logic (stove or dustbin, etc.)
                 if (players1.playerCheckCollison(Wok.x, Wok.y, Wok.width, Wok.height) ||
                     players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y,
@@ -525,6 +561,17 @@ void CoreEngine::Update()
                     players1.playerDrop(Wok);
                 }
             }
+
+            //if (playRatSound && !ratSoundTriggered)
+            //{
+            //    AEAudioPlay(ratSound, seGroup, 1.f, 1.f, -1);
+            //    ratSoundTriggered = true;
+            //}
+            //else if (!playRatSound)
+            //{
+            //    // Reset the flag when no collision is detected
+            //    ratSoundTriggered = false;
+            //}
             // Check collision with the mouse device
             if (players1.playerCheckCollison(collisionBoxes[3].x, collisionBoxes[3].y, collisionBoxes[3].width, collisionBoxes[3].height)) {
                 // Render highlight for the mouse device.
@@ -567,7 +614,10 @@ void CoreEngine::Update()
 void CoreEngine::Exit()
 {
     // Cleanup main menu
-
+    AEAudioUnloadAudio(bouken);
+   
+    AEAudioUnloadAudioGroup(bgm);
+    
     mainMenu.Cleanup();
     DestroyFront();
     // Free memory
