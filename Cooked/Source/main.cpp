@@ -30,8 +30,7 @@ enum class GameState {
 class CoreEngine
 {
     bool gGameRunning = true;
-    GameState currentState = GameState::DIGIPEN_LOGO
-        ;
+    GameState currentState = GameState::DIGIPEN_LOGO;
     Timer mouseDeviceCooldownTimer{};
 
     // Meshes
@@ -92,7 +91,9 @@ class CoreEngine
     Stove        Wok;
     WinScreen    winScreen;
     WinScreen    loseScreen;
+    OptionsMenu optionsMenu;
 
+    float g_bgmVolume = 0.1f; // default volume
     Timer gTimer{};
 
 public:
@@ -131,7 +132,8 @@ void CoreEngine::Init()
     pauseMenu.Init();
     creditMenu.setTexture(mainMenu.GetHtpButtonTexture());
     creditMenu.Init();
-
+    optionsMenu.Init();  // set up the Options menu
+    
     // Start the timer
 
     // Initialize fonts (used for both the menu and the game)
@@ -263,7 +265,7 @@ void CoreEngine::Init()
     bouken = AEAudioLoadMusic("Assets/bm.mp3");
     bgm = AEAudioCreateGroup(); // short for 'background music'
 
-    AEAudioPlay(bouken, bgm, 0.2f, 1.f, -1); // we can start playing here.
+    AEAudioPlay(bouken, bgm, g_bgmVolume, 1.f, -1); // we can start playing here.
 
     /*ratSound = AEAudioLoadMusic("Assets/rat.mp3");
     seGroup = AEAudioCreateGroup();*/
@@ -325,10 +327,27 @@ void CoreEngine::Update()
                 currentState = GameState::CREDITS;
             std::cout << "credits";
             }
+            else if(mainMenu.IsOptionsSelected())
+            {
+                currentState = GameState::OPTIONS_MENU;
+                std::cout << "options";
+            }
             else if (mainMenu.IsQuitSelected())
             {
                 std::cout << "Out";
                 gGameRunning = false;
+            }
+        }
+        break;
+        case GameState::OPTIONS_MENU:
+        {
+            // Update returns an int indicating user action
+            int result = optionsMenu.Update(g_bgmVolume, bgm);
+            optionsMenu.Render(pMesh, backgroundTex, buttonTex);
+            // If result == 1 => user clicked "Back"
+            if (result == 1)
+            {
+                currentState = GameState::MAIN_MENU;
             }
         }
         break;
@@ -637,6 +656,7 @@ void CoreEngine::Exit()
     digi.Cleanup();
 
     mainMenu.Cleanup();
+	
     DestroyFront();
     // Free memory
     if (backgroundTex)    AEGfxTextureUnload(backgroundTex);

@@ -77,7 +77,7 @@ void MainMenu::Update() {
         m_StartGameActivated = false;
         m_CreditsActivated = false;
         m_StartGameActivated4 = false;
-        
+        m_OptionsActivated = false;
         
 
         if (AEInputCheckTriggered(AEVK_DOWN)) {
@@ -107,6 +107,10 @@ void MainMenu::Update() {
                     }
                     else if (i == 1) {
                         m_CreditsActivated = true;
+                    }
+                    else if (i == 2) 
+                    {
+                        m_OptionsActivated = true;
                     }
                     else if (i == 4) {
                         m_howToPlayActivated = true;
@@ -169,6 +173,10 @@ bool MainMenu::IsQuitSelected() const {
     return ((m_StartGameActivated4));
 }
 
+bool MainMenu::IsOptionsSelected() const
+{
+    return ((m_OptionsActivated));
+}
 
 void MainMenu::Cleanup() {
     AEGfxTextureUnload(background);
@@ -452,5 +460,114 @@ void Credits::Render(AEGfxVertexList* mesh) {
         if (IsPointInsideButton(static_cast<float>(mouseX), static_cast<float>(mouseY), HTPbutton_buttonX)) {
             exitToMain = true;  // Set the flag if the button is clicked
         }
+    }
+}
+
+
+OptionsMenu::~OptionsMenu() {}
+
+void OptionsMenu::Init()
+{
+   
+
+    // Create buttons for volume control + back
+    // Adjust positions/sizes to fit your layout
+    float centerX = 0.0f;
+    float startY = 0.3f;
+    float buttonW = 300.0f;
+    float buttonH = 60.0f;
+    float spacing = 0.2f;
+
+    buttons.clear();
+    buttons.push_back({ "Volume Up",   { buttonW, buttonH, centerX * 800.0f,  startY * 450.0f } });
+    buttons.push_back({ "Volume Down", { buttonW, buttonH, centerX * 800.0f,  (startY * 450.0f) - (spacing * 450.0f) } });
+    buttons.push_back({ "Back",        { buttonW, buttonH, centerX * 800.0f,  (startY * 450.0f) - (spacing * 2 * 450.0f) } });
+}
+
+int OptionsMenu::Update(float& bgmVolume, AEAudioGroup bgm)
+{
+    // Mouse input
+    if (AEInputCheckTriggered(AEVK_LBUTTON))
+    {
+        int mouseX, mouseY;
+        AEInputGetCursorPosition(&mouseX, &mouseY);
+
+        // Check each button
+        for (size_t i = 0; i < buttons.size(); i++)
+        {
+            if (IsPointInsideButton(static_cast<float>(mouseX), static_cast<float>(mouseY), buttons[i]))
+            {
+                selectedOption = static_cast<int>(i);
+                switch (selectedOption)
+                {
+                case 0: // Volume Up
+                    bgmVolume += 0.5f;
+                    if (bgmVolume > 1.0f) bgmVolume = 1.0f;
+                    AEAudioSetGroupVolume(bgm, bgmVolume);
+                    break;
+                case 1: // Volume Down
+                    bgmVolume -= 0.5f;
+                    if (bgmVolume < 0.0f) bgmVolume = 0.0f;
+                    AEAudioSetGroupVolume(bgm, bgmVolume);
+                    break;
+                case 2: // Back
+                    return 1; // We'll return 1 to indicate "back to main menu"
+                default:
+                    break;
+                }
+            }
+        }
+    }
+
+    return 0; // 0 means no special action
+}
+
+//void OptionsMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* buttonTex)
+//{
+//    // Render background
+//
+//        RenderMain_menu_background(mesh, background);
+//
+//    // Render buttons
+//    for (size_t i = 0; i < buttons.size(); i++)
+//    {
+//        DrawRect(buttons[i].box, buttonTex, mesh);
+//        // Print button label (adjust position as needed)
+//        AEGfxPrint(FontID, buttons[i].label.c_str(),
+//            buttons[i].box.x - 0.1f,
+//            buttons[i].box.y / 450.0f,
+//            1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+//    }
+//}
+
+void OptionsMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* buttonTex)
+{
+    // Set render mode and reset color state before drawing the background.
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+    AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+
+    // Render the background (ensure RenderMain_menu_background correctly handles coordinates)
+    RenderMain_menu_background(mesh, background);
+
+    // Loop through each button to render its background and label
+    for (size_t i = 0; i < buttons.size(); i++)
+    {
+        // Draw the button background using texture mode.
+        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+        DrawRect(buttons[i].box, buttonTex, mesh);
+
+        // Switch to color mode for text rendering and reset color state.
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+
+        // Draw the button label.
+        // (You may need to adjust the position values depending on your coordinate system.)
+        AEGfxPrint(FontID, buttons[i].label.c_str(),
+            buttons[i].box.x - 0.1f,
+            buttons[i].box.y / 450.0f,
+            1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+
+        // Optionally, switch back to texture mode in preparation for the next button.
+        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
     }
 }

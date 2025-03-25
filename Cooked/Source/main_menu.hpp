@@ -89,6 +89,9 @@ public:
    
     bool IsQuitSelected() const;
 
+    bool IsOptionsSelected() const;
+    
+
    // bool IsHowToPlaySelected() const;
 
     
@@ -124,6 +127,7 @@ private:
  
     bool m_StartGameActivated4{ false };
     bool m_howToPlayActivated{ false };
+	bool m_OptionsActivated{ false };
 };
 
 
@@ -173,4 +177,32 @@ private:
     bool quitActivated = false;
     bool m_howToPlayActivated = false;
     double time = 0;
+};
+
+class OptionsMenu
+{
+public:
+    OptionsMenu()=default;
+    ~OptionsMenu();
+
+    // Initializes the menu (loads textures, sets up buttons, etc.)
+    void Init();
+
+    // Updates the menu each frame. 
+    // `bgmVolume` is passed by reference so we can modify it here.
+    // Returns an int indicating what the user did: 
+    // e.g., 0 = nothing, 1 = back to main menu, etc.
+    int Update(float& bgmVolume, AEAudioGroup bgm);
+
+    // Renders the menu
+    void Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* buttonTex);
+
+private:
+    std::vector<Button> buttons;
+    size_t selectedOption = 0;
+
+    
+
+    // If you want a flag to indicate when to return to main menu
+    bool backToMain = false;
 };
