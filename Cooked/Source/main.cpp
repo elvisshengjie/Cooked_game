@@ -557,6 +557,7 @@ void CoreEngine::Update()
             // Render Stove & Player
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh,Wok, players1,qteGauge,stoveTex,stoveDirtyTex,stoveCookTex);
+            renderStoveIngredient(pMesh, chickenTex, eggTex, cheeseTex, riceTex, beefTex, potatoTex,Wok);
             players1.playerdraw(pMesh, IngredientMesh, playerIdle,playerWalkUp , playerWalkDown , playerWalkLeft, playerWalkRight ,chickenTex , beefTex , riceTex, eggTex , cheeseTex , potatoTex  );
             mouse1.mousedraw(pMesh,mouseUp, mouseDown , mouseLeft, mouseRight);
             mouse2.mousedraw(pMesh, mouseUp, mouseDown, mouseLeft, mouseRight);
