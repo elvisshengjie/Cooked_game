@@ -378,6 +378,7 @@ void renderStoveIngredient(AEGfxVertexList* mesh, AEGfxTexture* chickenTex, AEGf
         DrawRect(rec, selectedTexture, mesh);
     }
 }
+int maxChar{ 16 };
 
 void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& recipe, float x, float y,
     AEGfxTexture* chickenTex, AEGfxTexture* beefTex, AEGfxTexture* cheeseTex,
@@ -397,27 +398,27 @@ void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& rec
     std::string nameLine1 = recipe.Name;
     std::string nameLine2 = "";
 
-    if (recipe.Name.length() > 16) {
+    if (recipe.Name.length() > maxChar) { // If too long, break into two lines
         size_t spacePos = recipe.Name.find(' ', 12);
         if (spacePos != std::string::npos) {
             nameLine1 = recipe.Name.substr(0, spacePos);
             nameLine2 = recipe.Name.substr(spacePos + 1);
         }
     }
-
-    // Draw name
-    AEGfxPrint(FontID, nameLine1.c_str(), textX, nameY, nameScale, 0, 0, 0, 1);
-    if (!nameLine2.empty())
-        AEGfxPrint(FontID, nameLine2.c_str(), textX, nameY - 0.05f, nameScale, 0, 0, 0, 1);
-
+    // Print Name (Left-aligned)
+    float textOffset{ 0.05f };
+    float offsetX{ 0.20f };
+    AEGfxPrint(FontID, nameLine1.c_str(), textX, nameY, nameScale, 0.0f, 0.0f, 0.0f, 1.0f);
+    if (!nameLine2.empty()) {
+        AEGfxPrint(FontID, nameLine2.c_str(), textX, nameY - textOffset, nameScale, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
     // Draw ingredient icons instead of text
     float iconSize = 60.0f;
     float iconSpacing = 50.0f;
     float iconStartY = y - 25.0f;
     float iconXLeft = x - 120.0f;
     float iconXRight = x + 10.0f;
-
-
+    
     for (size_t i = 0; i < recipe.Ingredients.size(); ++i)
     {
 
@@ -440,8 +441,6 @@ void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& rec
             AEGfxSetTransparency(1.0f);
             AEGfxSetBlendMode(AE_GFX_BM_BLEND);
             AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
-        }
-    }
 }
 
 void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture* tex, const RecipeSystem& recipeSystem,

@@ -6,7 +6,6 @@
 #include "collison.hpp"
 #include <assert.h>
 #include <iostream>
-#include <math.h>
 
 
 class player

@@ -60,7 +60,7 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vect
 		float offsetY = height +0.2f;
 
 		AEMtx33 ingredientTransform;
-		AEMtx33Scale(&ingredientTransform, width * 1.0f, height * 1.0f);
+		AEMtx33Scale(&ingredientTransform, width, height);
 		AEMtx33TransApply(&ingredientTransform, &ingredientTransform, x + offsetX, y + offsetY);
 		AEGfxSetTransform(ingredientTransform.m);
 
@@ -68,47 +68,29 @@ void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vect
 		switch (Hand)
 		{
 		case CHICKEN:
-			/*AEGfxSetColorToMultiply(1.0f, 0.9f, 0.8f, 1.0f);
-			AEGfxSetColorToAdd(1.0f, 0.9f, 0.8f, 1.0f);
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(1.0f, 0.9f, 0.8f, 1.0f);*/
 			AEGfxTextureSet(chickenTex, 0, 0);
 			break;
+
 		case RICE:
-			/*AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-			AEGfxSetColorToAdd(1.0f, 1.0f, 1.0f, 1.0f);
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(1.0f, 1.0f, 1.0f, 1.0f);*/
 			AEGfxTextureSet(riceTex, 0, 0);
 			break;
+
 		case EGG:
-			/*AEGfxSetColorToMultiply(1.0f, 1.0f, 0.5f, 1.0f);
-			AEGfxSetColorToAdd(1.0f, 1.0f, 0.5f, 1.0f);
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(1.0f, 1.0f, 0.5f, 1.0f);*/
 			AEGfxTextureSet(eggTex, 0, 0);
 			break;
+
 		case CHEESE:
-			/*AEGfxSetColorToMultiply(1.0f, 0.9f, 0.2f, 1.0f);
-			AEGfxSetColorToAdd(1.0f, 0.9f, 0.2f, 1.0f);
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(1.0f, 0.9f, 0.2f, 1.0f);*/
 			AEGfxTextureSet(cheeseTex, 0, 0);
 			break;
+
 		case POTATO:
-			/*AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
-			AEGfxSetColorToAdd(0.6f, 0.4f, 0.2f, 1.0f);
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(0.6f, 0.4f, 0.2f, 1.0f);*/
 			AEGfxTextureSet(potatoTex, 0, 0);
 			break;
+
 		case BEEF:
-			/*AEGfxSetColorToMultiply(0.5f, 0.1f, 0.1f, 1.0f);
-			AEGfxSetColorToAdd(0.5f, 0.1f, 0.1f, 1.0f);
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetBlendColor(0.5f, 0.1f, 0.1f, 1.0f);*/
 			AEGfxTextureSet(beefTex, 0, 0);
 			break;
+
 		default:
 			AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 			break;
@@ -178,8 +160,8 @@ void player::playerMove(float speed)
 
 	}
 	else if(!isDashing){
-		
-	normalize_speed = speed * 0.707f;
+		float scalar{ 0.707f };
+	normalize_speed = speed * scalar;
 	if (AEInputCheckCurr(AEVK_W) && AEInputCheckCurr(AEVK_D)) { //NE
 		this->x += normalize_speed * dt;
 		this->y += normalize_speed * dt;
@@ -294,6 +276,7 @@ void player::playerPickUp(Ingredients& boxIngredient)
 	}
 }
 
+int cleanDuration{ 4 };
 void player::playerDrop(Stove& stove) {
 	if (AEInputCheckTriggered(AEVK_E)) {
 		if (Hand != EMPTY && stove.isDirty==false) {
@@ -317,7 +300,7 @@ void player::playerDrop(Stove& stove) {
 	if (AEInputCheckTriggered(AEVK_C)) {
 		if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height)) {
 			if (stove.isDirty) {
-				stove.cookingTimer.start(4);
+				stove.cookingTimer.start(cleanDuration);
 				stove.isCleaning = true;
 			}
 		}

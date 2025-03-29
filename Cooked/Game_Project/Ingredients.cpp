@@ -1,12 +1,15 @@
 #include "Ingredients.hpp"
 #include "utils.hpp"
 
+int minIngredients{ 1 };
+int maxIngredients{ 6 };
+
 Ingredients GetRandomIngredient(Ingredients previousIngredient)
 {
 	// Use a static random engine so that it isn't re-seeded on every call.
 	static std::random_device rd;
 	static std::mt19937 engine(rd());
-	std::uniform_int_distribution<int> distribution(1, 6); // valid indices: 1 to 6
+	std::uniform_int_distribution<int> distribution(minIngredients, maxIngredients); // valid indices: 1 to 6
 
 	Ingredients newIngredient;
 	do {
@@ -37,6 +40,8 @@ bool Recipe::matchesWok(const std::vector<std::string> &wokIngredients)const
 	return sortedWok == sortedRecipe;
 }
 
+int maxRecipesDisplay{ 3 };
+double baseTimer{ 15.0f };
 RecipeSystem::RecipeSystem() {
 	std::srand(static_cast<unsigned int>(std::time(0)));; // Srand Seed with time
 
@@ -48,18 +53,19 @@ RecipeSystem::RecipeSystem() {
 	allRecipes.push_back(Recipe("Loaded Protein Bowl", { "CHICKEN", "RICE", "EGG", "CHEESE", "POTATO", "BEEF" }));
 
 	// Start with 3 random recipes
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < maxRecipesDisplay; i++) {
 		activeRecipes.push_back(allRecipes[std::rand() % allRecipes.size()]);
-		activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size()*15.0f);
+		activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * baseTimer);
 	}
 
 }
+
 void RecipeSystem::update() {
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < maxRecipesDisplay; ++i) {
 		if (activeRecipes[i].recipeTimer.getRemainingTime() <= 0.0f) {
 			//std::cout << "REPLACED";
 			activeRecipes[i] = generateRandomRecipe();
-			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * 15.0f); // Restart timer
+			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * baseTimer); // Restart timer
 			//std::cout << "restarted";
 		}
 	}

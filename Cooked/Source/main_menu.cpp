@@ -1,5 +1,7 @@
 #include "Main_Menu.hpp"
 
+float screenWidth{ 1600.0f };
+float screenHeight{ 900.0f };
 void Digipen::Init(){
 
     time.start(5);
@@ -31,10 +33,10 @@ void Digipen::Cleanup() {
     AEGfxTextureUnload(DigipenLogo);
 }
 bool IsPointInsideButton(float px, float py, const Button& btn) {
-    float left = btn.box.x+800.0f - btn.box.width / 2.0f;
-    float right = btn.box.x+800.0f + btn.box.width / 2.0f;
-    float top = 450.0f -btn.box.y + btn.box.height / 2.0f;
-    float bottom = 450.0f -btn.box.y - btn.box.height / 2.0f;
+    float left = btn.box.x+screenWidth / 2 - btn.box.width / 2.0f;
+    float right = btn.box.x+screenWidth / 2 + btn.box.width / 2.0f;
+    float top = (screenHeight / 2) -btn.box.y + btn.box.height / 2.0f;
+    float bottom = (screenHeight / 2) -btn.box.y - btn.box.height / 2.0f;
 
 
     return (px >= left && px <= right && py <= top && py >= bottom);
@@ -62,14 +64,14 @@ void MainMenu::Init() {
     float buttonHeight{ 50.0f };//Height of each button
     float spacing{ 0.2f };      // Vertical spacing between button centers
 
-
+    
     buttons.clear();
-    buttons.push_back({ "Start Game", { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) } });
-    buttons.push_back({ "Credits",    { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 450.0f)}});
-    buttons.push_back({ "Options",    { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 2 * 450.0f)}});
-    buttons.push_back({ "Extras",     { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f)- (spacing * 3 * 450.0f)}});
-    buttons.push_back({ "How To Play",{ buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f)  - (spacing * 4 * 450.0f)}});
-    buttons.push_back({ "Quit Game",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 5 * 450.0f)}});
+    buttons.push_back({ "Start Game", { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) } });
+    buttons.push_back({ "Credits",    { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) - (spacing * (screenHeight / 2))}});
+    buttons.push_back({ "Options",    { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) - (spacing * 2 * (screenHeight / 2))}});
+    buttons.push_back({ "Extras",     { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2))- (spacing * 3 * (screenHeight / 2))}});
+    buttons.push_back({ "How To Play",{ buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2))  - (spacing * 4 * (screenHeight / 2))}});
+    buttons.push_back({ "Quit Game",  { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) - (spacing * 5 * (screenHeight / 2))}});
 }
 
 void MainMenu::Update() {
@@ -93,8 +95,8 @@ void MainMenu::Update() {
             int rawX, rawY;
             AEInputGetCursorPosition(&rawX, &rawY);
             //// Convert from screen-space (assuming 1600x900) to centered coordinates:
-            //float mouseX{ (rawX - 800) / 800.0f };
-            //float mouseY{ (450 - rawY) / 450.0f };
+            //float mouseX{ (rawX - 800) / screenWidth / 2 };
+            //float mouseY{ (450 - rawY) / (screenHeight / 2) };
 
             // Check each button to see if the mouse is over it.
             for (size_t i = 0; i < buttons.size(); i++) {
@@ -142,7 +144,7 @@ void MainMenu::Render(AEGfxVertexList* mesh) {
             const Button& btn = buttons[i];
 
             DrawRect(btn.box, button, mesh);
-            AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f , btn.box.y/450.0f -0.02f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+            AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f , btn.box.y/(screenHeight / 2) -0.02f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
 
     
@@ -206,9 +208,9 @@ void WinScreen::Init()
     float spacing{ 0.2f };      // Vertical spacing between button centers
 
     buttons.clear();
-    buttons.push_back({ "Restart",    { buttonWidth, buttonHeight, centerX * 800.0f , (startY * 450.0f) } } );
-    buttons.push_back({ "Main Menu",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 450.0f)} });
-    buttons.push_back({ "Quit Game",  { buttonWidth, buttonHeight, (centerX * 800.0f) , (startY * 450.0f) - (spacing * 2 * 450.0f)} });
+    buttons.push_back({ "Restart",    { buttonWidth, buttonHeight, centerX * screenWidth / 2 , (startY * (screenHeight / 2)) } } );
+    buttons.push_back({ "Main Menu",  { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) - (spacing * (screenHeight / 2))} });
+    buttons.push_back({ "Quit Game",  { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) - (spacing * 2 * (screenHeight / 2))} });
 }
 int WinScreen::Update()
 {
@@ -219,8 +221,8 @@ int WinScreen::Update()
         int rawX, rawY;
         AEInputGetCursorPosition(&rawX, &rawY);
         // Convert from screen-space (assuming 1600x900) to centered coordinates:
-     /*   float mouseX = (rawX - 800) / 800.0f;
-        float mouseY = (450 - rawY) / 450.0f;*/
+     /*   float mouseX = (rawX - 800) / screenWidth / 2;
+        float mouseY = (450 - rawY) / (screenHeight / 2);*/
 
         // Check each button to see if the mouse is over it.
         for (size_t i = 0; i < buttons.size(); i++)
@@ -273,7 +275,7 @@ void WinScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* tex, AEGfxTexture* t
         
         DrawRect(btn.box, button, mesh);
         //unsigned int color = (i == static_cast<size_t>(selected)) ? 0xFFFFFF00 : 0xFFFFFFFF;
-        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f, btn.box.y/450.f-0.01f, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f, btn.box.y / (screenHeight / 2) - 0.01f, 1.5f, 0.0f, 0.0f, 0.0f, 1.0f);
 
     }
 
@@ -304,9 +306,9 @@ void PauseMenu::Init() {
     float spacing{ 0.2f };
 
     buttons.clear();
-    buttons.push_back({ "Resume Game", { buttonWidth, buttonHeight, centerX * 800.0f, startY * 450.0f } });
-    buttons.push_back({ "How To Play", { buttonWidth, buttonHeight, centerX * 800.0f, (startY * 450.0f) - spacing * 450.0f } });
-    buttons.push_back({ "Quit Game", { buttonWidth, buttonHeight, centerX * 800.0f, (startY * 450.0f) - (spacing * 2 * 450.0f )} });
+    buttons.push_back({ "Resume Game", { buttonWidth, buttonHeight, centerX * screenWidth / 2, startY * (screenHeight / 2) } });
+    buttons.push_back({ "How To Play", { buttonWidth, buttonHeight, centerX * screenWidth / 2, (startY * (screenHeight / 2)) - spacing * (screenHeight / 2) } });
+    buttons.push_back({ "Quit Game", { buttonWidth, buttonHeight, centerX * screenWidth / 2, (startY * (screenHeight / 2)) - (spacing * 2 * (screenHeight / 2) )} });
 }
 
 int PauseMenu::Update() {
@@ -372,7 +374,7 @@ void PauseMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTex
         // Draw button rectangle
         DrawRect(btn.box, button, mesh);
         // Print button label
-        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f, btn.box.y/450.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f); // black text
+        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f, btn.box.y/(screenHeight / 2), 1.0f, 0.0f, 0.0f, 0.0f, 1.0f); // black text
 
     }
 
@@ -442,7 +444,7 @@ void Credits::Render(AEGfxVertexList* mesh) {
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     float textX = -0.5f; 
     // Convert scrollPosition (in pixels) to normalized space
-    float normY = -scrollPosition / 450.0f;
+    float normY = -scrollPosition / (screenHeight / 2);
 
     for (std::vector<CreditLine>::const_iterator it = lines.begin(); it != lines.end(); ++it) {
         // Only draw if in the visible normalized range (-1.0 to 1.0)
@@ -450,7 +452,7 @@ void Credits::Render(AEGfxVertexList* mesh) {
       
             AEGfxPrint(FontID, it->text.c_str(), textX, normY, it->scale, 1, 1, 1, 1.0f);
         }
-        normY -= it->spacing / 450.0f;
+        normY -= it->spacing / (screenHeight / 2);
     }
 
     // Check if the left mouse button is pressed on the HTP button:
@@ -479,11 +481,14 @@ void OptionsMenu::Init()
     float spacing = 0.2f;
 
     buttons.clear();
-    buttons.push_back({ "Volume Up",   { buttonW, buttonH, centerX * 800.0f,  startY * 450.0f } });
-    buttons.push_back({ "Volume Down", { buttonW, buttonH, centerX * 800.0f,  (startY * 450.0f) - (spacing * 450.0f) } });
-    buttons.push_back({ "Back",        { buttonW, buttonH, centerX * 800.0f,  (startY * 450.0f) - (spacing * 2 * 450.0f) } });
+    buttons.push_back({ "Volume Up",   { buttonW, buttonH, centerX * screenWidth / 2,  startY * (screenHeight / 2) } });
+    buttons.push_back({ "Volume Down", { buttonW, buttonH, centerX * screenWidth / 2,  (startY * (screenHeight / 2)) - (spacing * (screenHeight / 2)) } });
+    buttons.push_back({ "Back",        { buttonW, buttonH, centerX * screenWidth / 2,  (startY * (screenHeight / 2)) - (spacing * 2 * (screenHeight / 2)) } });
 }
 
+float value{ 0.2f };
+float min{ 0.0f };
+float max{ 1.0f };
 int OptionsMenu::Update(float& bgmVolume, AEAudioGroup bgm)
 {
     // Mouse input
@@ -501,13 +506,13 @@ int OptionsMenu::Update(float& bgmVolume, AEAudioGroup bgm)
                 switch (selectedOption)
                 {
                 case 0: // Volume Up
-                    bgmVolume += 0.5f;
-                    if (bgmVolume > 1.0f) bgmVolume = 1.0f;
+                    bgmVolume += value;
+                    if (bgmVolume > max) bgmVolume = max;
                     AEAudioSetGroupVolume(bgm, bgmVolume);
                     break;
                 case 1: // Volume Down
-                    bgmVolume -= 0.5f;
-                    if (bgmVolume < 0.0f) bgmVolume = 0.0f;
+                    bgmVolume -= value;
+                    if (bgmVolume < min) bgmVolume = min;
                     AEAudioSetGroupVolume(bgm, bgmVolume);
                     break;
                 case 2: // Back
@@ -522,23 +527,6 @@ int OptionsMenu::Update(float& bgmVolume, AEAudioGroup bgm)
     return 0; // 0 means no special action
 }
 
-//void OptionsMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* buttonTex)
-//{
-//    // Render background
-//
-//        RenderMain_menu_background(mesh, background);
-//
-//    // Render buttons
-//    for (size_t i = 0; i < buttons.size(); i++)
-//    {
-//        DrawRect(buttons[i].box, buttonTex, mesh);
-//        // Print button label (adjust position as needed)
-//        AEGfxPrint(FontID, buttons[i].label.c_str(),
-//            buttons[i].box.x - 0.1f,
-//            buttons[i].box.y / 450.0f,
-//            1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-//    }
-//}
 
 void OptionsMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* buttonTex)
 {
@@ -564,7 +552,7 @@ void OptionsMenu::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxT
         // (You may need to adjust the position values depending on your coordinate system.)
         AEGfxPrint(FontID, buttons[i].label.c_str(),
             buttons[i].box.x - 0.1f,
-            buttons[i].box.y / 450.0f,
+            buttons[i].box.y / (screenHeight / 2),
             1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
         // Optionally, switch back to texture mode in preparation for the next button.

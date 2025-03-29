@@ -34,14 +34,14 @@ void Timer::pauseresume() {
 	}
 }
 // Constructor initializes the Wok position
-
+int maxSize{ 6 };
 bool Stove::putIngredient(const std::string& ingredient)
 {
 	if (isCooking) {
 		return false;
 	}
 	//Add return codes for edge cases, testing.
-	if (!isCooking && stoveItems.size() < 6) {
+	if (!isCooking && stoveItems.size() < maxSize) {
 		stoveItems.push_back(ingredient);
 		return true;
 	}
@@ -55,14 +55,15 @@ void Stove::clearWok() {
 	cookingRecipeName = "";
 }
 
+int minSize{ 2 };
 bool Stove::canCook(player& player) const
 {
-	return !isCooking && stoveItems.size() >= 2 && player.playerCheckCollison(x, y, width, height) && !isDirty;
+	return !isCooking && stoveItems.size() >= minSize && player.playerCheckCollison(x, y, width, height) && !isDirty;
 }
 
 void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 {
-	if (isCooking || stoveItems.size() < 2 || isDirty) return;
+	if (isCooking || stoveItems.size() < minSize || isDirty) return;
 
 	isCooking = true;
 	double cookingTime = baseTime + stoveItems.size();
@@ -135,21 +136,23 @@ QTE::QTE() {
 	reset();
 }
 
+float scaleEnd{ 1.0f };
+float scaleStart{ 0.0f };
 void QTE::update(float dt) {
 	if (!isActive) {
 		return;
 	}
 	if (movingRight) {
 		sliderPos += sliderSpd * dt;
-		if (sliderPos >= 1.0f) {
-			sliderPos = 1.0f;
+		if (sliderPos >= scaleEnd) {
+			sliderPos = scaleEnd;
 			movingRight = false;
 		}
 	}
 	else {
 		sliderPos -= sliderSpd * dt;
-		if (sliderPos <= 0.0f) {
-			sliderPos = 0.0f;
+		if (sliderPos <= scaleStart) {
+			sliderPos = scaleStart;
 			movingRight = true;
 		}
 	}
@@ -218,7 +221,7 @@ void QTE::start() {
 	isActive = true;
 	isCompleted = false;
 	isSuccess = false;
-	sliderPos = 0.0f;
+	sliderPos = scaleStart;
 
 	std::cout << isActive;
 	// Randomize the target zone position
