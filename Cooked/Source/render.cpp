@@ -434,13 +434,15 @@ void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& rec
         if (ingTex) {
             AEMtx33 transform;
             AEMtx33Scale(&transform, iconSize, iconSize);
-            AEMtx33TransApply(&transform, &transform, iconXLeft +iconSpacing*i, iconStartY);
+            AEMtx33TransApply(&transform, &transform, iconXLeft + iconSpacing * i, iconStartY);
             AEGfxSetTransform(transform.m);
             AEGfxTextureSet(ingTex, 0.0f, 0.0f);
             AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             AEGfxSetTransparency(1.0f);
             AEGfxSetBlendMode(AE_GFX_BM_BLEND);
             AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+        }
+    }
 }
 
 void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture* tex, const RecipeSystem& recipeSystem,
