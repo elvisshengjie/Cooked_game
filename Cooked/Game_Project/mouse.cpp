@@ -210,6 +210,32 @@ void mouse::chaseAway(float duration)
     randomDirY = sinf(angle);
 }
 
+void mouse::handleDeviceInteraction(const Rect& deviceRect, Timer& deviceCooldownTimer, player& player)
+{
+    // Check if the player collides with the device's collision area.
+    if (player.playerCheckCollison(deviceRect.x, deviceRect.y, deviceRect.width, deviceRect.height)) {
+        if (!deviceCooldownTimer.completed()) {
+            float remaining = static_cast<float>(deviceCooldownTimer.getRemainingTime());
+            std::string cooldownStr = "Device cooldown: " + std::to_string(static_cast<int>(remaining)) + " s";
+            AEGfxPrint(FontID, cooldownStr.c_str(), 0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f);
+        }
+        else {
+            AEGfxPrint(FontID, "Press E to activate device", 0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f);
+            if (AEInputCheckTriggered(AEVK_E)) {
+                // Generate a random chase duration between 20 and 30 seconds.
+                float chaseDuration = 20.0f + static_cast<float>(rand()) / RAND_MAX * 10.0f;
+                // Trigger the chaseAway for all mouse objects.
+                mouse1.chaseAway(chaseDuration);
+                mouse2.chaseAway(chaseDuration);
+                mouse3.chaseAway(chaseDuration);
+                deviceCooldownTimer.start(25.0);
+            }
+        }
+    }
+}
+
 //-----------------------------------------------------------------
 // mouseCheckCollison: returns true if bounding-box collision
 //-----------------------------------------------------------------

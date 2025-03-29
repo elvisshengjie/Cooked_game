@@ -7,7 +7,7 @@
 #include "collison.hpp"
 #include <assert.h>
 #include <iostream>
-
+#include "player.hpp"
 class Rect;
 
 // Forward declarations if needed:
@@ -45,7 +45,7 @@ public:
 
     // The mouse is chased away for a certain duration
     void chaseAway(float duration);
-
+    static void handleDeviceInteraction(const Rect& deviceRect, Timer& deviceCooldownTimer, player& player);
     // Public flags you may need for anim logic
     bool isMoving = false;
     int  currentFrame = 0;

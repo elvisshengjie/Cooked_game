@@ -521,31 +521,7 @@ void CoreEngine::Update()
 
             recipeSystem.update();
             
-
-            // Only show device UI when player is colliding with the device.
-            if (players1.playerCheckCollison(collisionBoxes[3].x, collisionBoxes[3].y, collisionBoxes[3].width, collisionBoxes[3].height))
-            {
-                if (!mouseDeviceCooldownTimer.completed())
-                {
-                    float remaining = static_cast<float>(mouseDeviceCooldownTimer.getRemainingTime());
-                    std::string cooldownStr = "Device cooldown: " + std::to_string(static_cast<int>(remaining)) + " s";
-                    AEGfxPrint(FontID, cooldownStr.c_str(), 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-                }
-                else
-                {
-                    AEGfxPrint(FontID, "Press E to activate device", 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-                    if (AEInputCheckTriggered(AEVK_E))
-                    {
-                        // Generate a random chase duration between 20 and 30 seconds.
-                        float chaseDuration = 20.0f + static_cast<float>(rand()) / RAND_MAX * 10.0f;
-                        mouse1.chaseAway(chaseDuration);
-                        mouse2.chaseAway(chaseDuration);
-                        mouse3.chaseAway(chaseDuration);
-                        mouseDeviceCooldownTimer.start(25.0);
-                        
-                    }
-                }
-            }
+            mouse::handleDeviceInteraction(collisionBoxes[3], mouseDeviceCooldownTimer, players1);
             // Ingredient boxes (3 boxes at top?), Active recipes, etc.
             RenderIngredientbox(pMesh, boxTex);
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
