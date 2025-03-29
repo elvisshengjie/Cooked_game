@@ -43,7 +43,7 @@ private:
 	float mangnituded{};
 	
 	float dashspeed{ 1000.0f };
-	float dashCooldown{0.3f};
+	float dashCooldown{0.25f};
 	float dashDuration{0.2f};
 	int	  rawX{};
 	int   rawY{};
@@ -55,14 +55,14 @@ private:
 	float DirectionX{};
 	float DirectionY{};
 	float Magnitude{};
-	int  dashCounter{ 1 };
+	int  isDashAvailable{ 1 };
 	Ingredients Hand = EMPTY;
 
 
 public:
 
-	Timer cooldown;
-	Timer cooldown2;
+	Timer dashDurationTimer;
+	Timer dashRechargeTimer;
 
 };
 
