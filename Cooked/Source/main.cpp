@@ -321,7 +321,6 @@ void CoreEngine::Update()
             }
             else if (mainMenu.isCreditsSelected())
             {
-                
                 currentState = GameState::CREDITS;
             }
             else if(mainMenu.IsOptionsSelected())
