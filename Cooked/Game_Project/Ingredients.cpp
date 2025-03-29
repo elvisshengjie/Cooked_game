@@ -21,23 +21,22 @@ Ingredients GetRandomIngredient(Ingredients previousIngredient)
 std::vector<Ingredients> g_currentBoxIngredients(3);
 
 //Constructor
-Recipe::Recipe(std::string recipeName, std::vector<std::string> ingredientList)
+Recipe::Recipe(std::string recipeName, std::vector<::Ingredients> ingredientList)
 	: Name(recipeName), Ingredients(ingredientList) {}
 
-bool Recipe::matchesWok(const std::vector<std::string> &wokIngredients)const
+bool Recipe::matchesWok(const std::vector<::Ingredients> &wokIngredients)const
 {
 	if(wokIngredients.size() != Ingredients.size()) {
 		return false;
 	}
+	std::vector<::Ingredients> sortedRecipe = Ingredients;
+	std::vector<::Ingredients> sortedWok = wokIngredients;
 
-	//sorting both lists for comparisons - so the order does not matter
-	std::vector<std::string> sortedWok = wokIngredients;
-	std::vector<std::string> sortedRecipe = Ingredients;
-
-	std::sort(sortedWok.begin(), sortedWok.end());
 	std::sort(sortedRecipe.begin(), sortedRecipe.end());
+	std::sort(sortedWok.begin(), sortedWok.end());
 
-	return sortedWok == sortedRecipe;
+	return sortedRecipe == sortedWok;
+
 }
 
 int maxRecipesDisplay{ 3 };
@@ -45,12 +44,12 @@ double baseTimer{ 15.0f };
 RecipeSystem::RecipeSystem() {
 	std::srand(static_cast<unsigned int>(std::time(0)));; // Srand Seed with time
 
-	allRecipes.push_back(Recipe("Cheesy Potato Mash", { "POTATO", "CHEESE" }));
-	allRecipes.push_back(Recipe("Cheese Omelette", { "CHEESE", "EGG" }));
-	allRecipes.push_back(Recipe("Beef Stir-Fry with Rice", { "BEEF", "RICE", "EGG" }));
-	allRecipes.push_back(Recipe("Chicken Fried Rice", { "CHICKEN", "RICE", "EGG" }));
-	allRecipes.push_back(Recipe("Beef & Cheese Stuffed Potato", { "POTATO", "BEEF", "CHEESE", "EGG" }));
-	allRecipes.push_back(Recipe("Loaded Protein Bowl", { "CHICKEN", "RICE", "EGG", "CHEESE", "POTATO", "BEEF" }));
+	allRecipes.push_back(Recipe("Cheesy Potato Mash", { POTATO, CHEESE }));
+	allRecipes.push_back(Recipe("Cheese Omelette", { CHEESE, EGG }));
+	allRecipes.push_back(Recipe("Beef Stir-Fry with Rice", { BEEF, RICE, EGG }));
+	allRecipes.push_back(Recipe("Chicken Fried Rice", { CHICKEN, RICE, EGG }));
+	allRecipes.push_back(Recipe("Beef & Cheese Stuffed Potato", { POTATO, BEEF, CHEESE, EGG }));
+	allRecipes.push_back(Recipe("Loaded Protein Bowl", { CHICKEN, RICE, EGG, CHEESE, POTATO, BEEF }));
 
 	// Start with 3 random recipes
 	for (int i = 0; i < maxRecipesDisplay; i++) {
@@ -63,10 +62,8 @@ RecipeSystem::RecipeSystem() {
 void RecipeSystem::update() {
 	for (int i = 0; i < maxRecipesDisplay; ++i) {
 		if (activeRecipes[i].recipeTimer.getRemainingTime() <= 0.0f) {
-			//std::cout << "REPLACED";
 			activeRecipes[i] = generateRandomRecipe();
 			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * baseTimer); // Restart timer
-			//std::cout << "restarted";
 		}
 	}
 }

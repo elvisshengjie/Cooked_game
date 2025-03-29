@@ -10,6 +10,7 @@ class player;
 
 class Recipe;
 
+enum Ingredients { EMPTY = 0, CHICKEN, RICE, EGG, CHEESE, POTATO, BEEF };
 
 class Timer {
 
@@ -39,7 +40,7 @@ public:
 class Stove
 {
 private:
-	std::vector<std::string> stoveItems;
+	std::vector<Ingredients> stoveItems;
 
 	std::string cookingRecipeName;
 
@@ -66,7 +67,7 @@ public:
 
 public:
 
-	bool putIngredient(const std::string& ingredient);
+	bool putIngredient(const Ingredients ingredient);
 
 	void clearWok();
 
@@ -80,7 +81,7 @@ public:
 
 	std::string getCookingRecipeName()const;
 
-	std::vector<std::string> getStoveItems()const;
+	std::vector<Ingredients> getStoveItems()const;
 
 
 };

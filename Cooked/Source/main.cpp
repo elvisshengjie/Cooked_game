@@ -323,16 +323,13 @@ void CoreEngine::Update()
             {
                 
                 currentState = GameState::CREDITS;
-            std::cout << "credits";
             }
             else if(mainMenu.IsOptionsSelected())
             {
                 currentState = GameState::OPTIONS_MENU;
-                std::cout << "options";
             }
             else if (mainMenu.IsQuitSelected())
             {
-                std::cout << "Out";
                 gGameRunning = false;
             }
         }

@@ -282,7 +282,7 @@ void player::playerDrop(Stove& stove) {
 		if (Hand != EMPTY && stove.isDirty==false) {
 			if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height))
 			{
-				if (stove.putIngredient(IngredientToString(Hand))) {
+				if (stove.putIngredient(Hand)) {
 					Hand = EMPTY;
 				}
 				return;				

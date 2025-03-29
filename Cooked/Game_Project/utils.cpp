@@ -35,7 +35,7 @@ void Timer::pauseresume() {
 }
 // Constructor initializes the Wok position
 int maxSize{ 6 };
-bool Stove::putIngredient(const std::string& ingredient)
+bool Stove::putIngredient(const Ingredients ingredient)
 {
 	if (isCooking) {
 		return false;
@@ -96,13 +96,11 @@ double Stove::remainingCookingTime()
 }
 void Stove::update(RecipeSystem& recipeSystem) {
 	if (isCooking && cookingTimer.completed()) {
-		std::cout << "Cooking completed";
 		static std::random_device rd;
 		static std::mt19937 engine(rd());
 		std::uniform_int_distribution<int> distribution(1, 10); // valid indices: 1 to 10
 		if (distribution(engine) >7) {
 			isDirty = true;
-			std::cout << "Stove needs cleaning!\n";
 		}
 		for (const Recipe& recipe : recipeSystem.getActiveRecipes()) {
 			if (recipe.Name == cookingRecipeName) {
@@ -118,7 +116,6 @@ void Stove::update(RecipeSystem& recipeSystem) {
 		if (isCleaning && cookingTimer.getRemainingTime() <= 0) {
 			isDirty = false;
 			isCleaning = false;
-			std::cout << "|-just cleaned-|";
 		}
 	}
 }
@@ -128,7 +125,7 @@ std::string Stove::getCookingRecipeName() const {
 	return cookingRecipeName;
 }
 
-std::vector<std::string> Stove::getStoveItems()const {
+std::vector<Ingredients> Stove::getStoveItems()const {
 	return stoveItems;
 }
 
@@ -223,7 +220,6 @@ void QTE::start() {
 	isSuccess = false;
 	sliderPos = scaleStart;
 
-	std::cout << isActive;
 	// Randomize the target zone position
 	std::random_device rd;
 	std::mt19937 gen(rd());

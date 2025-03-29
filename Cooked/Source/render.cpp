@@ -336,7 +336,7 @@ void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE
 //chicken, rice, egg, cheese, potato, beef
 void renderStoveIngredient(AEGfxVertexList* mesh, AEGfxTexture* chickenTex, AEGfxTexture* eggTex , AEGfxTexture* cheeseTex , AEGfxTexture* riceTex, AEGfxTexture* beefTex, AEGfxTexture* potatoTex, Stove& stove)
 {
-    std::vector<std::string> stoveIngredients {stove.getStoveItems()}; //list of ingredients in stove
+    std::vector<Ingredients> stoveIngredients {stove.getStoveItems()}; //list of ingredients in stove
     if (stoveIngredients.size() == 0) return; //if nothing in stove
 
     float offsety{ 15.0f };
@@ -348,27 +348,27 @@ void renderStoveIngredient(AEGfxVertexList* mesh, AEGfxTexture* chickenTex, AEGf
     
     for (size_t i = 0; i < stoveIngredients.size(); ++i) {
         AEGfxTexture* selectedTexture{ nullptr };
-        if (stoveIngredients[i] == IngredientToString(Ingredients::CHICKEN))
+        if (stoveIngredients[i] == Ingredients::CHICKEN)
         {
 			selectedTexture = chickenTex;
         }
-        else if (stoveIngredients[i] == IngredientToString(Ingredients::EGG))
+        else if (stoveIngredients[i] == Ingredients::EGG)
         {
             selectedTexture = eggTex;
         }
-        else  if (stoveIngredients[i] == IngredientToString(Ingredients::CHEESE))
+        else  if (stoveIngredients[i] == Ingredients::CHEESE)
         {
 			selectedTexture = cheeseTex;
         }
-		else  if (stoveIngredients[i] == IngredientToString(Ingredients::RICE))
+		else  if (stoveIngredients[i] == Ingredients::RICE)
         {
 			selectedTexture = riceTex;
         }
-        else if (stoveIngredients[i] == IngredientToString(Ingredients::BEEF))
+        else if (stoveIngredients[i] == Ingredients::BEEF)
         {
 			selectedTexture = beefTex;
         }
-        else if (stoveIngredients[i] == IngredientToString(Ingredients::POTATO))
+        else if (stoveIngredients[i] == Ingredients::POTATO)
         {
 			selectedTexture = potatoTex;
         }
@@ -424,12 +424,12 @@ void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& rec
 
         AEGfxTexture* ingTex = nullptr;
 
-        if (recipe.Ingredients[i] == "CHICKEN") ingTex = chickenTex;
-        else if (recipe.Ingredients[i] == "BEEF") ingTex = beefTex;
-        else if (recipe.Ingredients[i] == "CHEESE") ingTex = cheeseTex;
-        else if (recipe.Ingredients[i] == "EGG") ingTex = eggTex;
-        else if (recipe.Ingredients[i] == "RICE") ingTex = riceTex;
-        else if (recipe.Ingredients[i] == "POTATO") ingTex = potatoTex;
+        if (recipe.Ingredients[i] == Ingredients::CHICKEN) ingTex = chickenTex;
+        else if (recipe.Ingredients[i] == Ingredients::BEEF) ingTex = beefTex;
+        else if (recipe.Ingredients[i] == Ingredients::CHEESE) ingTex = cheeseTex;
+        else if (recipe.Ingredients[i] == Ingredients::EGG) ingTex = eggTex;
+        else if (recipe.Ingredients[i] == Ingredients::RICE) ingTex = riceTex;
+        else if (recipe.Ingredients[i] == Ingredients::POTATO) ingTex = potatoTex;
         AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
         if (ingTex) {
             AEMtx33 transform;

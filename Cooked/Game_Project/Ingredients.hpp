@@ -27,7 +27,7 @@
 	Loaded Protein Bowl (Chicken, Rice, Egg, Cheese, Potato, Beef)-6
 */
 
-enum Ingredients { EMPTY = 0, CHICKEN, RICE, EGG, CHEESE, POTATO, BEEF };
+
 inline std::string IngredientToString(Ingredients ing)
 {
 	switch (ing)
@@ -51,11 +51,11 @@ extern std::vector<Ingredients> g_currentBoxIngredients;
 class Recipe {
 public:
 	std::string Name;
-	std::vector<std::string> Ingredients; // List of ingredients
+	std::vector<Ingredients> Ingredients; // List of ingredients
 
-	Recipe(std::string recipeName, std::vector<std::string> ingredientsList);
+	Recipe(std::string recipeName, std::vector<::Ingredients> ingredientsList);
 
-	bool matchesWok(const std::vector<std::string>& wokIngredients) const;
+	bool matchesWok(const std::vector<::Ingredients>& wokIngredients) const;
 
 	Timer recipeTimer;  // Timer to refresh recipes
 
