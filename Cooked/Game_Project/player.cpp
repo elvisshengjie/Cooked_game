@@ -287,25 +287,19 @@ void player::playerPickUp(Ingredients& boxIngredient)
 		// If the player is not already holding something, pick up the box ingredient.
 		if (Hand != EMPTY)
 		{
-			std::cout << "You are already holding, drop into Dustbin / Stove";
 			return;
 		}
 			Hand = boxIngredient;                // Player picks up the current ingredient.
 			boxIngredient = GetRandomIngredient(boxIngredient); // Randomize the box immediately.
-			std::cout << "Picked up: " << IngredientToString(Hand) << std::endl;
-		// If already holding an ingredient, drop it (clear the held ingredient).
 	}
 }
 
 void player::playerDrop(Stove& stove) {
-	//std::cout << "Attempted";
 	if (AEInputCheckTriggered(AEVK_E)) {
 		if (Hand != EMPTY && stove.isDirty==false) {
 			if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height))
 			{
-				std::cout << IngredientToString(Hand) << "\n";
 				if (stove.putIngredient(IngredientToString(Hand))) {
-					std::cout << "Dropped ingredient: " << IngredientToString(Hand) << " into the stove!" << std::endl;
 					Hand = EMPTY;
 				}
 				return;				
@@ -313,7 +307,6 @@ void player::playerDrop(Stove& stove) {
 			}
 			else if (playerCheckCollison(-720.0f, -300.0f,100.0f, 100.0f))
 			{
-				std::cout << "Threw away ingredient: " << IngredientToString(Hand) << std::endl;
 				Hand = EMPTY;  // Ingredient is removed
 			}
 			else {
@@ -326,7 +319,6 @@ void player::playerDrop(Stove& stove) {
 			if (stove.isDirty) {
 				stove.cookingTimer.start(4);
 				stove.isCleaning = true;
-				std::cout << "Cleaning Stove";
 			}
 		}
 	}
@@ -388,11 +380,9 @@ void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gaug
 		QTE_Gauge.update(static_cast<float>(AEFrameRateControllerGetFrameTime()));
 		if (QTE_Gauge.isCompleted) {
 			if (QTE_Gauge.isSuccess) {
-				//std::cout << "QTE Successful! Cooking started." << std::endl;
 				stove.startCooking(recipeSystem.getActiveRecipes());
 			}
 			else {
-				//std::cout << "QTE Failed! Ingredients thrown away." << std::endl;
 				stove.clearWok(); // Clear the wok if QTE fails
 			}
 			QTE_Gauge.reset(); // Reset QTE state

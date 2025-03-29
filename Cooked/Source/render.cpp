@@ -306,7 +306,9 @@ void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE
 
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
-    // Debugging: If the texture still doesn't show, print an error
+    // Debugging: If the texture still doesn't s
+    // 
+    // , print an error
     if (!selectedTexture) {
         std::cerr << "Error: Stove texture is NULL!" << std::endl;
     }
@@ -377,28 +379,25 @@ void renderStoveIngredient(AEGfxVertexList* mesh, AEGfxTexture* chickenTex, AEGf
     }
 }
 
-void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& recipe, float x, float y)
+void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& recipe, float x, float y,
+    AEGfxTexture* chickenTex, AEGfxTexture* beefTex, AEGfxTexture* cheeseTex,
+    AEGfxTexture* eggTex, AEGfxTexture* riceTex, AEGfxTexture* potatoTex)
 {
 
     Rect recipeBox{ 330.0f, 200.0f, x, y };
     DrawRect(recipeBox, tex, mesh);
 
-    // Print Recipe Name
     if (FontID < 0) return;
 
-    // Adjust text alignment for wider box
-    float textX = (x - 110.0f) / 800.0f;  // Left-align for wider box
-    float nameY = (y + 30.0f) / 450.0f;   // Position recipe name higher
-    float ingYStart = (y-30.0f) / 450.0f; // Ingredients start slightly lower
+    float textX = (x - 110.0f) / 800.0f;
+    float nameY = (y + 30.0f) / 450.0f;
 
-    float nameScale = 0.85f;  // Slightly larger for better readability
-    float ingScale = 0.75f;   // Maintain clarity for ingredients
+    float nameScale = 0.85f;
 
-    // Split long recipe names over two lines
     std::string nameLine1 = recipe.Name;
     std::string nameLine2 = "";
 
-    if (recipe.Name.length() > 16) { // If too long, break into two lines
+    if (recipe.Name.length() > 16) {
         size_t spacePos = recipe.Name.find(' ', 12);
         if (spacePos != std::string::npos) {
             nameLine1 = recipe.Name.substr(0, spacePos);
@@ -406,38 +405,59 @@ void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& rec
         }
     }
 
-    // Print Name (Left-aligned)
-    AEGfxPrint(FontID, nameLine1.c_str(), textX, nameY, nameScale, 0.0f, 0.0f, 0.0f, 1.0f);
-    if (!nameLine2.empty()) {
-        AEGfxPrint(FontID, nameLine2.c_str(), textX, nameY - 0.05f, nameScale, 0.0f, 0.0f, 0.0f, 1.0f);
-    }
+    // Draw name
+    AEGfxPrint(FontID, nameLine1.c_str(), textX, nameY, nameScale, 0, 0, 0, 1);
+    if (!nameLine2.empty())
+        AEGfxPrint(FontID, nameLine2.c_str(), textX, nameY - 0.05f, nameScale, 0, 0, 0, 1);
 
-    // Handle Ingredients Overflow (Split into two columns, flowing into right half)
-    float ingTextY = ingYStart;
-    float ingColumnX = textX;  // Start in left half
-    size_t midPoint = (recipe.Ingredients.size() + 1) / 2;  // Halfway point for two columns
+    // Draw ingredient icons instead of text
+    float iconSize = 60.0f;
+    float iconSpacing = 50.0f;
+    float iconStartY = y - 25.0f;
+    float iconXLeft = x - 120.0f;
+    float iconXRight = x + 10.0f;
 
-    for (size_t i = 0; i < recipe.Ingredients.size(); ++i) {
-        AEGfxPrint(FontID, recipe.Ingredients[i].c_str(), ingColumnX, ingTextY, ingScale, 0.0f, 0.0f, 1.0f, 1.0f); // Blue text
-        ingTextY -= 0.05f;  // **Reduced spacing between ingredients (was 0.07f)**
 
-        // Move to second column if halfway through the ingredient list
-        if (i + 1 == midPoint) {
-            ingTextY = ingYStart;  // Reset Y for second column
-            ingColumnX += 0.20f;  // **Added extra space for clearer separation**
+    for (size_t i = 0; i < recipe.Ingredients.size(); ++i)
+    {
+
+        AEGfxTexture* ingTex = nullptr;
+
+        if (recipe.Ingredients[i] == "CHICKEN") ingTex = chickenTex;
+        else if (recipe.Ingredients[i] == "BEEF") ingTex = beefTex;
+        else if (recipe.Ingredients[i] == "CHEESE") ingTex = cheeseTex;
+        else if (recipe.Ingredients[i] == "EGG") ingTex = eggTex;
+        else if (recipe.Ingredients[i] == "RICE") ingTex = riceTex;
+        else if (recipe.Ingredients[i] == "POTATO") ingTex = potatoTex;
+        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+        if (ingTex) {
+            AEMtx33 transform;
+            AEMtx33Scale(&transform, iconSize, iconSize);
+            AEMtx33TransApply(&transform, &transform, iconXLeft +iconSpacing*i, iconStartY);
+            AEGfxSetTransform(transform.m);
+            AEGfxTextureSet(ingTex, 0.0f, 0.0f);
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            AEGfxSetTransparency(1.0f);
+            AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+            AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
         }
     }
- }
+}
 
-void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture* tex, const RecipeSystem& recipeSystem)
+void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture* tex, const RecipeSystem& recipeSystem,
+    AEGfxTexture* chickenTex, AEGfxTexture* beefTex, AEGfxTexture* cheeseTex,
+    AEGfxTexture* eggTex, AEGfxTexture* riceTex, AEGfxTexture* potatoTex)
 {
+    
     const std::vector<Recipe>& activeRecipes = recipeSystem.getActiveRecipes();
 
     for (size_t i = 0; i < activeRecipes.size(); i++)
     {
         if (i >= recipeBoxes.size()) break; // Prevent overflow
-        RenderRecipeBox(mesh, tex, activeRecipes[i], recipeBoxes[i].x, recipeBoxes[i].y);
-        std::string remainTime = std::to_string(static_cast<int>(activeRecipes[i].recipeTimer.getRemainingTime()));
+        RenderRecipeBox(mesh, tex, activeRecipes[i],
+            recipeBoxes[i].x, recipeBoxes[i].y,
+            chickenTex, beefTex, cheeseTex, eggTex, riceTex, potatoTex);       
+         std::string remainTime = std::to_string(static_cast<int>(activeRecipes[i].recipeTimer.getRemainingTime()));
         AEGfxPrint(FontID, remainTime.c_str(), -0.3f + i * 0.45f , 0.58f, 1.0, 0.0f, 0.0f, 0.0f, 1.0f); // Blue text
     }
 }

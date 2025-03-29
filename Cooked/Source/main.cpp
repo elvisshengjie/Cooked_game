@@ -546,12 +546,10 @@ void CoreEngine::Update()
                     }
                 }
             }
-
-            
             // Ingredient boxes (3 boxes at top?), Active recipes, etc.
             RenderIngredientbox(pMesh, boxTex);
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-            RenderActiveRecipes(pMesh, recipeTex, recipeSystem);
+            RenderActiveRecipes(pMesh, recipeTex, recipeSystem , chickenTex, beefTex, cheeseTex, eggTex, riceTex, potatoTex);
             //mouse Device
             mouseDevicefun(pMesh, deviceTex);
             // Render Stove & Player

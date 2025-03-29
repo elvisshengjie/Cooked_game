@@ -98,7 +98,7 @@ void MainMenu::Update() {
 
             // Check each button to see if the mouse is over it.
             for (size_t i = 0; i < buttons.size(); i++) {
-                if (IsPointInsideButton(static_cast<float>(rawX), static_cast<float>(rawY), buttons[i])) {
+                if (IsPointInsideButton(static_cast<float>(rawX), static_cast<float>(rawY), buttons[i]) && !m_howToPlayActivated) {
                     selectedOption = static_cast<int>(i);
                    // std::cout << "yes";
                     // If "Start Game" (button 0) is clicked, set activation flag.
@@ -327,7 +327,7 @@ int PauseMenu::Update() {
         AEInputGetCursorPosition(&rawX, &rawY);
         for (size_t i = 0; i < buttons.size(); i++)
         {
-            if (IsPointInsideButton((float)rawX, (float)rawY, buttons[i]))
+            if (IsPointInsideButton((float)rawX, (float)rawY, buttons[i])&& !m_howToPlayActivated)
             {
                 selectedOption = i;
                 // Immediately return if you want the click itself to ��activate�� the button:

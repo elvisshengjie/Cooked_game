@@ -49,9 +49,13 @@ void RenderCollisionBox(AEGfxVertexList* mesh, const Rect& box);
 void RenderhighlightIngredientBox(AEGfxVertexList* mesh, const Rect& highlightBox);
 void RenderQTEGauge(AEGfxVertexList* mesh, const QTE& qteGauge, AEGfxTexture* barTex, AEGfxTexture* sliderTex,  AEGfxTexture* targetTex);
 
-void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture*, const Recipe& recipe, float x, float y);
+void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& recipe, float x, float y,
+    AEGfxTexture* chickenTex, AEGfxTexture* beefTex, AEGfxTexture* cheeseTex,
+    AEGfxTexture* eggTex, AEGfxTexture* riceTex, AEGfxTexture* potatoTex);
 
-void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture*, const RecipeSystem& recipeSystem);
+void RenderActiveRecipes(AEGfxVertexList* mesh, AEGfxTexture* tex, const RecipeSystem& recipeSystem,
+    AEGfxTexture* chickenTex, AEGfxTexture* beefTex, AEGfxTexture* cheeseTex,
+    AEGfxTexture* eggTex, AEGfxTexture* riceTex, AEGfxTexture* potatoTex);
 
 void renderStoveIngredient(AEGfxVertexList* mesh, AEGfxTexture* chickenTex, AEGfxTexture* eggTex, AEGfxTexture* cheeseTex, AEGfxTexture* riceTex, AEGfxTexture* beefTex, AEGfxTexture* potatoTex, Stove& stove);
 
