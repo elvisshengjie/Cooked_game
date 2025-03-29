@@ -258,8 +258,6 @@ void CoreEngine::Init()
     //
     // Audio variables
     //
-    f32 bgm_volume = 1.f;
-    f32 bgm_pitch = 1.f;
 
     // Configure audio group
     bouken = AEAudioLoadMusic("Assets/bm.mp3");
@@ -474,7 +472,7 @@ void CoreEngine::Update()
         {
             static bool ratSoundTriggered = false;
 
-            bool playRatSound = false;
+       
             // 1. Update Player & Collisions
             players1.playerDash();
             players1.playerMove(400.0);
@@ -554,12 +552,6 @@ void CoreEngine::Update()
                     players1.playerPickUp(g_currentBoxIngredients[i]);
                 }
 
-                /*if (mouse1.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)|| mouse2.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height)||mouse3.mouseCheckCollison(collBox.x, collBox.y, collBox.width, collBox.height))
-                {
-                    	playRatSound = true;
-                }
-                */
-
 
                 // Drop logic (stove or dustbin, etc.)
                 if (players1.playerCheckCollison(Wok.x, Wok.y, Wok.width, Wok.height) ||
@@ -570,16 +562,7 @@ void CoreEngine::Update()
                 }
             }
 
-            //if (playRatSound && !ratSoundTriggered)
-            //{
-            //    AEAudioPlay(ratSound, seGroup, 1.f, 1.f, -1);
-            //    ratSoundTriggered = true;
-            //}
-            //else if (!playRatSound)
-            //{
-            //    // Reset the flag when no collision is detected
-            //    ratSoundTriggered = false;
-            //}
+          
             // Check collision with the mouse device
             if (players1.playerCheckCollison(collisionBoxes[3].x, collisionBoxes[3].y, collisionBoxes[3].width, collisionBoxes[3].height)) {
                 // Render highlight for the mouse device.

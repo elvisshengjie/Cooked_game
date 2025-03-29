@@ -8,9 +8,9 @@ void RenderAnimatedSprite(AEGfxVertexList* mesh, AEGfxTexture* texture, int fram
 
 	// Calculate UV coordinates
 	float uMin = frameIndex * frameWidth;
-	float uMax = uMin + frameWidth;
+	
 	float vMin = 0.0f;
-	float vMax = 1.0f;
+	
 
 	// Apply UV mapping
 	AEGfxTextureSet(texture, uMin, vMin);
@@ -20,7 +20,7 @@ player players1;
 
 
 void player::playerdraw(AEGfxVertexList* mesh, AEGfxVertexList* mesh2, std::vector<AEGfxTexture*> idle, std::vector<AEGfxTexture*> up, std::vector<AEGfxTexture*> down, std::vector<AEGfxTexture*> left, std::vector<AEGfxTexture*> right,
-	AEGfxTexture* chickenTex , AEGfxTexture* beefTex , AEGfxTexture* riceTex , AEGfxTexture* eggTex , AEGfxTexture* cheeseTex , AEGfxTexture* potatoTex) {
+	AEGfxTexture* chickenTex , AEGfxTexture* beefTex , AEGfxTexture* riceTex , AEGfxTexture* eggTex , AEGfxTexture* cheeseTex , AEGfxTexture* potatoTex) const {
 	// Draw the player (blue rectangle)
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
@@ -372,7 +372,7 @@ void player::playerInit()
 	dy={}, dx={}, angle={}, normdy={}, normdx={};
 	mangnituded={};
 
-    dashCooldown={ 0.25f };
+    dashCooldown={ 0.2f };
 	/*int	  rawX{};
 	int   rawY{};*/
 	isDashing={ false };

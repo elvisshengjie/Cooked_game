@@ -16,9 +16,9 @@ class Timer {
 public:
 
 
-	double countdownDuration; //Countdown in s
+	double countdownDuration{}; //Countdown in s
 
-	double startTime; //Start Time in s
+	double startTime{}; //Start Time in s
 
 
 	double pausedTime{};

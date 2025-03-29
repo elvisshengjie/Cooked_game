@@ -407,7 +407,7 @@ void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& rec
     }
     // Print Name (Left-aligned)
     float textOffset{ 0.05f };
-    float offsetX{ 0.20f };
+   
     AEGfxPrint(FontID, nameLine1.c_str(), textX, nameY, nameScale, 0.0f, 0.0f, 0.0f, 1.0f);
     if (!nameLine2.empty()) {
         AEGfxPrint(FontID, nameLine2.c_str(), textX, nameY - textOffset, nameScale, 0.0f, 0.0f, 0.0f, 1.0f);
@@ -417,7 +417,7 @@ void RenderRecipeBox(AEGfxVertexList* mesh, AEGfxTexture* tex, const Recipe& rec
     float iconSpacing = 50.0f;
     float iconStartY = y - 25.0f;
     float iconXLeft = x - 120.0f;
-    float iconXRight = x + 10.0f;
+
     
     for (size_t i = 0; i < recipe.Ingredients.size(); ++i)
     {

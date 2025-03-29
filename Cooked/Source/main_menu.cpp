@@ -94,15 +94,13 @@ void MainMenu::Update() {
 
             int rawX, rawY;
             AEInputGetCursorPosition(&rawX, &rawY);
-            //// Convert from screen-space (assuming 1600x900) to centered coordinates:
-            //float mouseX{ (rawX - 800) / screenWidth / 2 };
-            //float mouseY{ (450 - rawY) / (screenHeight / 2) };
+
 
             // Check each button to see if the mouse is over it.
             for (size_t i = 0; i < buttons.size(); i++) {
                 if (IsPointInsideButton(static_cast<float>(rawX), static_cast<float>(rawY), buttons[i]) && !m_howToPlayActivated) {
                     selectedOption = static_cast<int>(i);
-                   // std::cout << "yes";
+                   
                     // If "Start Game" (button 0) is clicked, set activation flag.
                     if (i == 0) {
                         m_StartGameActivated = true;
