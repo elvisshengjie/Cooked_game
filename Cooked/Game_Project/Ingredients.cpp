@@ -63,10 +63,8 @@ RecipeSystem::RecipeSystem() {
 void RecipeSystem::update() {
 	for (int i = 0; i < maxRecipesDisplay; ++i) {
 		if (activeRecipes[i].recipeTimer.getRemainingTime() <= 0.0f) {
-			//std::cout << "REPLACED";
 			activeRecipes[i] = generateRandomRecipe();
 			activeRecipes[i].recipeTimer.start(activeRecipes[i].Ingredients.size() * baseTimer); // Restart timer
-			//std::cout << "restarted";
 		}
 	}
 }
