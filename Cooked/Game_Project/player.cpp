@@ -325,48 +325,36 @@ void player::playerDrop(Stove& stove) {
 }
 	
 void player::playerDash() {
-
-	
-
-	if (dashCounter == 1) {
+	// Check if dash is available
+	if (isDashAvailable) {
 		if (AEInputCheckTriggered(AEVK_LSHIFT)) {
-			
-				// Prevent dashing if the player is not moving
-			if (AEIsF32Zero(dx) && AEIsF32Zero(dy) ) {
+			// Prevent dashing if the player is not moving
+			if (AEIsF32Zero(dx) && AEIsF32Zero(dy)) {
 				return;  // Stop execution if no movement direction
 			}
-		
-
 			isDashing = true;
-			cooldown.start(dashDuration);
-
-			}
-
+			dashDurationTimer.start(dashDuration);
 		}
+	}
+
 	if (isDashing) {
-		float remainTimedash2 = static_cast<float>( cooldown.getRemainingTime());
-	
-		if (AEIsF32Zero(remainTimedash2)) {
-			dashCounter = 0;
+		float remainingDashDuration = static_cast<float>(dashDurationTimer.getRemainingTime());
+		if (AEIsF32Zero(remainingDashDuration)) {
+			isDashAvailable = false;
 			isDashing = false;
-			cooldown2.start(dashCooldown);
-		}
-
-	}
-
-	 
-	if (AEIsF32Zero(dashCounter)  && !isDashing)
-	{
-		float remainTimedash = static_cast<float>(cooldown2.getRemainingTime());
-		if (remainTimedash <= 0) {
-			dashCounter = 1;
+			dashRechargeTimer.start(dashCooldown);
 		}
 	}
 
-
-
-	
+	if (!isDashing && !isDashAvailable) {
+		float remainingDashCooldown = static_cast<float>(dashRechargeTimer.getRemainingTime());
+		if (remainingDashCooldown <= 0) {
+			isDashAvailable = true;
+		}
+	}
 }
+
+
 
 void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gauge) {
 	if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height) &&
@@ -401,7 +389,7 @@ void player::playerInit()
 	dy={}, dx={}, angle={}, normdy={}, normdx={};
 	mangnituded={};
 
-    dashCooldown={ 0.5f };
+    dashCooldown={ 0.25f };
 	/*int	  rawX{};
 	int   rawY{};*/
 	isDashing={ false };
@@ -410,6 +398,6 @@ void player::playerInit()
 	DirectionX={};
 	DirectionY={};
 	Magnitude={};
-	dashCounter={ 1 };
+	isDashAvailable={ 1 };
 	Hand = EMPTY;
 }
