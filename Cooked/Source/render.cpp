@@ -109,11 +109,11 @@ std::vector<Rect> collisionBoxes = {
     {110.0f, 110.0f, -200.0f, 175.0f},
     {110.0f,110.0f, -49.0f, 175.0f},
     { 110.0f, 110.0f, 102.0f, 175.0f },
-    { 100.0f, 140.0f, 200.0f, -365.0f }
+    { 60.0f, 100.0f, 200.0f, -360.0f }
    
 };
 std::vector<Rect> objectcollision = {
-    { 100.0f, 100.0f,-720.0f , -300.0f }, //Dustbin
+    { 50.0f, 40.0f, -720.0f , -270.0f }, //Dustbin
     { 200.0f, 100.0f,-50.0f, -200.0f }, // stove
     { 100.0f, 100.0f,-200.0f ,175.0f }, //Ing Box 1
     { 100.0f, 100.0f,-49.0f ,175.0f }, //Ing Box 2
@@ -121,7 +121,7 @@ std::vector<Rect> objectcollision = {
     { 330.0f, 200.0f, -350.0f, 340.0f },  // Recipe 1 Collision
     { 330.0f, 200.0f, -0.0f, 340.0f },  // Recipe 2 Collision
     { 330.0f, 200.0f, 350.0f, 340.0f },  // Recipe 3 Collision
-    { 90.0f, 110.0f, 200.0f, -350.0f } //mouse device
+    { 20.0f, 70.0f, 200.0f, -350.0f } //mouse device
 };
 
 std::vector<Rect> recipeBoxes = {
@@ -136,7 +136,7 @@ Rect dustbinRect{ 100.0f, 100.0f,-720.0f , -300.0f };
 Rect ingredientBoxRect{ 100.0f, 100.0f,-200.0f ,175.0f };
 Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
 Rect digipen_logo{ 1000, 455 * 1000 / 1525,0.0f,0.0f };
-Rect mouseDevice{ 170.0f, 170.0f,200.0f, -350.0f };
+Rect mouseDevice{ 120.0f, 120.0f,200.0f, -350.0f };
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -275,7 +275,6 @@ void RenderIngredientsOnBoxes(
             break;
         case POTATO:
             AEGfxTextureSet(potatoTex, 0, 0);
-            //AEGfxSetColorToMultiply(0.6f, 0.4f, 0.2f, 1.0f);
             
             break;
         default:
@@ -339,10 +338,10 @@ void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE
         AEGfxPrint(FontID, timerText.c_str(), -0.4f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);        
     }
     if (stove.isDirty && !stove.isCleaning) {
-        AEGfxPrint(FontID, "Stove is dirty! Press C to clean", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, "Stove is dirty! Press C to clean", -0.6f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
     if (stove.isDirty && stove.isCleaning) {
-        AEGfxPrint(FontID, "Cleaning Stove!", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, "Cleaning Stove!", -0.6f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
 

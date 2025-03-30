@@ -429,9 +429,6 @@ void Credits::Init() {
     lines.push_back({ "SOROOR", 1.2f, 30.0f });
     lines.push_back({ "GERALD WONG", 1.2f, 60.0f });
     lines.push_back({ "All Content Copyright 2025 DigiPen Institute of Technology Singapore. All Rights Reserved", 0.8f, 80.0f });
-
-    lines.push_back({ "PRESS Q TO GO BACK MAIN MENU", 1.5f, 80.0f });
-
 }
 
 void Credits::Update() {

@@ -128,7 +128,7 @@ void Stove::update(RecipeSystem& recipeSystem) {
 		}
 	}
 }
-// Getter Functions -> actually i can just put everything public .. no client gonna have access to my source code... im dumb
+// Getter Functions 
 
 std::string Stove::getCookingRecipeName() const {
 	return cookingRecipeName;
