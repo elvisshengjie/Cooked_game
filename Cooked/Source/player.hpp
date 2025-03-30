@@ -26,8 +26,8 @@ public:
 	void playerCheckCollisonobject(float x1, float y1, float width1, float height1);
 	void ClampToScreen();
 	void playerPickUp(Ingredients& boxIngredient);
-	void playerDrop(Stove& stove);
-	void playerUpdate(Stove& stove, RecipeSystem& recipeSystem, QTE& QTE_Gauge, AEAudio, AEAudioGroup);
+	void playerDrop(Stove& stove, AEAudio cleaningSound, AEAudioGroup sfx);
+	void playerUpdate(Stove& stove, RecipeSystem& recipeSystem, QTE& QTE_Gauge, AEAudio cookingSound, AEAudio qteFailSound, AEAudio qteSuccessSound, AEAudioGroup sfx);
 	void playerDash();
 
 	int spriteDirection{}; // 0- idle , 1 - up , 2- down , 3 - left , 4 - right 

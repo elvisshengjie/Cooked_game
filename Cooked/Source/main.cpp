@@ -118,8 +118,9 @@ AEAudio qteSuccessSound{}; // QTE Success  sound effect
 AEAudio qteFailSound{}; // QTE fail  sound effect
 AEAudio winSound{}; //win screen sound effect
 AEAudio loseSound{};//lose screen sound effect
-AEAudio cleanSound{}; //cleaning sound effect
+AEAudio cleaningSound{}; //cleaning sound effect
 AEAudio bouken{}; //bgm
+
 AEAudioGroup bgm; // short for 'background music'
 AEAudioGroup sfx; //sound effects
 
@@ -275,10 +276,12 @@ void CoreEngine::Init()
     // Configure audio group
     
     bouken = AEAudioLoadMusic("Assets/bm.mp3");
-    cookingSound = AEAudioLoadSound("Assets/cookingSound.mp3");
+    cookingSound = AEAudioLoadSound("Assets/cookingSound.mp3"); 
     winSound = AEAudioLoadSound("Assets/winSound.mp3");
     loseSound = AEAudioLoadSound("Assets/loseSound.mp3");
-    cleanSound = AEAudioLoadSound("Assets/cleanSound.mp3");
+    cleaningSound = AEAudioLoadSound("Assets/cleaningSound.mp3");
+    qteFailSound = AEAudioLoadSound("Assets/qteFailSound.mp3");
+    qteSuccessSound = AEAudioLoadSound("Assets/qteSuccessSound.mp3");
 
     bgm = AEAudioCreateGroup(); // short for 'background music'
     sfx = AEAudioCreateGroup();
@@ -537,7 +540,7 @@ void CoreEngine::Update()
 
 
             // Player update logic (picking up, dropping, etc.)
-            players1.playerUpdate(Wok, recipeSystem, qteGauge, cookingSound, sfx);
+            players1.playerUpdate(Wok, recipeSystem, qteGauge, cookingSound,qteFailSound,qteSuccessSound, sfx);
 
             // Stove / Wok logic (cooking)
             Wok.update(recipeSystem, sfx);
@@ -583,7 +586,7 @@ void CoreEngine::Update()
                     players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y,
                         objectcollision[0].width, objectcollision[0].height))
                 {
-                    players1.playerDrop(Wok);
+                    players1.playerDrop(Wok,cleaningSound, sfx);
                 }
             }
 
@@ -637,6 +640,7 @@ void CoreEngine::Exit()
     AEAudioUnloadAudio(loseSound);
     AEAudioUnloadAudio(qteSuccessSound);
     AEAudioUnloadAudio(qteFailSound);
+    AEAudioUnloadAudio(cleaningSound);
 
     AEAudioUnloadAudioGroup(sfx);
     AEAudioUnloadAudioGroup(bgm);

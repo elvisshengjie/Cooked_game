@@ -123,7 +123,6 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q
     <Image Include="..\..\..\..\Desktop\chicken.png" />
     <Image Include="..\..\..\..\Desktop\egg.png" />
     <Image Include="..\..\..\..\Desktop\potato.png" />
-    <Image Include="..\..\..\..\Desktop\rice.png" />
     <Image Include="..\Assets\Assets\dustbin.png" />
     <Image Include="..\Assets\Assets\PlanetTexture.png" />
   </ItemGroup>
