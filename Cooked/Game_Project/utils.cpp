@@ -100,7 +100,7 @@ void Stove::update(RecipeSystem& recipeSystem) {
 		static std::random_device rd;
 		static std::mt19937 engine(rd());
 		std::uniform_int_distribution<int> distribution(1, 10); // valid indices: 1 to 10
-		if (distribution(engine) >2) {
+		if (distribution(engine) >7) {
 			currentState = StoveState::DIRTY;
 		}
 		else 
