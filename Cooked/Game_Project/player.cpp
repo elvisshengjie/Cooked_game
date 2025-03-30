@@ -6,7 +6,6 @@
 -bool playerCheckCollison
 -void playerCheckCollisonobject
 -void ClampToScreen
--void playerPickUp
 -void playerDash
 -void playerInit
 @author2
