@@ -1,3 +1,17 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file render.cpp
+@author1 Elvis lim sheng jie(elvisshengjie.lim)
+- void RenderCollisionBox
+- void RenderhighlightIngredientBox
+- void mouseDeviceRender
+- void RenderMain_menu_background
+- void RenderMain_digipenLogo
+- Rect class
+@author2
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
 // render.cpp
 #include "render.hpp"
 
@@ -77,7 +91,7 @@ s8 FontID = -1;
 void InitFont()
 {
     FontID = AEGfxCreateFont("./Assets/Cute Dino.otf", 24); 
-    assert(FontID >= 0 && "Failed to load font!");
+
 }
 
 void DestroyFront() {
@@ -100,10 +114,10 @@ std::vector<Rect> collisionBoxes = {
 };
 std::vector<Rect> objectcollision = {
     { 100.0f, 100.0f,-720.0f , -300.0f }, //Dustbin
-    { 200.0f, 100.0f,-50.0f, -200.0f }, // ?what is this one?
+    { 200.0f, 100.0f,-50.0f, -200.0f }, // stove
     { 100.0f, 100.0f,-200.0f ,175.0f }, //Ing Box 1
-    { 100.0f, 100.0f,-49.0f ,175.0f }, //Ing Box 2?
-    { 100.0f, 100.0f,102.0f ,175.0f }, //Ing Box 3?
+    { 100.0f, 100.0f,-49.0f ,175.0f }, //Ing Box 2
+    { 100.0f, 100.0f,102.0f ,175.0f }, //Ing Box 3
     { 330.0f, 200.0f, -350.0f, 340.0f },  // Recipe 1 Collision
     { 330.0f, 200.0f, -0.0f, 340.0f },  // Recipe 2 Collision
     { 330.0f, 200.0f, 350.0f, 340.0f },  // Recipe 3 Collision
@@ -192,7 +206,8 @@ void RenderIngredientbox(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     }
 }
 
-void mouseDevicefun(AEGfxVertexList* mesh, AEGfxTexture* tex)
+// draw repellent
+void mouseDeviceRender(AEGfxVertexList* mesh, AEGfxTexture* tex)
 {
     DrawRect(mouseDevice, tex, mesh);
 }

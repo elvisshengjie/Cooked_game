@@ -1,3 +1,14 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file mouse.cpp
+@author1 Elvis lim sheng jie(elvisshengjie.lim)
+-void mouseMove (only the part where the condition isChased)
+-void chaseAway
+-void handleDeviceInteraction
+@author2 Justin
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
 #include "mouse.hpp"
 #include <float.h>   // for FLT_MAX
 #include <cmath>     // for sqrtf

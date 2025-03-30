@@ -1,3 +1,12 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file main.cpp
+@author1 Elvis lim sheng jie(elvisshengjie.lim)
+- game state mangement Core Engine class
+@author2
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
 #include <iostream>
 #include <crtdbg.h> // To check for memory leaks
 #include "AEEngine.h"
@@ -521,7 +530,7 @@ void CoreEngine::Update()
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderActiveRecipes(pMesh, recipeTex, recipeSystem , chickenTex, beefTex, cheeseTex, eggTex, riceTex, potatoTex);
             //mouse Device
-            mouseDevicefun(pMesh, deviceTex);
+            mouseDeviceRender(pMesh, deviceTex);
             // Render Stove & Player
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
             RenderStove(pStoveMesh,Wok, players1,qteGauge,stoveTex,stoveDirtyTex,stoveCookTex);

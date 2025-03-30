@@ -1,3 +1,13 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file collison.cpp
+@author1 Elvis lim sheng jie(elvisshengjie.lim)
+- bool collisonRect
+@author2
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
+
 #include "collison.hpp"
 #include <iostream>
 

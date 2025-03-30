@@ -1,3 +1,27 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file main_menu.cpp
+@author1 Elvis lim sheng jie(elvisshengjie.lim)
+- void Digipen::Init
+- void Digipen::Render
+- void Digipen::Cleanup
+- bool IsPointInsideButton
+- void MainMenu::Init
+- void MainMenu::Update
+- void MainMenu::Render
+- bool MainMenu::IsStartGameSelected() const
+- bool MainMenu::isCreditsSelected() const
+- bool MainMenu::IsQuitSelected() const
+- bool MainMenu::IsOptionsSelected() const
+- void MainMenu::Cleanup
+- Credits::Credits()
+- void Credits::Init
+- void Credits::Update
+- void Credits::Render
+@author2
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
 #include "Main_Menu.hpp"
 
 float screenWidth{ 1600.0f };
@@ -144,9 +168,6 @@ void MainMenu::Render(AEGfxVertexList* mesh) {
             DrawRect(btn.box, button, mesh);
             AEGfxPrint(FontID, btn.label.c_str(), btn.box.x-0.1f , btn.box.y/(screenHeight / 2) -0.02f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
-
-    
-            //DrawRect(btn.box, 0xFFFF00FF, mesh);
 
         }
         if (m_howToPlayActivated) {

@@ -1,3 +1,11 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file main_menu.hpp
+@author1 Elvis lim sheng jie(elvisshengjie.lim)
+@author2
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
 #pragma once
 #include <vector>
 #include <string>

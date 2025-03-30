@@ -1,3 +1,11 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file player.hpp
+@author1 Elvis lim sheng jie(elvisshengjie.lim)
+@author2
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
 #pragma once
 #include <crtdbg.h>		// To check for memory leaks
 #include <math.h> 
@@ -17,7 +25,6 @@ public:
 	bool playerCheckCollison(float x1, float y1, float width1, float height1)const;
 	void playerCheckCollisonobject(float x1, float y1, float width1, float height1);
 	void ClampToScreen();
-	void playerThrow();
 	void playerPickUp(Ingredients& boxIngredient);
 	void playerDrop(Stove& stove);
 	void playerUpdate(Stove& stove, RecipeSystem& recipeSystem, QTE& QTE_Gauge);

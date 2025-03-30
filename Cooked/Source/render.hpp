@@ -1,3 +1,11 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file render.hpp
+@author1 Elvis lim sheng jie(elvisshengjie.lim)
+@author2
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
 // render.hpp
 #pragma once
 
@@ -61,7 +69,7 @@ void renderStoveIngredient(AEGfxVertexList* mesh, AEGfxTexture* chickenTex, AEGf
 
 void displayScore(int);
 void displayTimer(double);
-void mouseDevicefun(AEGfxVertexList* mesh, AEGfxTexture*);
+void mouseDeviceRender(AEGfxVertexList* mesh, AEGfxTexture*);
 //Font
 void InitFont();
 void DestroyFront();

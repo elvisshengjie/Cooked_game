@@ -1,3 +1,18 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file player.cpp
+@author1 Elvis lim sheng jie(elvisshengjie.lim)
+-void playerMove
+-bool playerCheckCollison
+-void playerCheckCollisonobject
+-void ClampToScreen
+-void playerPickUp
+-void playerDash
+-void playerInit
+@author2
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
 #include "player.hpp"
 
 void RenderAnimatedSprite(AEGfxVertexList* mesh, AEGfxTexture* texture, int frameIndex, int totalFrames) {
@@ -224,9 +239,7 @@ void player::playerCheckCollisonobject(float x1, float y1, float width1, float h
 {
 	Colingredientbox1.collisonobjectRect(x, y, width, height, x1, y1, width1, height1);
 }
-void player::playerThrow(){
-	this->Hand = EMPTY;
-}
+
 
 void player::ClampToScreen() {
 	// Player's half dimensions (since x/y are at the center)
@@ -373,8 +386,7 @@ void player::playerInit()
 	mangnituded={};
 
     dashCooldown={ 0.2f };
-	/*int	  rawX{};
-	int   rawY{};*/
+
 	isDashing={ false };
 	DirectX={};
 	DirectY={};
