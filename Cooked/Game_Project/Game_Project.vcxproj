@@ -132,6 +132,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q
     <ClInclude Include="..\Source\Ingredients.hpp" />
     <ClInclude Include="..\Source\main_menu.hpp" />
     <ClInclude Include="..\Source\mouse.hpp" />
+    <ClInclude Include="..\Source\player.hpp" />
     <ClInclude Include="..\Source\render.hpp" />
     <ClInclude Include="..\Source\utils.hpp" />
   </ItemGroup>
