@@ -3,7 +3,8 @@
 @file Ingredients.cpp
 @author1 Elvis lim sheng jie(elvisshengjie.lim)
 - Ingredients GetRandomIngredient
-@author2
+@author2 Justin Kong (yimo.kong)
+- Ingredients GetRandomIngredient(complete together with elvis)
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/

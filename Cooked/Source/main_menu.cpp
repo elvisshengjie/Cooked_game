@@ -18,7 +18,14 @@
 - void Credits::Init
 - void Credits::Update
 - void Credits::Render
-@author2
+@author2 Justin Kong (yimo.kong)
+- void PauseMenu::Init
+- int PauseMenu::Update
+- void PauseMenu::Render
+- void OptionsMenu::Init
+- int OptionsMenu::Update
+- void OptionsMenu::Render
+-
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/

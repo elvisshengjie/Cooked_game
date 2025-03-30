@@ -3,7 +3,7 @@
 @file main.cpp
 @author1 Elvis lim sheng jie(elvisshengjie.lim)
 - game state mangement Core Engine class
-@author2
+@author2 Justin Kong (yimo.kong)
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/

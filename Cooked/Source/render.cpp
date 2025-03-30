@@ -14,6 +14,10 @@
 - void RenderStove
 - void RenderStoveIngredients
 - void RenderRecipeBox
+@author3 Justin Kong (yimo.kong)
+- void RenderDustbin
+- void Renderbackground
+- void RenderIngredientsOnBoxes
 
 @course csd1451s25 Software Engineering Project 2
 @section a

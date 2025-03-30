@@ -3,7 +3,8 @@
 @file collison.cpp
 @author1 Elvis lim sheng jie(elvisshengjie.lim)
 - bool collisonRect
-@author2
+@author2 Justin Kong (yimo.kong)
+- void collisonobjectRect
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/

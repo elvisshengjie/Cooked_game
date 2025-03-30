@@ -5,7 +5,12 @@
 -void mouseMove (only the part where the condition isChased)
 -void chaseAway
 -void handleDeviceInteraction
-@author2 Justin
+@author2 Justin Kong (yimo.kong)
+- void mouse::init
+- void mouse::mousedraw
+- void mouse::mouseMove  
+- bool mouse::mouseCheckCollison
+- void mouse::mouseCheckCollisonobject
 @author3 Norman (chan.f)
 -mouse sprite animation
 
