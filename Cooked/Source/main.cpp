@@ -358,10 +358,8 @@ void CoreEngine::Update()
         {
 
             creditMenu.Update();
-            if (AEInputCheckTriggered(AEVK_Q)|| creditMenu.shouldExitToMain())  // Use Q or X to exit credits
+            if (creditMenu.shouldExitToMain())  // Use Q or X to exit credits
             {
-                
-                
                 creditMenu.ResetExitFlag();
                 currentState = GameState::MAIN_MENU;
             }
