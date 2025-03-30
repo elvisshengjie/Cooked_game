@@ -87,7 +87,7 @@ public:
 
 	void startCooking(const std::vector<Recipe>& activeRecipes, AEAudio, AEAudioGroup);
 
-	void update(RecipeSystem &recipeSystem, AEAudioGroup);
+	void update(RecipeSystem &recipeSystem, AEAudio ,AEAudioGroup);
 
 	double remainingCookingTime();
 
@@ -136,4 +136,4 @@ private:
 
 };
 extern int score;
-int updateScore(bool, size_t);
+int updateScore(bool, size_t, AEAudio, AEAudioGroup);

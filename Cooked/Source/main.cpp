@@ -114,6 +114,7 @@ public:
 //audio
 bool hasPlayed = false;
 AEAudio cookingSound{}; // Cooking sound effect
+AEAudio pointsSound{}; //sound when cooking finished and points added
 AEAudio qteSuccessSound{}; // QTE Success  sound effect
 AEAudio qteFailSound{}; // QTE fail  sound effect
 AEAudio winSound{}; //win screen sound effect
@@ -279,6 +280,7 @@ void CoreEngine::Init()
     winSound = AEAudioLoadSound("Assets/winSound.mp3");
     loseSound = AEAudioLoadSound("Assets/loseSound.mp3");
     cleanSound = AEAudioLoadSound("Assets/cleanSound.mp3");
+    pointsSound = AEAudioLoadSound("Assets/pointsSound.mp3");
 
     bgm = AEAudioCreateGroup(); // short for 'background music'
     sfx = AEAudioCreateGroup();
@@ -540,7 +542,7 @@ void CoreEngine::Update()
             players1.playerUpdate(Wok, recipeSystem, qteGauge, cookingSound, sfx);
 
             // Stove / Wok logic (cooking)
-            Wok.update(recipeSystem, sfx);
+            Wok.update(recipeSystem, pointsSound, sfx);
 
             recipeSystem.update();
             
@@ -637,6 +639,8 @@ void CoreEngine::Exit()
     AEAudioUnloadAudio(loseSound);
     AEAudioUnloadAudio(qteSuccessSound);
     AEAudioUnloadAudio(qteFailSound);
+    AEAudioUnloadAudio(cleanSound);
+    AEAudioUnloadAudio(pointsSound);
 
     AEAudioUnloadAudioGroup(sfx);
     AEAudioUnloadAudioGroup(bgm);
