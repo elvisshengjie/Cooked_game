@@ -16,7 +16,7 @@
 #include <float.h>   // for FLT_MAX
 #include <cmath>     // for sqrtf
 
-#include "../Source/render.hpp"  // Adjust include paths if needed
+#include "render.hpp"  // Adjust include paths if needed
 // #include "../Source/Ingredients.hpp"
 // #include "../Source/collison.hpp"
 
