@@ -1,3 +1,11 @@
+/*!
+@ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
+@file utils.hpp
+@author1
+@author2
+@course csd1451s25 Software Engineering Project 2
+@section a
+*//*______________________________________________________________________*/
 #pragma once
 
 #include "AEEngine.h"
