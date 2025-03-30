@@ -148,6 +148,8 @@ private:
 
    
 public:
+
+	bool hasPlayedSound = false;
     WinScreen() = default;
     ~WinScreen();
     void Init();
@@ -161,6 +163,8 @@ public:
 
 class PauseMenu {
 public:
+
+
     PauseMenu() = default;
     ~PauseMenu();
 

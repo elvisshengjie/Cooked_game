@@ -66,7 +66,7 @@ bool Stove::canCook(player& player) const
 	return currentState == StoveState::IDLE && stoveItems.size() >= minSize && player.playerCheckCollison(x, y, width, height);
 }
 
-void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
+void Stove::startCooking(const std::vector<Recipe>& activeRecipes, AEAudio cookingSound, AEAudioGroup sfx)
 {
 	if (currentState != StoveState::IDLE || stoveItems.size() < minSize) return;
 	currentState = StoveState::COOKING;
@@ -85,7 +85,8 @@ void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 			break;
 		}
 	}
-
+	// Play cooking sound
+	AEAudioPlay(cookingSound, sfx, 1.0f, 1.0f, 0); // false for non-looping playback
 }
 
 double Stove::remainingCookingTime()
@@ -95,7 +96,8 @@ double Stove::remainingCookingTime()
 	double remainTime = cookingTimer.getRemainingTime();
 	return remainTime;
 }
-void Stove::update(RecipeSystem& recipeSystem) {
+
+void Stove::update(RecipeSystem& recipeSystem, AEAudioGroup sfx) {
 	if (currentState == StoveState::COOKING && cookingTimer.completed()) {
 		static std::random_device rd;
 		static std::mt19937 engine(rd());
@@ -116,6 +118,8 @@ void Stove::update(RecipeSystem& recipeSystem) {
 		
 		score = updateScore(recipeMatched, stoveItems.size());
 		clearWok();
+
+		AEAudioStopGroup(sfx);
 	}
 	if (currentState == StoveState::CLEANING && cookingTimer.getRemainingTime() <= 0) {
 		currentState = StoveState::IDLE;

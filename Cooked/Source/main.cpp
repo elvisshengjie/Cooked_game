@@ -41,6 +41,7 @@ class CoreEngine
     bool gGameRunning = true;
     GameState currentState = GameState::DIGIPEN_LOGO;
     Timer mouseDeviceCooldownTimer{};
+    int gameTimer{ 300 };
 
     // Meshes
     AEGfxVertexList* pMesh = nullptr;          // Generic mesh (background, dustbin, etc.)
@@ -87,15 +88,13 @@ class CoreEngine
     std::vector<AEGfxTexture*>mouseLeft{ nullptr, nullptr, nullptr, nullptr };
     std::vector<AEGfxTexture*>mouseRight{ nullptr, nullptr, nullptr, nullptr };
 
-    
-    
 
     // Systems
     RecipeSystem recipeSystem;
     Digipen digi;
-   MainMenu     mainMenu;
-   PauseMenu    pauseMenu;
-   Credits     creditMenu;
+    MainMenu     mainMenu;
+    PauseMenu    pauseMenu;
+    Credits     creditMenu;
     QTE          qteGauge;
     Stove        Wok;
     WinScreen    winScreen;
@@ -112,10 +111,18 @@ public:
 
 };
 
-//AEAudio ratSound;
-//AEAudioGroup seGroup;
-AEAudio bouken;
+//audio
+bool hasPlayed = false;
+AEAudio cookingSound{}; // Cooking sound effect
+AEAudio qteSuccessSound{}; // QTE Success  sound effect
+AEAudio qteFailSound{}; // QTE fail  sound effect
+AEAudio winSound{}; //win screen sound effect
+AEAudio loseSound{};//lose screen sound effect
+AEAudio cleanSound{}; //cleaning sound effect
+AEAudio bouken{}; //bgm
 AEAudioGroup bgm; // short for 'background music'
+AEAudioGroup sfx; //sound effects
+
 
 // ------------------------------------------------------------
 // CoreEngine::Init
@@ -124,7 +131,7 @@ void CoreEngine::Init()
     currentState = GameState::DIGIPEN_LOGO;
     // Changing the window title
 
-    gTimer.start(300);
+    gTimer.start(gameTimer);
     AESysSetWindowTitle("Cooked!");
 
     // AESysReset() re-initializes various engine systems
@@ -264,20 +271,19 @@ void CoreEngine::Init()
     IngredientMesh = AEGfxMeshEnd();
 
     // 4. Create sound and music
-    //
-    // Audio variables
-    //
-
+    
     // Configure audio group
+    
     bouken = AEAudioLoadMusic("Assets/bm.mp3");
+    cookingSound = AEAudioLoadSound("Assets/cookingSound.mp3");
+    winSound = AEAudioLoadSound("Assets/winSound.mp3");
+    loseSound = AEAudioLoadSound("Assets/loseSound.mp3");
+    cleanSound = AEAudioLoadSound("Assets/cleanSound.mp3");
+
     bgm = AEAudioCreateGroup(); // short for 'background music'
+    sfx = AEAudioCreateGroup();
 
     AEAudioPlay(bouken, bgm, g_bgmVolume, 1.f, -1); // we can start playing here.
-
-    /*ratSound = AEAudioLoadMusic("Assets/rat.mp3");
-    seGroup = AEAudioCreateGroup();*/
-
-    
 }
 
 // ------------------------------------------------------------
@@ -322,7 +328,7 @@ void CoreEngine::Update()
             // Check menu selection
             if (mainMenu.IsStartGameSelected())
             {
-                gTimer.start(300);
+                gTimer.start(gameTimer);
                 mouse1.init(-2500.0f, 100.0f);
                 mouse2.init(2200.0f, 500.0f);
                 mouse3.init(3300.0f, 0.0f);
@@ -377,7 +383,7 @@ void CoreEngine::Update()
             // Check menu selection
             if (check == 1)
             {
-                gTimer.start(300);
+                gTimer.start(gameTimer);
                 currentState = GameState::GAME;
             }
             else if (check == 2)
@@ -390,6 +396,13 @@ void CoreEngine::Update()
             }
             
             winScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Win!");
+            
+            if (!hasPlayed)
+            {
+                AEAudioPlay(winSound, sfx, 1.0f, 1.0f, 0);
+                hasPlayed = true;
+            }
+            
 
             //reinit
             // reinitialize random box ingredients
@@ -417,9 +430,9 @@ void CoreEngine::Update()
             // Check menu selection
             if (check == 1)
             {
-                gTimer.start(300);
+                gTimer.start(gameTimer);
                 currentState = GameState::GAME;
-            }
+            } 
             else if (check == 2)
             {
                 currentState = GameState::MAIN_MENU;
@@ -431,6 +444,12 @@ void CoreEngine::Update()
 
            // AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             loseScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Lose :(");
+            if (!hasPlayed) {
+                AEAudioPlay(loseSound, sfx, 1.6f, 1.0f, 0);
+                hasPlayed = true;
+
+            }
+
             //reinit
             // reinitialize random box ingredients
             for (int i = 0; i < 3; ++i)
@@ -475,6 +494,7 @@ void CoreEngine::Update()
         // ------------------------------
         case GameState::GAME:
         {
+            hasPlayed = false;
             static bool ratSoundTriggered = false;
 
        
@@ -517,10 +537,10 @@ void CoreEngine::Update()
 
 
             // Player update logic (picking up, dropping, etc.)
-            players1.playerUpdate(Wok, recipeSystem, qteGauge);
+            players1.playerUpdate(Wok, recipeSystem, qteGauge, cookingSound, sfx);
 
             // Stove / Wok logic (cooking)
-            Wok.update(recipeSystem);
+            Wok.update(recipeSystem, sfx);
 
             recipeSystem.update();
             
@@ -612,7 +632,13 @@ void CoreEngine::Exit()
     // Cleanup main menu
 
     AEAudioUnloadAudio(bouken);
-   
+    AEAudioUnloadAudio(cookingSound);
+    AEAudioUnloadAudio(winSound);
+    AEAudioUnloadAudio(loseSound);
+    AEAudioUnloadAudio(qteSuccessSound);
+    AEAudioUnloadAudio(qteFailSound);
+
+    AEAudioUnloadAudioGroup(sfx);
     AEAudioUnloadAudioGroup(bgm);
     
 

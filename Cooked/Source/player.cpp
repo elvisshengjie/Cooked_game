@@ -352,7 +352,7 @@ void player::playerDash() {
 
 
 
-void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gauge) {
+void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gauge, AEAudio cookingSound, AEAudioGroup sfx) {
 	if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height) &&
 		stove.canCook(*this))
 	{
@@ -364,7 +364,7 @@ void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gaug
 		QTE_Gauge.update(static_cast<float>(AEFrameRateControllerGetFrameTime()));
 		if (QTE_Gauge.isCompleted) {
 			if (QTE_Gauge.isSuccess) {
-				stove.startCooking(recipeSystem.getActiveRecipes());
+				stove.startCooking(recipeSystem.getActiveRecipes(), cookingSound, sfx);
 			}
 			else {
 				stove.clearWok(); // Clear the wok if QTE fails

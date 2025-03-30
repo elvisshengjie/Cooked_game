@@ -27,7 +27,7 @@ public:
 	void ClampToScreen();
 	void playerPickUp(Ingredients& boxIngredient);
 	void playerDrop(Stove& stove);
-	void playerUpdate(Stove& stove, RecipeSystem& recipeSystem, QTE& QTE_Gauge);
+	void playerUpdate(Stove& stove, RecipeSystem& recipeSystem, QTE& QTE_Gauge, AEAudio, AEAudioGroup);
 	void playerDash();
 
 	int spriteDirection{}; // 0- idle , 1 - up , 2- down , 3 - left , 4 - right 

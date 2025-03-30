@@ -85,9 +85,9 @@ public:
 
 	bool canCook(player& player) const;
 
-	void startCooking(const std::vector<Recipe>& activeRecipes);
+	void startCooking(const std::vector<Recipe>& activeRecipes, AEAudio, AEAudioGroup);
 
-	void update(RecipeSystem &recipeSystem);
+	void update(RecipeSystem &recipeSystem, AEAudioGroup);
 
 	double remainingCookingTime();
 
