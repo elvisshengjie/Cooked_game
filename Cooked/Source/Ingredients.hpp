@@ -3,6 +3,7 @@
 @file Ingredients.hpp
 @author1 Elvis lim sheng jie(elvisshengjie.lim)
 @author2 Justin Kong (yimo.kong)
+@author3 Norman Chan (chan.f)
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/

@@ -5,6 +5,9 @@
 - Ingredients GetRandomIngredient
 @author2 Justin Kong (yimo.kong)
 - Ingredients GetRandomIngredient(complete together with elvis)
+@author3 Norman Chan (chan.f)
+- RecipeSystem Class
+- Recipe Class
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/

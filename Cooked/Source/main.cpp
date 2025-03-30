@@ -4,6 +4,8 @@
 @author1 Elvis lim sheng jie(elvisshengjie.lim)
 - game state mangement Core Engine class
 @author2 Justin Kong (yimo.kong)
+@author3 Kerrin Lemin Khoo (kerrinlemin.k)
+@author4 Norman Chan (chan.f)
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/
@@ -402,7 +404,7 @@ void CoreEngine::Update()
             
             if (!hasPlayed)
             {
-                AEAudioPlay(winSound, sfx, 1.0f, 1.0f, 0);
+                AEAudioPlay(winSound, sfx, 0.70f, 1.0f, 0);
                 hasPlayed = true;
             }
             
@@ -448,7 +450,7 @@ void CoreEngine::Update()
            // AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             loseScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Lose :(");
             if (!hasPlayed) {
-                AEAudioPlay(loseSound, sfx, 1.6f, 1.0f, 0);
+                AEAudioPlay(loseSound, sfx, 1.0f, 1.0f, 0);
                 hasPlayed = true;
 
             }

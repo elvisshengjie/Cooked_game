@@ -3,8 +3,10 @@
 @file utils.cpp
 @author1 Norman Chan (chan.f)
 - Timer Class
--
-@author2
+- QTE Class
+
+@author2 Kerrin Lemin Khoo (kerrinlemin.k)
+- Stove Class
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/

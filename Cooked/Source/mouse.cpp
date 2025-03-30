@@ -11,8 +11,6 @@
 - void mouse::mouseMove  
 - bool mouse::mouseCheckCollison
 - void mouse::mouseCheckCollisonobject
-@author3 Norman (chan.f)
--mouse sprite animation
 
 @course csd1451s25 Software Engineering Project 2
 @section a

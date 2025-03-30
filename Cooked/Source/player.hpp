@@ -2,7 +2,8 @@
 @ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
 @file player.hpp
 @author1 Elvis lim sheng jie(elvisshengjie.lim)
-@author2
+@author2 Norman Chan (chan.f)
+
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/
