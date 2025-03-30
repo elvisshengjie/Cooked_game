@@ -97,7 +97,7 @@ double Stove::remainingCookingTime()
 	return remainTime;
 }
 
-void Stove::update(RecipeSystem& recipeSystem, AEAudio pointsSound, AEAudioGroup sfx) {
+void Stove::update(RecipeSystem& recipeSystem, AEAudioGroup sfx) {
 	if (currentState == StoveState::COOKING && cookingTimer.completed()) {
 		static std::random_device rd;
 		static std::mt19937 engine(rd());
@@ -116,7 +116,7 @@ void Stove::update(RecipeSystem& recipeSystem, AEAudio pointsSound, AEAudioGroup
 			}
 		}
 		
-		score = updateScore(recipeMatched, stoveItems.size(), pointsSound, sfx);
+		score = updateScore(recipeMatched, stoveItems.size());
 		clearWok();
 
 		AEAudioStopGroup(sfx);
@@ -236,14 +236,12 @@ void QTE::start() {
 	targetZoneEnd = targetZoneStart + zoneWidth;
 }
 
-int updateScore(bool recipeMatched, size_t stoveItems, AEAudio audio, AEAudioGroup sfx)
+int updateScore(bool recipeMatched, size_t stoveItems)
 {
 	int multiplier{ 2 };
 	if (recipeMatched)
 	{
 		score += static_cast<int>(stoveItems) * multiplier;
-		AEAudioPlay(audio, sfx, 1.4f, 1.0f, 0);
-		std::cout << "audiop plaspla";
 	}
 	else
 	{
