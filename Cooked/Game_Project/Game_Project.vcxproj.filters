@@ -71,9 +71,6 @@
     <Image Include="..\..\..\..\Desktop\cheese.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\Desktop\rice.png">
-      <Filter>Source Files</Filter>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\render.hpp">

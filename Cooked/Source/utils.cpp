@@ -86,7 +86,7 @@ void Stove::startCooking(const std::vector<Recipe>& activeRecipes, AEAudio cooki
 		}
 	}
 	// Play cooking sound
-	AEAudioPlay(cookingSound, sfx, 1.0f, 1.0f, 0); // false for non-looping playback
+	AEAudioPlay(cookingSound, sfx, 1.0f, 1.0f, 1); // false for non-looping playback
 }
 
 double Stove::remainingCookingTime()
@@ -123,6 +123,7 @@ void Stove::update(RecipeSystem& recipeSystem, AEAudioGroup sfx) {
 	}
 	if (currentState == StoveState::CLEANING && cookingTimer.getRemainingTime() <= 0) {
 		currentState = StoveState::IDLE;
+		AEAudioStopGroup(sfx);
 	}
 	
 }

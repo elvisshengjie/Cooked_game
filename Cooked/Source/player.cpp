@@ -290,7 +290,7 @@ void player::playerPickUp(Ingredients& boxIngredient)
 }
 
 int cleanDuration{ 4 };
-void player::playerDrop(Stove& stove) {
+void player::playerDrop(Stove& stove, AEAudio cleaningSound , AEAudioGroup sfx) {
 	if (AEInputCheckTriggered(AEVK_E)) {
 		if (Hand != EMPTY && stove.currentState == Stove::StoveState::IDLE) {
 			if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height))
@@ -315,6 +315,8 @@ void player::playerDrop(Stove& stove) {
 			if (stove.currentState == Stove::StoveState::DIRTY) {
 				stove.cookingTimer.start(cleanDuration);
 				stove.currentState = Stove::StoveState::CLEANING;
+				AEAudioPlay(cleaningSound, sfx, 1.0f, 1.0f, 1);
+				
 			}
 		}
 	}
@@ -352,7 +354,7 @@ void player::playerDash() {
 
 
 
-void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gauge, AEAudio cookingSound, AEAudioGroup sfx) {
+void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gauge, AEAudio cookingSound, AEAudio qteFailSound, AEAudio qteSuccessSound, AEAudioGroup sfx) {
 	if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height) &&
 		stove.canCook(*this))
 	{
@@ -361,13 +363,16 @@ void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gaug
 		}
 	}
 	if (QTE_Gauge.isActive) {
-		QTE_Gauge.update(static_cast<float>(AEFrameRateControllerGetFrameTime()));
+		QTE_Gauge.update(static_cast<float>(AEFrameRateControllerGetFrameTime()) );
 		if (QTE_Gauge.isCompleted) {
 			if (QTE_Gauge.isSuccess) {
+				AEAudioPlay(qteSuccessSound, sfx, 1.0f, 1.0f, 0);
 				stove.startCooking(recipeSystem.getActiveRecipes(), cookingSound, sfx);
 			}
 			else {
+				AEAudioPlay(qteFailSound, sfx, 1.0f, 1.0f, 0);
 				stove.clearWok(); // Clear the wok if QTE fails
+
 			}
 			QTE_Gauge.reset(); // Reset QTE state
 		}
