@@ -8,7 +8,13 @@
 - void RenderMain_menu_background
 - void RenderMain_digipenLogo
 - Rect class
-@author2
+@author2 Norman Chan (chan.f)
+- void InitFont
+- void DestroyFront
+- void RenderStove
+- void RenderStoveIngredients
+- void RenderRecipeBox
+
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/
@@ -114,7 +120,7 @@ std::vector<Rect> collisionBoxes = {
 };
 std::vector<Rect> objectcollision = {
     { 100.0f, 100.0f,-720.0f , -300.0f }, //Dustbin
-    { 200.0f, 100.0f,-50.0f, -200.0f }, // stove
+    { 200.0f, 100.0f * 2.0f / 3.0f ,-50.0f, -200.0f + 100.0f/ 6.0f }, // stove
     { 100.0f, 100.0f,-200.0f ,175.0f }, //Ing Box 1
     { 100.0f, 100.0f,-49.0f ,175.0f }, //Ing Box 2
     { 100.0f, 100.0f,102.0f ,175.0f }, //Ing Box 3
@@ -304,10 +310,10 @@ void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE
     // Set default texture
     AEGfxTexture* selectedTexture = stoveTex;
 
-    if (stove.isCooking) {
+    if (stove.currentState == Stove::StoveState::COOKING) {
         selectedTexture = stoveCook;
     }
-    else if (stove.isDirty) {
+    else if (stove.currentState == Stove::StoveState::DIRTY  || stove.currentState == Stove::StoveState::CLEANING) {
         selectedTexture = stoveDirty;
     }
 
@@ -321,27 +327,24 @@ void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE
 
     AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
-    // Debugging: If the texture still doesn't s
-    // 
-    // , print an error
     if (!selectedTexture) {
         std::cerr << "Error: Stove texture is NULL!" << std::endl;
     }
 
 
-    if (!stove.isCooking && stove.canCook(Player) && !qteGauge.isActive ) {
+    if ((stove.currentState == Stove::StoveState::IDLE) && stove.canCook(Player) && !qteGauge.isActive ) {
         AEGfxPrint(FontID, "Press Q to Cook!", -0.6f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
-    if (stove.isCooking) {
+    if (stove.currentState == Stove::StoveState::COOKING) {
         std::string timerText = "Cooking: " + stove.getCookingRecipeName() +
             " (" + std::to_string((int)stove.remainingCookingTime()) + "s)";
         AEGfxPrint(FontID, timerText.c_str(), -0.4f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);        
     }
-    if (stove.isDirty && !stove.isCleaning) {
+    if (stove.currentState == Stove::StoveState::DIRTY) {
         AEGfxPrint(FontID, "Stove is dirty! Press C to clean", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
-    if (stove.isDirty && stove.isCleaning) {
+    if (stove.currentState == Stove::StoveState::CLEANING) {
         AEGfxPrint(FontID, "Cleaning Stove!", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 

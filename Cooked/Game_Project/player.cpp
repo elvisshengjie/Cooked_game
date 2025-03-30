@@ -8,7 +8,8 @@
 -void ClampToScreen
 -void playerDash
 -void playerInit
-@author2
+@author2 Norman Chan (chan.f)
+- Player Animation
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/
@@ -291,7 +292,7 @@ void player::playerPickUp(Ingredients& boxIngredient)
 int cleanDuration{ 4 };
 void player::playerDrop(Stove& stove) {
 	if (AEInputCheckTriggered(AEVK_E)) {
-		if (Hand != EMPTY && stove.isDirty==false) {
+		if (Hand != EMPTY && stove.currentState == Stove::StoveState::IDLE) {
 			if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height))
 			{
 				if (stove.putIngredient(Hand)) {
@@ -311,9 +312,9 @@ void player::playerDrop(Stove& stove) {
 	}
 	if (AEInputCheckTriggered(AEVK_C)) {
 		if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height)) {
-			if (stove.isDirty) {
+			if (stove.currentState == Stove::StoveState::DIRTY) {
 				stove.cookingTimer.start(cleanDuration);
-				stove.isCleaning = true;
+				stove.currentState = Stove::StoveState::CLEANING;
 			}
 		}
 	}

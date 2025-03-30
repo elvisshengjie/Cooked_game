@@ -1,8 +1,9 @@
 /*!
 @ All content 2025 DigiPen (SINGAPORE) Corporation, all rights reserved
 @file utils.cpp
-@author1
-- what function?
+@author1 Norman Chan (chan.f)
+- Timer Class
+-
 @author2
 @course csd1451s25 Software Engineering Project 2
 @section a
@@ -46,11 +47,7 @@ void Timer::pauseresume() {
 int maxSize{ 6 };
 bool Stove::putIngredient(const Ingredients ingredient)
 {
-	if (isCooking) {
-		return false;
-	}
-	//Add return codes for edge cases, testing.
-	if (!isCooking && stoveItems.size() < maxSize) {
+	if (currentState == StoveState::IDLE && stoveItems.size() < maxSize) {
 		stoveItems.push_back(ingredient);
 		return true;
 	}
@@ -60,21 +57,19 @@ bool Stove::putIngredient(const Ingredients ingredient)
 //clears items in stove after cooking
 void Stove::clearWok() {
 	stoveItems.clear();
-	isCooking = false;
 	cookingRecipeName = "";
 }
 
 int minSize{ 2 };
 bool Stove::canCook(player& player) const
 {
-	return !isCooking && stoveItems.size() >= minSize && player.playerCheckCollison(x, y, width, height) && !isDirty;
+	return currentState == StoveState::IDLE && stoveItems.size() >= minSize && player.playerCheckCollison(x, y, width, height);
 }
 
 void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 {
-	if (isCooking || stoveItems.size() < minSize || isDirty) return;
-
-	isCooking = true;
+	if (currentState != StoveState::IDLE || stoveItems.size() < minSize) return;
+	currentState = StoveState::COOKING;
 	double cookingTime = baseTime + stoveItems.size();
 
 	cookingTimer.start(cookingTime);
@@ -95,21 +90,22 @@ void Stove::startCooking(const std::vector<Recipe>& activeRecipes)
 
 double Stove::remainingCookingTime()
 {
-	if (!isCooking) return 0.0;
+	if (currentState != StoveState::COOKING && currentState != StoveState::CLEANING) return 0.0;
 
 	double remainTime = cookingTimer.getRemainingTime();
-	if (remainTime <= 0.0) {
-		isCooking = false;
-	}
 	return remainTime;
 }
 void Stove::update(RecipeSystem& recipeSystem) {
-	if (isCooking && cookingTimer.completed()) {
+	if (currentState == StoveState::COOKING && cookingTimer.completed()) {
 		static std::random_device rd;
 		static std::mt19937 engine(rd());
 		std::uniform_int_distribution<int> distribution(1, 10); // valid indices: 1 to 10
-		if (distribution(engine) >7) {
-			isDirty = true;
+		if (distribution(engine) >2) {
+			currentState = StoveState::DIRTY;
+		}
+		else 
+		{
+			currentState = StoveState::IDLE;
 		}
 		for (const Recipe& recipe : recipeSystem.getActiveRecipes()) {
 			if (recipe.Name == cookingRecipeName) {
@@ -121,12 +117,10 @@ void Stove::update(RecipeSystem& recipeSystem) {
 		score = updateScore(recipeMatched, stoveItems.size());
 		clearWok();
 	}
-	if (isDirty) {
-		if (isCleaning && cookingTimer.getRemainingTime() <= 0) {
-			isDirty = false;
-			isCleaning = false;
-		}
+	if (currentState == StoveState::CLEANING && cookingTimer.getRemainingTime() <= 0) {
+		currentState = StoveState::IDLE;
 	}
+	
 }
 // Getter Functions -> actually i can just put everything public .. no client gonna have access to my source code... im dumb
 

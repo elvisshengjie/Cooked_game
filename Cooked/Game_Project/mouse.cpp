@@ -6,6 +6,9 @@
 -void chaseAway
 -void handleDeviceInteraction
 @author2 Justin
+@author3 Norman (chan.f)
+-mouse sprite animation
+
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/

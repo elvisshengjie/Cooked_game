@@ -55,13 +55,17 @@ private:
 
 public:
 
+	enum class StoveState {
+		IDLE,
+		COOKING,
+		DIRTY,
+		CLEANING
+	};
+
+
+	StoveState currentState = StoveState::IDLE;
+
 	Timer cookingTimer{};
-
-	bool isCooking=false;
-
-	bool isCleaning = false;
-
-	bool isDirty = false;
 
 	bool recipeMatched = false;
 
@@ -106,7 +110,7 @@ private:
 	float sliderSpd = { 0.8f};
 
 	float targetZoneStart = { 0.3f }; // Start of the target zone (0 to 1) - NOMNOMlised
-	float targetZoneEnd = {0.5f};  // End of the target zone (0 to 1) - NOMNOMlisesd 
+	float targetZoneEnd = {0.5f};  // End of the target zone (0 to 1) - NOMNOMlised 
 
 	bool movingRight = true;
 
