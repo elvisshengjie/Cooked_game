@@ -88,10 +88,7 @@ void ConfirmScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGf
     }
 }
 
-void ConfirmScreen::Cleanup() {
 
-
-}
 void Digipen::Init(){
 
     time.start(5);
