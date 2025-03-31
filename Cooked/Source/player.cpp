@@ -292,8 +292,8 @@ void player::playerPickUp(Ingredients& boxIngredient)
 int cleanDuration{ 4 };
 void player::playerDrop(Stove& stove, AEAudio cleaningSound , AEAudioGroup sfx) {
 	if (AEInputCheckTriggered(AEVK_E)) {
-		if (Hand != EMPTY && stove.currentState == Stove::StoveState::IDLE) {
-			if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height))
+		if (Hand != EMPTY ) {
+			if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height) && stove.currentState == Stove::StoveState::IDLE)
 			{
 				if (stove.putIngredient(Hand)) {
 					Hand = EMPTY;
@@ -366,7 +366,7 @@ void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gaug
 		QTE_Gauge.update(static_cast<float>(AEFrameRateControllerGetFrameTime()) );
 		if (QTE_Gauge.isCompleted) {
 			if (QTE_Gauge.isSuccess) {
-				AEAudioPlay(qteSuccessSound, sfx, 1.0f, 1.0f, 0);
+				AEAudioPlay(qteSuccessSound, sfx, 0.15f, 1.0f, 0);
 				stove.startCooking(recipeSystem.getActiveRecipes(), cookingSound, sfx);
 			}
 			else {

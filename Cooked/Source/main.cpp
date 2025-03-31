@@ -117,15 +117,22 @@ public:
 //audio
 bool hasPlayed = false;
 AEAudio cookingSound{}; // Cooking sound effect
+AEAudio winPtsSound{}; //sound when cooking finished and points added
+AEAudio losePtsSound{}; //sound when cooking finished and points deducted
 AEAudio qteSuccessSound{}; // QTE Success  sound effect
 AEAudio qteFailSound{}; // QTE fail  sound effect
 AEAudio winSound{}; //win screen sound effect
 AEAudio loseSound{};//lose screen sound effect
 AEAudio cleaningSound{}; //cleaning sound effect
+AEAudio spraySound{};
+AEAudio pauseSound{};
 AEAudio bouken{}; //bgm
 
 AEAudioGroup bgm; // short for 'background music'
 AEAudioGroup sfx; //sound effects
+AEAudioGroup points; //sound effects for points
+AEAudioGroup mice;
+AEAudioGroup pause;
 
 
 // ------------------------------------------------------------
@@ -285,9 +292,16 @@ void CoreEngine::Init()
     cleaningSound = AEAudioLoadSound("Assets/cleaningSound.mp3");
     qteFailSound = AEAudioLoadSound("Assets/qteFailSound.mp3");
     qteSuccessSound = AEAudioLoadSound("Assets/qteSuccessSound.mp3");
+    winPtsSound = AEAudioLoadSound("Assets/winPts.mp3");
+    losePtsSound = AEAudioLoadSound("Assets/losePts.mp3");
+    spraySound = AEAudioLoadSound("Assets/spraySound.mp3");
+    pauseSound = AEAudioLoadSound("Assets/pauseSound.mp3");
 
     bgm = AEAudioCreateGroup(); // short for 'background music'
     sfx = AEAudioCreateGroup();
+    points = AEAudioCreateGroup();
+    mice = AEAudioCreateGroup();
+    pause = AEAudioCreateGroup();
 
     AEAudioPlay(bouken, bgm, g_bgmVolume, 1.f, -1); // we can start playing here.
 }
@@ -304,14 +318,13 @@ void CoreEngine::Update()
         // Global exit conditions (Esc key or window closed)
         if (AEInputCheckTriggered(AEVK_ESCAPE) || !AESysDoesWindowExist())
             gGameRunning = false;
-
+   
         // -- SWITCH ON CURRENT STATE --
         switch (currentState)
         {
 
         case GameState::DIGIPEN_LOGO:
          {
-            
             digi.Update();
             digi.Render(pMesh);
             if (digi.GetFlag()) {
@@ -324,7 +337,7 @@ void CoreEngine::Update()
             // ------------------------------
         case GameState::MAIN_MENU:
         {
-
+            AEAudioResumeGroup(bgm);
             // Update & render Main Menu
             mainMenu.Update();
 
@@ -382,6 +395,7 @@ void CoreEngine::Update()
         break;
         case GameState::WIN_SCREEN:
         {
+            AEAudioPauseGroup(bgm);
             // Update & render Main Menu
 
             int check = winScreen.Update();
@@ -430,6 +444,7 @@ void CoreEngine::Update()
 
         case GameState::LOSE_SCREEN:
         {
+            AEAudioPauseGroup(bgm);
             // Update & render Main Menu
             int check = loseScreen.Update();
 
@@ -493,6 +508,17 @@ void CoreEngine::Update()
             {
                 gGameRunning = false;
             }
+
+            AEAudioPauseGroup(bgm);
+            AEAudioPauseGroup(sfx);
+            AEAudioPauseGroup(points);
+            AEAudioPauseGroup(mice);
+            
+            if (!hasPlayed)
+            {   
+                AEAudioPlay(pauseSound, pause, 0.02f, 1.0f, -1);
+                hasPlayed = true;
+            }
         }
         break;
         // ------------------------------
@@ -500,6 +526,11 @@ void CoreEngine::Update()
         // ------------------------------
         case GameState::GAME:
         {
+            AEAudioResumeGroup(bgm);
+            AEAudioResumeGroup(sfx);
+            AEAudioResumeGroup(points);
+            AEAudioResumeGroup(mice);
+            AEAudioStopGroup(pause);
             hasPlayed = false;
             static bool ratSoundTriggered = false;
 
@@ -546,11 +577,12 @@ void CoreEngine::Update()
             players1.playerUpdate(Wok, recipeSystem, qteGauge, cookingSound,qteFailSound,qteSuccessSound, sfx);
 
             // Stove / Wok logic (cooking)
-            Wok.update(recipeSystem, sfx);
+            Wok.update(recipeSystem, winPtsSound, losePtsSound, sfx, points);
+            
 
             recipeSystem.update();
             
-            mouse::handleDeviceInteraction(collisionBoxes[3], mouseDeviceCooldownTimer, players1);
+            mouse::handleDeviceInteraction(collisionBoxes[3], mouseDeviceCooldownTimer, players1, spraySound, mice);
             // Ingredient boxes (3 boxes at top?), Active recipes, etc.
             RenderIngredientbox(pMesh, boxTex);
             AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -644,10 +676,16 @@ void CoreEngine::Exit()
     AEAudioUnloadAudio(qteSuccessSound);
     AEAudioUnloadAudio(qteFailSound);
     AEAudioUnloadAudio(cleaningSound);
+    AEAudioUnloadAudio(winPtsSound);
+    AEAudioUnloadAudio(losePtsSound);
+    AEAudioUnloadAudio(spraySound);
+    AEAudioUnloadAudio(pauseSound);
 
     AEAudioUnloadAudioGroup(sfx);
     AEAudioUnloadAudioGroup(bgm);
-    
+    AEAudioUnloadAudioGroup(points);
+    AEAudioUnloadAudioGroup(mice);
+    AEAudioUnloadAudioGroup(pause);
 
     digi.Cleanup();
 

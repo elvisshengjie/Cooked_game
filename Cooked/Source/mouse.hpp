@@ -53,7 +53,7 @@ public:
 
     // The mouse is chased away for a certain duration
     void chaseAway(float duration);
-    static void handleDeviceInteraction(const Rect& deviceRect, Timer& deviceCooldownTimer, player& player);
+    static void handleDeviceInteraction(const Rect& deviceRect, Timer& deviceCooldownTimer, player& player, AEAudio, AEAudioGroup);
     // Public flags you may need for anim logic
     bool isMoving = false;
     int  currentFrame = 0;

@@ -354,10 +354,10 @@ void RenderStove(AEGfxVertexList* mesh, Stove& stove, player& Player, const  QTE
         AEGfxPrint(FontID, timerText.c_str(), -0.4f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);        
     }
     if (stove.currentState == Stove::StoveState::DIRTY) {
-        AEGfxPrint(FontID, "Stove is dirty! Press C to clean", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, "Stove is dirty! Press C to clean", -0.6f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
     if (stove.currentState == Stove::StoveState::CLEANING) {
-        AEGfxPrint(FontID, "Cleaning Stove!", -0.6f, -0.1f, 0.8f, 0.0f, 0.0f, 0.0f, 1.0f);
+        AEGfxPrint(FontID, "Cleaning Stove!", -0.6f, -0.1f, 1.2f, 0.0f, 0.0f, 0.0f, 1.0f);
 
     }
 
