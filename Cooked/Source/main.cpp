@@ -29,6 +29,7 @@ enum class GameState {
 
     DIGIPEN_LOGO,
     MAIN_MENU,
+    CONFIRM_SCREEN,
     GAME,
     CREDITS,
     PAUSE_MENU,
@@ -41,6 +42,9 @@ enum class GameState {
 // CoreEngine class
 class CoreEngine
 {
+    bool mainMenuFlag = false;
+    bool pauseFlag = false;
+   
     bool gGameRunning = true;
     GameState currentState = GameState::DIGIPEN_LOGO;
     Timer mouseDeviceCooldownTimer{};
@@ -103,6 +107,7 @@ class CoreEngine
     WinScreen    winScreen;
     WinScreen    loseScreen;
     OptionsMenu optionsMenu;
+    ConfirmScreen confirmSN;
 
     float g_bgmVolume = 0.1f; // default volume
     Timer gTimer{};
@@ -154,6 +159,7 @@ void CoreEngine::Init()
     // Initialize the main menu
     digi.Init();
     mainMenu.Init();
+    confirmSN.Init();
     winScreen.Init();
     loseScreen.Init();
     pauseMenu.Init();
@@ -363,8 +369,32 @@ void CoreEngine::Update()
             }
             else if (mainMenu.IsQuitSelected())
             {
+                mainMenuFlag = true;
+                  currentState = GameState::CONFIRM_SCREEN;
+                
+                
+            }
+        }
+        break;
+        case GameState::CONFIRM_SCREEN:
+        {
+            confirmSN.Update();
+            AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+            confirmSN.Render(pMesh, backgroundTex, buttonTex);
+            if (confirmSN.GetFlag()) {
                 gGameRunning = false;
             }
+            else if (confirmSN.GetflagToUpdate() && mainMenuFlag) {
+                confirmSN.ModflagToUpdate(false);
+                mainMenuFlag = false;
+                currentState = GameState::MAIN_MENU;
+            }
+            else if (confirmSN.GetflagToUpdate() && pauseFlag) {
+                confirmSN.ModflagToUpdate(false);
+                pauseFlag = false;
+                currentState = GameState::PAUSE_MENU;
+            }
+                
         }
         break;
         case GameState::OPTIONS_MENU:
@@ -412,7 +442,8 @@ void CoreEngine::Update()
             }
             else if (check == 3)
             {
-                gGameRunning = false;
+                mainMenuFlag = true;
+                currentState = GameState::CONFIRM_SCREEN;
             }
             
             winScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Win!");
@@ -460,7 +491,8 @@ void CoreEngine::Update()
             }
             else if (check == 3)
             {
-                gGameRunning = false;
+                mainMenuFlag = true;
+                currentState = GameState::CONFIRM_SCREEN;
             }
 
            // AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -506,7 +538,8 @@ void CoreEngine::Update()
             // If "Quit Game" is selected, exit the application.
             else if (result == 3)
             {
-                gGameRunning = false;
+                pauseFlag = true;
+                currentState = GameState::CONFIRM_SCREEN;
             }
 
             AEAudioPauseGroup(bgm);
