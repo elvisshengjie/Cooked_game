@@ -4,8 +4,8 @@
 @author1 Elvis lim sheng jie(elvisshengjie.lim)
 - game state mangement Core Engine class
 @author2 Justin Kong (yimo.kong)
-@author3 Kerrin Lemin Khoo (kerrinlemin.k)
-@author4 Norman Chan (chan.f)
+@author3 Norman Chan (chan.f)
+@author4 Kerrin Lemin Khoo ( kerrinlemin.k)
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/
@@ -13,14 +13,15 @@
 #include <crtdbg.h> // To check for memory leaks
 #include "AEEngine.h"
 #include <AEGraphics.h>
+#include <math.h>
+#include <vector>
 #include "main_menu.hpp"
 #include "render.hpp"
 #include "utils.hpp"
 #include "collison.hpp"
 #include "player.hpp"
 #include "mouse.hpp"
-#include <math.h>
-#include <vector>
+
 
 // ---------------------------------------------------------------------------
 // Define your game states
@@ -404,7 +405,7 @@ void CoreEngine::Update()
             
             if (!hasPlayed)
             {
-                AEAudioPlay(winSound, sfx, 0.70f, 1.0f, 0);
+                AEAudioPlay(winSound, sfx, 0.7f, 1.0f, 0);
                 hasPlayed = true;
             }
             
