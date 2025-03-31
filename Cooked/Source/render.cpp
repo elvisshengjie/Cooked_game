@@ -8,12 +8,25 @@
 - void RenderMain_menu_background
 - void RenderMain_digipenLogo
 - Rect class
-@author2 Norman Chan (chan.f)
+
+@author2 Justin Kong (yimo.kong)
+- void RenderDustbin
+- void Renderbackground
+- void RenderIngredientsOnBoxes
+
+@author3 Kerrin Lemin Khoo (kerrinlemin.k)
+- AEGfxVertexList* CreateMesh
+- void DrawRect (2x overloads)
+- void displayScore
+
+@author4 Norman Chan (chan.f)
 - void InitFont
 - void DestroyFront
 - void RenderStove
 - void RenderStoveIngredients
 - void RenderRecipeBox
+- void RenderQTEGauge
+- void displayTimer
 
 @course csd1451s25 Software Engineering Project 2
 @section a

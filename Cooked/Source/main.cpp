@@ -3,7 +3,9 @@
 @file main.cpp
 @author1 Elvis lim sheng jie(elvisshengjie.lim)
 - game state mangement Core Engine class
-@author2
+@author2 Justin Kong (yimo.kong)
+@author3 Norman Chan (chan.f)
+@author4 Kerrin Lemin Khoo ( kerrinlemin.k)
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/
@@ -11,14 +13,15 @@
 #include <crtdbg.h> // To check for memory leaks
 #include "AEEngine.h"
 #include <AEGraphics.h>
+#include <math.h>
+#include <vector>
 #include "main_menu.hpp"
 #include "render.hpp"
 #include "utils.hpp"
 #include "collison.hpp"
 #include "player.hpp"
 #include "mouse.hpp"
-#include <math.h>
-#include <vector>
+
 
 // ---------------------------------------------------------------------------
 // Define your game states
@@ -118,8 +121,9 @@ AEAudio qteSuccessSound{}; // QTE Success  sound effect
 AEAudio qteFailSound{}; // QTE fail  sound effect
 AEAudio winSound{}; //win screen sound effect
 AEAudio loseSound{};//lose screen sound effect
-AEAudio cleanSound{}; //cleaning sound effect
+AEAudio cleaningSound{}; //cleaning sound effect
 AEAudio bouken{}; //bgm
+
 AEAudioGroup bgm; // short for 'background music'
 AEAudioGroup sfx; //sound effects
 
@@ -275,10 +279,12 @@ void CoreEngine::Init()
     // Configure audio group
     
     bouken = AEAudioLoadMusic("Assets/bm.mp3");
-    cookingSound = AEAudioLoadSound("Assets/cookingSound.mp3");
+    cookingSound = AEAudioLoadSound("Assets/cookingSound.mp3"); 
     winSound = AEAudioLoadSound("Assets/winSound.mp3");
     loseSound = AEAudioLoadSound("Assets/loseSound.mp3");
-    cleanSound = AEAudioLoadSound("Assets/cleanSound.mp3");
+    cleaningSound = AEAudioLoadSound("Assets/cleaningSound.mp3");
+    qteFailSound = AEAudioLoadSound("Assets/qteFailSound.mp3");
+    qteSuccessSound = AEAudioLoadSound("Assets/qteSuccessSound.mp3");
 
     bgm = AEAudioCreateGroup(); // short for 'background music'
     sfx = AEAudioCreateGroup();
@@ -399,7 +405,7 @@ void CoreEngine::Update()
             
             if (!hasPlayed)
             {
-                AEAudioPlay(winSound, sfx, 1.0f, 1.0f, 0);
+                AEAudioPlay(winSound, sfx, 0.7f, 1.0f, 0);
                 hasPlayed = true;
             }
             
@@ -445,7 +451,7 @@ void CoreEngine::Update()
            // AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
             loseScreen.Render(pMesh, backgroundTex, paperTex,buttonTex, "You Lose :(");
             if (!hasPlayed) {
-                AEAudioPlay(loseSound, sfx, 1.6f, 1.0f, 0);
+                AEAudioPlay(loseSound, sfx, 1.0f, 1.0f, 0);
                 hasPlayed = true;
 
             }
@@ -537,7 +543,7 @@ void CoreEngine::Update()
 
 
             // Player update logic (picking up, dropping, etc.)
-            players1.playerUpdate(Wok, recipeSystem, qteGauge, cookingSound, sfx);
+            players1.playerUpdate(Wok, recipeSystem, qteGauge, cookingSound,qteFailSound,qteSuccessSound, sfx);
 
             // Stove / Wok logic (cooking)
             Wok.update(recipeSystem, sfx);
@@ -583,7 +589,7 @@ void CoreEngine::Update()
                     players1.playerCheckCollison(objectcollision[0].x, objectcollision[0].y,
                         objectcollision[0].width, objectcollision[0].height))
                 {
-                    players1.playerDrop(Wok);
+                    players1.playerDrop(Wok,cleaningSound, sfx);
                 }
             }
 
@@ -637,6 +643,7 @@ void CoreEngine::Exit()
     AEAudioUnloadAudio(loseSound);
     AEAudioUnloadAudio(qteSuccessSound);
     AEAudioUnloadAudio(qteFailSound);
+    AEAudioUnloadAudio(cleaningSound);
 
     AEAudioUnloadAudioGroup(sfx);
     AEAudioUnloadAudioGroup(bgm);

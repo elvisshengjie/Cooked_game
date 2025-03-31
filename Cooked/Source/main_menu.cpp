@@ -18,7 +18,17 @@
 - void Credits::Init
 - void Credits::Update
 - void Credits::Render
-@author2
+@author2 Justin Kong (yimo.kong)
+- void PauseMenu::Init
+- int PauseMenu::Update
+- void PauseMenu::Render
+- void OptionsMenu::Init
+- int OptionsMenu::Update
+- void OptionsMenu::Render
+
+@author3 Kerrin Lemin Khoo (kerrinlemin.k)
+- WinScreen class (Used for both win and lose screens)
+
 @course csd1451s25 Software Engineering Project 2
 @section a
 *//*______________________________________________________________________*/
@@ -93,9 +103,8 @@ void MainMenu::Init() {
     buttons.push_back({ "Start Game", { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) } });
     buttons.push_back({ "Credits",    { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) - (spacing * (screenHeight / 2))}});
     buttons.push_back({ "Options",    { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) - (spacing * 2 * (screenHeight / 2))}});
-    buttons.push_back({ "Extras",     { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2))- (spacing * 3 * (screenHeight / 2))}});
-    buttons.push_back({ "How To Play",{ buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2))  - (spacing * 4 * (screenHeight / 2))}});
-    buttons.push_back({ "Quit Game",  { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) - (spacing * 5 * (screenHeight / 2))}});
+    buttons.push_back({ "How To Play",     { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2))- (spacing * 3 * (screenHeight / 2))}});
+    buttons.push_back({ "Quit Game",{ buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2))  - (spacing * 4 * (screenHeight / 2))}});
 }
 
 void MainMenu::Update() {
@@ -136,10 +145,10 @@ void MainMenu::Update() {
                     {
                         m_OptionsActivated = true;
                     }
-                    else if (i == 4) {
+                    else if (i == 3) {
                         m_howToPlayActivated = true;
                     }
-                    else if (i == 5) {
+                    else if (i == 4) {
                         m_StartGameActivated4 = true;
                     }
                 }
