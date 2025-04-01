@@ -227,7 +227,7 @@ void mouse::chaseAway(float duration)
     randomDirY = sinf(angle);
 }
 
-void mouse::handleDeviceInteraction(const Rect& deviceRect, Timer& deviceCooldownTimer, player& player)
+void mouse::handleDeviceInteraction(const Rect& deviceRect, Timer& deviceCooldownTimer, player& player, AEAudio spraySound, AEAudioGroup mice)
 {
     // Check if the player collides with the device's collision area.
     if (player.playerCheckCollison(deviceRect.x, deviceRect.y, deviceRect.width, deviceRect.height)) {
@@ -248,6 +248,7 @@ void mouse::handleDeviceInteraction(const Rect& deviceRect, Timer& deviceCooldow
                 mouse2.chaseAway(chaseDuration);
                 mouse3.chaseAway(chaseDuration);
                 deviceCooldownTimer.start(25.0);
+                AEAudioPlay(spraySound, mice, 1.0f, 1.0f, 0);
             }
         }
     }

@@ -23,6 +23,41 @@ struct Button {
     Rect box;
 };
 
+class ConfirmScreen {
+public:
+
+    // Initializes menu resources (fonts, background texture, buttons)
+    void Init();
+
+    // Handles input for menu navigation (keyboard and mouse)
+    void Update();
+
+    // Renders the menu background and buttons
+    void Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* button);
+    
+    
+
+    bool GetFlag() {
+        return flag;
+    }
+    
+    bool GetflagToUpdate() {
+        return flagToUpdate;
+    }
+
+    void ModflagToUpdate(bool A) {
+        flagToUpdate = A;
+    }
+   
+
+private:
+    std::vector<Button> buttons;
+    size_t selectedOption = 0;
+
+    bool flag{ false };
+    bool flagToUpdate{ false };
+    
+};
 class Digipen {
 public:
 

@@ -25,7 +25,9 @@
 - void OptionsMenu::Init
 - int OptionsMenu::Update
 - void OptionsMenu::Render
-
+- void ConfirmScreen::Init
+- void ConfirmScreen::Update
+- void ConfirmScreen::Render
 @author3 Kerrin Lemin Khoo (kerrinlemin.k)
 - WinScreen class (Used for both win and lose screens)
 
@@ -33,9 +35,62 @@
 @section a
 *//*______________________________________________________________________*/
 #include "Main_Menu.hpp"
-
 float screenWidth{ 1600.0f };
 float screenHeight{ 900.0f };
+void ConfirmScreen::Init() {
+
+    float centerX{ 0.0f };
+    float startY{ 0.5f };
+    float buttonWidth{ 300.0f };
+    float buttonHeight{ 60.0f };
+    float spacing{ 0.2f };
+
+    buttons.clear();
+    buttons.push_back({ "YES",    { buttonWidth, buttonHeight, centerX * screenWidth / 2 , (startY * (screenHeight / 2)) } });
+    buttons.push_back({ "NO",  { buttonWidth, buttonHeight, (centerX * screenWidth / 2) , (startY * (screenHeight / 2)) - (spacing * (screenHeight / 2))} });
+}
+
+void ConfirmScreen::Update() {
+
+    if (AEInputCheckTriggered(AEVK_LBUTTON))
+    {
+        int rawX, rawY;
+        AEInputGetCursorPosition(&rawX, &rawY);
+        for (size_t i = 0; i < buttons.size(); i++)
+        {
+            if (IsPointInsideButton((float)rawX, (float)rawY, buttons[i]) )
+            {
+                selectedOption = i;
+                // Immediately return if you want the click itself to ��activate�� the button:
+                if (i == 0) // Resume
+                    flag = true;
+                if (i == 1) {
+                    flagToUpdate = true;
+                }
+                
+            }
+        }
+    }
+}
+
+void ConfirmScreen::Render(AEGfxVertexList* mesh, AEGfxTexture* background, AEGfxTexture* button) {
+
+    // Render background and logo similar to MainMenu
+    RenderMain_menu_background(mesh, background);
+    /* RenderMain_digipenLogo(mesh, logo);*/
+
+     // Render each button
+    for (size_t i = 0; i < buttons.size(); i++) {
+        const Button& btn = buttons[i];
+        // Draw button rectangle
+        DrawRect(btn.box, button, mesh);
+        // Print button label
+        AEGfxPrint(FontID, btn.label.c_str(), btn.box.x - 0.1f, btn.box.y / (screenHeight / 2), 1.0f, 0.0f, 0.0f, 0.0f, 1.0f); // black text
+
+    }
+}
+
+
 void Digipen::Init(){
 
     time.start(5);

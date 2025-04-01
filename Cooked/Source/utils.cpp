@@ -99,7 +99,7 @@ double Stove::remainingCookingTime()
 	return remainTime;
 }
 
-void Stove::update(RecipeSystem& recipeSystem, AEAudioGroup sfx) {
+void Stove::update(RecipeSystem& recipeSystem, AEAudio winPoints, AEAudio losePoints, AEAudioGroup sfx, AEAudioGroup points) {
 	if (currentState == StoveState::COOKING && cookingTimer.completed()) {
 		static std::random_device rd;
 		static std::mt19937 engine(rd());
@@ -117,8 +117,7 @@ void Stove::update(RecipeSystem& recipeSystem, AEAudioGroup sfx) {
 				break;	
 			}
 		}
-		
-		score = updateScore(recipeMatched, stoveItems.size());
+		score = updateScore(recipeMatched, stoveItems.size(), winPoints, losePoints, points);
 		clearWok();
 
 		AEAudioStopGroup(sfx);
@@ -239,16 +238,23 @@ void QTE::start() {
 	targetZoneEnd = targetZoneStart + zoneWidth;
 }
 
-int updateScore(bool recipeMatched, size_t stoveItems)
+
+int updateScore(bool recipeMatched, size_t stoveItems, AEAudio winAudio, AEAudio loseAudio, AEAudioGroup points)
 {
 	int multiplier{ 2 };
+	int base{ 3 };
+	
 	if (recipeMatched)
 	{
 		score += static_cast<int>(stoveItems) * multiplier;
+		AEAudioPlay(winAudio, points, 0.3f, 1.0f, 0);
+		
 	}
 	else
 	{
-		score -= 3;
+		score -= base;
+		AEAudioPlay(loseAudio, points, 0.3f, 1.0f, 0);
+		
 	}
 	return score;
 }
