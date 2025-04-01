@@ -789,7 +789,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // Initialize the engine
-    AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
+    AESysInit(hInstance, nCmdShow, 1600, 900, 0, 60, false, NULL);
+
 
     // Create and run our CoreEngine
     CoreEngine ce;
