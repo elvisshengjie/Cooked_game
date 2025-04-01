@@ -25,7 +25,9 @@
 - void OptionsMenu::Init
 - int OptionsMenu::Update
 - void OptionsMenu::Render
-
+- void ConfirmScreen::Init
+- void ConfirmScreen::Update
+- void ConfirmScreen::Render
 @author3 Kerrin Lemin Khoo (kerrinlemin.k)
 - WinScreen class (Used for both win and lose screens)
 
