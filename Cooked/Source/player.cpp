@@ -358,7 +358,7 @@ void player::playerUpdate(Stove& stove,RecipeSystem& recipeSystem, QTE &QTE_Gaug
 	if (playerCheckCollison(stove.x, stove.y, stove.width, stove.height) &&
 		stove.canCook(*this))
 	{
-		if (AEInputCheckTriggered(AEVK_Q) && !QTE_Gauge.isActive) {  // Press Q to Cook
+		if (AEInputCheckTriggered(AEVK_Q) && !QTE_Gauge.isActive) {  
 			QTE_Gauge.start();
 		}
 	}

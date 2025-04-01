@@ -70,10 +70,10 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\Source\Extern\AlphaEngine\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Source\Assets\*" "$(OutDir)Source\Assets\" /s /r /y /q
+      <Command>xcopy "$(SolutionDir)Source\Assets\*" "$(OutDir)Assets\" /s /r /y /q
 xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\freetype.dll" "$(OutDir)" /s /r /y /q
-xcopy "$(SolutionDir)Extern\AlphaEngine\lib\Alpha_EngineD.dll" "$(OutDir)" /s /r /y /q
-xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmodL.dll" "$(OutDir)" /s /r /y /q
+xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\Alpha_EngineD.dll" "$(OutDir)" /s /r /y /q
+xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmodL.dll" "$(OutDir)" /s /r /y /q
 xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmodL.dll" "$(OutDir)" /s /r /y /q
 </Command>
     </PostBuildEvent>
@@ -97,16 +97,19 @@ xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmodL.dll" "$(OutDir)" /s /r 
       <AdditionalLibraryDirectories>$(SolutionDir)\Source\Extern\AlphaEngine\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Source\Assets\*" "$(OutDir)Source\Assets\" /s /r /y /q
+      <Command>xcopy "$(SolutionDir)Source\Assets\*" "$(OutDir)Assets\" /s /r /y /q
 xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\freetype.dll" "$(OutDir)" /s /r /y /q
-xcopy "$(SolutionDir)Extern\AlphaEngine\lib\Alpha_Engine.dll" "$(OutDir)" /s /r /y /q
-xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q
+xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\Alpha_EngineD.dll" "$(OutDir)" /s /r /y /q
+xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmodL.dll" "$(OutDir)" /s /r /y /q
+xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmodL.dll" "$(OutDir)" /s /r /y /q
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Source\AssetLoader.cpp" />
     <ClCompile Include="..\Source\collison.cpp" />
     <ClCompile Include="..\Source\Ingredients.cpp" />
+    <ClCompile Include="..\Source\JsonParser.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\main_menu.cpp" />
     <ClCompile Include="..\Source\mouse.cpp" />
@@ -127,8 +130,10 @@ xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /
     <Image Include="..\Assets\Assets\PlanetTexture.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Source\AssetLoader.hpp" />
     <ClInclude Include="..\Source\collison.hpp" />
     <ClInclude Include="..\Source\Ingredients.hpp" />
+    <ClInclude Include="..\Source\JsonParser.hpp" />
     <ClInclude Include="..\Source\main_menu.hpp" />
     <ClInclude Include="..\Source\mouse.hpp" />
     <ClInclude Include="..\Source\player.hpp" />

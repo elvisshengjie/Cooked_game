@@ -89,9 +89,14 @@ void RenderIngredientsOnBoxes(
 extern Rect backgroundRect;
 extern Rect dustbinRect;
 extern Rect ingredientBoxRect;
+extern Rect mouseDevice;
+extern Rect backgroundMain_menu;
+extern Rect digipen_logo;
 extern std::vector<Rect> highingredientBoxes;
 extern std::vector<Rect> collisionBoxes;
 extern std::vector<Rect> objectcollision;
+extern std::vector<Rect> recipeBoxes;
+
 extern s8 FontID;
 extern Rect mouseDevice;
 //extern s8 FontID_main_menu;

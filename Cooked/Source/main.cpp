@@ -21,6 +21,7 @@
 #include "collison.hpp"
 #include "player.hpp"
 #include "mouse.hpp"
+#include "AssetLoader.hpp"
 
 
 // ---------------------------------------------------------------------------
@@ -132,6 +133,10 @@ AEAudioGroup sfx; //sound effects
 // CoreEngine::Init
 void CoreEngine::Init()
 {
+    if (!RectLoader::LoadRectangles("Assets/Rect.json")) {
+        std::cerr << "Failed to load rectangles!\n";
+        //AESysExit();  // Safely exit or handle gracefully
+    }
     currentState = GameState::DIGIPEN_LOGO;
     // Changing the window title
 

@@ -116,46 +116,17 @@ void InitFont()
 void DestroyFront() {
     AEGfxDestroyFont(FontID);
 }
-std::vector<Rect> highingredientBoxes = {
-    {100.0f, 100.0f,-200.0f ,175.0f},
-    {100.0f,100.0f, -49.0f, 175.0f},
-    {100.0f, 100.0f, 102.0f, 175.0f },
-    { 210.0f, 210.0f,200.0f, -400.0f },
-    { 190.0f, 190.0f,200.0f, -350.0f }
-    
-};
-std::vector<Rect> collisionBoxes = {
-    {110.0f, 110.0f, -200.0f, 175.0f},
-    {110.0f,110.0f, -49.0f, 175.0f},
-    { 110.0f, 110.0f, 102.0f, 175.0f },
-    { 60.0f, 100.0f, 200.0f, -360.0f }
-   
-};
-std::vector<Rect> objectcollision = {
-    { 50.0f, 40.0f, -720.0f , -270.0f }, //Dustbin
-    { 200.0f, 100.0f * 2.0f / 3.0f ,-50.0f, -200.0f + 100.0f/ 6.0f }, // stove
-    { 100.0f, 100.0f,-200.0f ,175.0f }, //Ing Box 1
-    { 100.0f, 100.0f,-49.0f ,175.0f }, //Ing Box 2
-    { 100.0f, 100.0f,102.0f ,175.0f }, //Ing Box 3
-    { 330.0f, 200.0f, -350.0f, 340.0f },  // Recipe 1 Collision
-    { 330.0f, 200.0f, -0.0f, 340.0f },  // Recipe 2 Collision
-    { 330.0f, 200.0f, 350.0f, 340.0f },  // Recipe 3 Collision
-    { 20.0f, 70.0f, 200.0f, -350.0f } //mouse device
-};
+std::vector<Rect> highingredientBoxes{};
+std::vector<Rect> collisionBoxes{};
+std::vector<Rect> objectcollision{};
+std::vector<Rect> recipeBoxes{};
 
-std::vector<Rect> recipeBoxes = {
-    { 350.0f, 120.0f, -350.0f, 340.0f },  // Recipe 1 (Wider & Higher)
-    { 350.0f, 120.0f,   -0.0f, 340.0f },  // Recipe 2 (Centered)
-    { 350.0f, 120.0f,  350.0f, 340.0f }   // Recipe 3 (Right)
-};
-
-
-Rect backgroundRect{ 1600.0f,900.0f,0.0f,0.0f };
-Rect dustbinRect{ 100.0f, 100.0f,-720.0f , -300.0f };
-Rect ingredientBoxRect{ 100.0f, 100.0f,-200.0f ,175.0f };
-Rect backgroundMain_menu{ 1600.0f,900.0f,0.0f,0.0f };
-Rect digipen_logo{ 1000, 455 * 1000 / 1525,0.0f,0.0f };
-Rect mouseDevice{ 120.0f, 120.0f,200.0f, -350.0f };
+Rect backgroundRect{};
+Rect dustbinRect{};
+Rect ingredientBoxRect{};
+Rect mouseDevice{};
+Rect backgroundMain_menu{};
+Rect digipen_logo{};
 
 void Renderbackground(AEGfxVertexList* mesh, AEGfxTexture* tex) {
     AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
