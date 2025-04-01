@@ -99,10 +99,8 @@ xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmodL.dll" "$(OutDir)" /s /r 
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Source\Assets\*" "$(OutDir)Assets\" /s /r /y /q
 xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\freetype.dll" "$(OutDir)" /s /r /y /q
-xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\Alpha_EngineD.dll" "$(OutDir)" /s /r /y /q
-xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmodL.dll" "$(OutDir)" /s /r /y /q
-xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmodL.dll" "$(OutDir)" /s /r /y /q
-</Command>
+xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\Alpha_Engine.dll" "$(OutDir)" /s /r /y /q
+xcopy "$(SolutionDir)Source\Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
