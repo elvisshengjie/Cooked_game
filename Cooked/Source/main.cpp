@@ -315,6 +315,7 @@ void CoreEngine::Init()
     pause = AEAudioCreateGroup();
 
     AEAudioPlay(bouken, bgm, g_bgmVolume, 1.f, -1); // we can start playing here.
+    recipeSystem.pauseRecipeTimers();
 }
 
 // ------------------------------------------------------------
@@ -358,6 +359,7 @@ void CoreEngine::Update()
             // Check menu selection
             if (mainMenu.IsStartGameSelected())
             {
+                recipeSystem.pauseRecipeTimers();
                 gTimer.start(gameTimer);
                 mouse1.init(-2500.0f, 100.0f);
                 mouse2.init(2200.0f, 500.0f);
