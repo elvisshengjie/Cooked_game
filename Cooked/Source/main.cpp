@@ -147,13 +147,13 @@ void CoreEngine::Init()
 {
     if (!RectLoader::LoadRectangles("Assets/Rect.json")) {
         std::cerr << "Failed to load rectangles!\n";
-        //AESysExit();  // Safely exit or handle gracefully
     }
     currentState = GameState::DIGIPEN_LOGO;
     // Changing the window title
 
     gTimer.start(gameTimer);
     AESysSetWindowTitle("Cooked!");
+    AESysSetWindowIcon("Assets/CookedLogo.ico", 0, 0);
 
     // AESysReset() re-initializes various engine systems
     AESysReset();
@@ -790,6 +790,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // Initialize the engine
     AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
+
 
     // Create and run our CoreEngine
     CoreEngine ce;
