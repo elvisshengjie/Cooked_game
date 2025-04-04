@@ -315,6 +315,7 @@ void CoreEngine::Init()
     pause = AEAudioCreateGroup();
 
     AEAudioPlay(bouken, bgm, g_bgmVolume, 1.f, -1); // we can start playing here.
+    recipeSystem.pauseRecipeTimers();
 }
 
 // ------------------------------------------------------------
@@ -358,6 +359,7 @@ void CoreEngine::Update()
             // Check menu selection
             if (mainMenu.IsStartGameSelected())
             {
+                recipeSystem.pauseRecipeTimers();
                 gTimer.start(gameTimer);
                 mouse1.init(-2500.0f, 100.0f);
                 mouse2.init(2200.0f, 500.0f);
@@ -789,7 +791,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // Initialize the engine
-    AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
+    AESysInit(hInstance, nCmdShow, 1600, 900, 0, 60, false, NULL);
+
 
 
     // Create and run our CoreEngine
