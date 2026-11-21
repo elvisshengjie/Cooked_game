@@ -4,6 +4,16 @@
 
 You play as a chef racing to prepare dishes in a kitchen where ingredients change and mice interfere with your supplies. Gather the right ingredients, complete a cooking timing challenge, keep the stove clean, and use mouse repellent to keep the kitchen running. Reach **30 points before the five-minute timer runs out** to win.
 
+## Problem — The chef moved faster diagonally
+
+The chef needed to move at a consistent speed in every direction and across frame rates. The original movement applied the full step to each pressed direction on every update.
+
+**What failed and how to check it.** Comparing one-axis and diagonal movement in the original code shows that a diagonal step covered about 41% more distance. Applying a fixed step each update also meant that movement speed depended on how often the game updated.
+
+**What I changed and what happened.** I scaled both diagonal axes by approximately `1 / √2` and multiplied movement by the elapsed frame time. A diagonal step now covers approximately the same distance as a straight step, and movement is expressed in units per second.
+
+[Player movement fix](https://github.com/elvisshengjie/Cooked_game/commit/45c8e5903858f0d393d58111c535953f6188dbdb)
+
 ## Gameplay
 
 1. Choose one of the three active recipes displayed on screen.
